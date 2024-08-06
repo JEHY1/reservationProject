@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/loginsCss/join_finish.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <title>회원가입 완료</title>
+</head>
+<body>
+    <th:block th:include="layouts/header"></th:block>
+    <main>
+        <div id="joinfinishBox">
+            <p>✔</p>
+            <p>회원가입이 <span>완료</span> 되었습니다.</p>
+            <p><span th:text="${user.userRealName}"></span>님의 회원가입을 축하합니다.</p>
+            <hr>
+            <div class="buttonBox">
+                <a href="/">메인화면</a>
+                <a href="/login">로그인</a>
+            </div>
+        </div>
+    </main>
+    <th:block th:include="layouts/footer"></th:block>
+</body>
+</html>

@@ -1,0 +1,49 @@
+.box {
+    margin: 0 auto;
+    width: 430px;
+    margin-top: 80px;
+}
+.box > p:nth-child(1) {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 40px;
+}
+#findFinishBox {
+    text-align: center;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 30px;
+}
+#findFinishBox > p:not(:last-child) {
+    margin-bottom: 10px;
+}
+#findFinishBox > p:nth-child(1) {
+    font-size: 16px;
+}
+#findFinishBox > p:nth-child(1) span {
+    font-weight: bold;
+    font-size: 16px;
+}
+#findFinishBox > p:nth-child(2) {
+    font-weight: bold;
+    font-size: 25px;
+    color: #0D569B;
+}
+.box a {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    background-color: #0D569B;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 40px;
+    cursor: pointer;
+}
+

@@ -1,0 +1,42 @@
+<header xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div id="menu">
+        <a id="logo" href="/"></a>
+        <p><span sec:authentication="name"></span>님 <a href="/logout">로그아웃</a></p>
+        <a href="/">홈페이지로 돌아가기</a>
+        <ul>
+            <li>
+                <a href="javascript:void(0)"><span>주문관리</span><span>﹀</span></a>
+                <ul>
+                    <li><a href="/admin/orderManager">전체조회</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)"><span>상품관리</span><span>﹀</span></a>
+                <ul>
+                    <li><a href="/admin/product/index">목록조회</a></li>
+                    <li><a href="/admin/product/insert">상품등록</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)"><span>게시판관리</span><span>﹀</span></a>
+                <ul>
+                    <li><a href="/admin/notice/index">공지사항</a></li>
+                    <li><a href="/admin/qna/index">상품문의</a></li>
+                    <li><a href="/admin/review/index">리뷰</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)"><span>회원관리</span><span>﹀</span></a>
+                <ul>
+                    <li><a href="/admin/user/index">전체조회</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+<div xmlns:th="http://www.w3.org/1999/xhtml" id="notice" th:if="${msg != null}">
+    <div>
+        <p th:text="${msg}"></p>
+        <a href="javascript:void(0)">확인</a>
+    </div>
+</div>

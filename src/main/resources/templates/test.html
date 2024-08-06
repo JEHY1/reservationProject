@@ -1,40 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Option Event Example</title>
   <style>
-    hr{
-      height: 5px;
+    #mySelect {
+        width: 200px;
     }
   </style>
 </head>
 <body>
-<div th:each="account : ${accounts}">
-  <div th:text="${account.user.username}"></div>
-  <div th:text="${account.accountBank}"></div>
-  <div th:text="${account.accountNumber}"></div>
-</div>
-<hr><!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-<div th:each="user : ${users}">
-  <div th:text="${user.username}"></div>
-  <div th:each="account : ${user.accountList}">
-    <div th:text="${account.accountId}"></div>
-    <div th:text="${account.accountNumber}"></div>
-  </div>
-</div>
-<hr><!-- -&#45;5;&#45;&#45;&#45;;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-<div th:each="order : ${orders}">
-  <div th:text="${order.orderId}"></div>
-  <div th:each="user : ${order.user}">
-    <div th:text="${user.username}"></div>
-    <div th:each="account : ${user.accountList}">
-      <div th:text="${account.accountId}"></div>
-      <div th:text="${account.accountNumber}"></div>
-    </div>
-  </div>
-  <div th:text="${order.orderDate}"></div>
-</div>
+
+<select id="mySelect">
+  <option value="1">Option 1</option>
+  <option value="2">Option 2</option>
+  <option value="3">Option 3</option>
+</select>
+
+<p id="result"></p>
+
+<script>
+  const selectElement = document.getElementById('mySelect');
+  const resultElement = document.getElementById('result');
+
+  let lastSelectedIndex = selectElement.selectedIndex;
+  let isOptionClicked = false;
+
+  // Handle the selection change
+  function handleSelectChange() {
+      if (isOptionClicked) {
+          const selectedOption = selectElement.options[selectElement.selectedIndex];
+          resultElement.textContent = 'You selected: ' + selectedOption.text;
+          lastSelectedIndex = selectElement.selectedIndex;
+          isOptionClicked = false;  // Reset after handling change
+          console.log('click');
+      }
+  }
+
+  // Mark as option clicked when a mousedown event occurs
+  selectElement.addEventListener('mousedown', function(event) {
+      if (event.target.tagName === 'OPTION') {
+          isOptionClicked = true;
+      } else {
+          isOptionClicked = false;
+      }
+  });
+
+  // Reset the flag when the select loses focus
+  selectElement.addEventListener('focus', function() {
+      isOptionClicked = false;
+  });
+
+  // Handle the change event
+  selectElement.addEventListener('change', handleSelectChange);
+</script>
 
 </body>
 </html>

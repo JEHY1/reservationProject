@@ -22,14 +22,14 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer (){
         return web -> web.ignoring()
-                .requestMatchers("/js", "/css", "images");
+                .requestMatchers("/js/**", "/css/**", "/images/**");
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 
         return httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/", "/join", "/test").permitAll()
+                .requestMatchers("/login/**", "/", "/join/**", "/test", "/find/**", "/user/delete/finish").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/seller/**").hasRole("SELLER")
                 .anyRequest().authenticated()

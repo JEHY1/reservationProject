@@ -1,0 +1,150 @@
+* {
+    margin: 0;
+    font-size: 20px;
+}
+body {
+    width: 1903px;
+    display: flex;
+}
+/* header css */
+header {
+    width: 250px;
+    min-height: 953px;
+    z-index: 1;
+}
+#menu {
+    height: 100%;
+    background-color: #ddd;
+}
+#logo { /* 로고 */
+    display: inline-block;
+    background-image: url('../images/logo_img/logo.png');
+    width: 120px;
+    height: 57px;
+    margin: 30px 65px 20px 65px;
+    background-size: 120px;
+}
+#menu > p { /* 유저 이름 및 로그아웃 */
+    text-align: center;
+    font-size: 15px;
+}
+#menu > p span {
+    font-weight: bold;
+    font-size: 15px;
+}
+#menu > p a {
+    color: #777;
+    text-decoration: none;
+    padding-left: 10px;
+    font-size: 15px;
+}
+header #menu > p {
+    display: block;
+}
+#menu > a:nth-of-type(2) { /* 홈페이지로 돌아가기 */
+    padding: 5px 10px;
+    width: 140px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: black;
+    margin: 15px 55px 20px 55px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 15px;
+    font-size: 12px;
+}
+header #menu > a:nth-of-type(2) {
+    display: inline-block;
+}
+#menu > ul { /* 대분류 ul */
+    list-style: none;
+    padding: 0;
+}
+#menu > ul > li > a { /* 대분류 이름 */
+    display: block;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 20px 20px;
+    width: 220px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+}
+#menu > ul > li > a > span:nth-child(1) {
+    display: inline-block;
+    width: 88%;
+}
+#menu > ul > li > a > span:nth-child(2) { /* 중분류 여는 화살표 */
+    display: inline-block;
+    height: 20px;
+    vertical-align: top;
+    margin-top: 5px;
+}
+#menu > ul > li:hover > a {
+    color: #0D569B;
+    font-weight: bold;
+}
+#menu > ul > li > ul { /* 중분류 ul */
+    display: none;
+    list-style: none;
+    padding: 0;
+    width: 220px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    background-color: #f3f3f3;
+}
+#menu > ul > li > ul > li {
+    line-height: 50px;
+}
+#menu > ul > li > ul > li > a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 25px;
+}
+#menu > ul > li > ul > li:hover {
+    background-color: #bbb;
+}
+
+/* notice css */
+#notice {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #eeeeee95;
+    backdrop-filter: blur(3px);
+    z-index: 1;
+}
+#notice > div {
+    background-color: white;
+    border: 1px solid #0D569B;
+    position: relative;
+    width: 330px;
+    height: 180px;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    border-radius: 7px;
+}
+#notice > div > p {
+    margin-top: 55px;
+    font-size: 16px;
+}
+#notice > div > a {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 7px 12px;
+    border: 1px solid #0D569B;
+    border-radius: 12px;
+    background-color: #0D569B;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}

@@ -41,7 +41,7 @@ public class Product {
     @Column(name = "product_info")
     private String productInfo;
 
-    @Column(name = "product_status")
+    @Column(name = "product_status", nullable = false)
     private String productStatus;
 
     @CreatedDate

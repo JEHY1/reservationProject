@@ -1,0 +1,98 @@
+.box {
+    margin: 0 auto;
+    width: 600px;
+    margin-top: 80px;
+}
+.box > p:nth-child(1) {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+.box > p:nth-child(2) {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 40px;
+}
+.box > p:nth-child(2) > span {
+    font-size: 13px;
+    font-weight: bold;
+    color: #0D569B;
+}
+#confirmBox {
+    width: 430px;
+    margin: 0 auto;
+}
+#confirmBox > p:not(:last-child) {
+    margin-bottom: 10px;
+}
+#confirmBox > p > span:nth-child(1) { /* 항목이름 span 일 때 */
+    box-sizing: border-box;
+    display: inline-block;
+    width: 33%;
+    font-size: 16px;
+    font-weight: bold;
+}
+#confirmBox > p > span:nth-child(2) { /* 사용자정보, 오류창 감싸는 span */
+    display: inline-block;
+    width: 65%;
+}
+#confirmBox > p > span:nth-child(2) > span:nth-child(1) { /* 사용자정보 수정 불가능 할 때 */
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    padding: 9.5px 10px;
+    font-size: 16px;
+}
+#confirmBox > p > label { /* 항목이름 label 일 때 */
+    box-sizing: border-box;
+    display: inline-block;
+    width: 33%;
+    font-size: 16px;
+    line-height: 40px;
+    vertical-align: top;
+    font-weight: bold;
+}
+#confirmBox > p > span:nth-child(2) > input:nth-child(1) { /* 사용자정보 수정 가능 할 때 */
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#confirmBox > p > span:nth-child(2) > span:nth-child(2) { /* 오류창 */
+    padding-left: 5px;
+    font-size: 12px;
+    color: red;
+}
+.buttonBox {
+    text-align: center;
+    margin-top: 40px;
+}
+.buttonBox button:nth-child(1) {
+    box-sizing: border-box;
+    width: 49%;
+    background-color: #0D569B;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+}
+.buttonBox a:nth-child(2) {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 49%;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
+}
+

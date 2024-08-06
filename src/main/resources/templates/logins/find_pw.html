@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/loginsCss/find_idpw.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/find_pw.js"></script>
+    <title>비밀번호 찾기</title>
+</head>
+<body>
+    <th:block th:include="layouts/header"></th:block>
+    <main>
+        <div class="box">
+            <p>비밀번호 찾기</p>
+            <form id="findBox" autocomplete="off" action="/find/pw/create" method="post">
+                <p>
+                    <label for="userId">아이디</label>
+                    <span>
+                        <input type="text" id="userId" autofocus name="username">
+                        <span></span>
+                    </span>
+                </p>
+                <p>
+                    <label for="userName">이름</label>
+                    <span>
+                        <input type="text" id="userName" name="userRealName">
+                        <span></span>
+                    </span>
+                </p>
+                <p>
+                    <label for="userEmail">이메일</label>
+                    <span>
+                        <input type="text" id="userEmail" name="userEmail">
+                        <span></span>
+                    </span>
+                </p>
+                <button type="submit">확인</button>
+            </form>
+        </div>
+    </main>
+    <th:block th:include="layouts/footer"></th:block>
+</body>
+</html>

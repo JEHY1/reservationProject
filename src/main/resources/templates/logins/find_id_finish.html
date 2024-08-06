@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/loginsCss/find_id_finish.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <title>아이디 찾기 완료</title>
+</head>
+<body>
+    <th:block th:include="layouts/header"></th:block>
+    <main>
+        <div class="box">
+            <p>아이디 찾기 완료</p>
+            <div id="findFinishBox">
+                <p><span th:text="${user.userRealName}"></span> 회원님의 아이디입니다.</p>
+                <p th:text="${user.username}"></p>
+            </div>
+            <a href="/login">로그인</a>
+        </div>
+    </main>
+    <th:block th:include="layouts/footer"></th:block>
+</body>
+</html>

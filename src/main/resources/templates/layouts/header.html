@@ -1,0 +1,89 @@
+<header xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div id="upper">
+        <ul>
+            <li sec:authorize="isAnonymous()"><a href="/login">로그인</a><span>l</span></li>
+            <li sec:authorize="isAnonymous()"><a href="/join/new">회원가입</a><span>l</span></li>
+            <li sec:authorize="isAnonymous()"><a href="#">예약조회</a><span>l</span></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/information/confirm/new"><span sec:authentication="name"></span>님</a><span>l</span></li>
+            <li sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a><span>l</span></li>
+            <li sec:authorize="isAuthenticated()"><a href="#">주문내역</a><span>l</span></li>
+            <li><a href="#">공지사항</a></li>
+        </ul>
+    </div>
+    <div id="search">
+        <div id="logoBox">
+            <a href="/" id="logo"></a>
+            <div class="searchBox">
+                <input type="search" placeholder="검색어를 입력하세요.">
+                <button type="button"></button>
+            </div>
+        </div>
+    </div>
+    <ul class="maintab">
+        <li>
+            <span>전체메뉴</span>
+            <ul>
+                <li></li>
+                <li>
+                    <a href="#">여행1</a>
+                    <a href="#">여행1</a>
+                    <a href="#">여행1</a>
+                    <a href="#">여행1</a>
+                </li>
+                <li>
+                    <a href="#">여행1</a>
+                    <a href="#">여행1</a>
+                </li>
+                <li>
+                    <a href="#">여행1</a>
+                </li>
+                <li>
+                    <a href="#">여행3</a>
+                </li>
+                <li>
+                    <a href="#">여행4</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><span>국내여행</span></a>
+            <ul>
+                <li><a href="#">여행1</a></li>
+                <li><a href="#">여행1</a></li>
+                <li><a href="#">여행1</a></li>
+                <li><a href="#">여행1</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><span>일본여행</span></a>
+            <ul>
+                <li><a href="#">여행1</a></li>
+                <li><a href="#">여행1</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><span>중국여행</span></a>
+            <ul>
+                <li><a href="#">여행1</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><span>미국여행</span></a>
+            <ul>
+                <li><a href="#">여행3</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><span>유럽여행</span></a>
+            <ul>
+                <li><a href="#">여행4</a></li>
+            </ul>
+        </li>
+    </ul>
+</header>
+<div xmlns:th="http://www.w3.org/1999/xhtml" id="notice" th:if="${msg != null}">
+    <div>
+        <p th:text="${msg}"></p>
+        <a href="javascript:void(0)">확인</a>
+    </div>
+</div>

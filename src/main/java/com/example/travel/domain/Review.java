@@ -28,15 +28,11 @@ public class Review {
     @Column(name = "review_comment")
     private String reviewComment;
 
-    @Column(name = "review_views")
-    private int reviewViews;
-
     @Builder
-    public Review(Order order, String reviewTitle, String reviewContent, String reviewComment, int reviewViews) {
+    public Review(Order order, String reviewTitle, String reviewContent, String reviewComment) {
         this.order = order;
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
         this.reviewComment = reviewComment;
-        this.reviewViews = reviewViews;
     }
 }

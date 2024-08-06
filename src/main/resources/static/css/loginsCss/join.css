@@ -1,0 +1,105 @@
+.box {
+    margin: 0 auto;
+    width: 600px;
+    margin-top: 80px;
+}
+.box > p:nth-child(1) {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 40px;
+}
+.box > p:nth-child(2) {
+    text-align: right;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-right: 5px;
+    color: #777;
+}
+#joinBox * {
+    font-size: 16px;
+}
+#joinBox > p:not(:last-child) {
+    margin-bottom: 30px;
+}
+#joinBox > p label {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 33%;
+    line-height: 40px;
+    vertical-align: top;
+}
+#joinBox > p > span {
+    display: inline-block;
+    width: 66%;
+}
+#joinBox > p > span > input:nth-child(1) {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#joinBox > p > span > span:nth-child(1) > input { /* 연락처 input */
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 30.3%;
+}
+#joinBox > p > span input::placeholder {
+    color: #ccc;
+    font-size: 12px;
+}
+#joinBox > p > span > span:nth-child(2) { /* 오류창 */
+    padding-left: 5px;
+    font-size: 12px;
+}
+#agreeBox * {
+    font-size: 14px;
+}
+#agreeBox {
+    margin-top: 50px;
+    border-top: 1px solid #eee;
+}
+#agreeBox > div {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+}
+#agreeBox > span:nth-child(2) { /* 필수항목 동의 알림창 */
+    font-size: 15px;
+}
+#agreeBox > div input {
+    margin-right: 5px;
+}
+#agreeBox > div:first-child > p > label {
+    font-size: 15px;
+    color: #555;
+} 
+#agreeBox > div:not(:first-child) > p {
+    color: #555;
+} 
+#agreeBox > div > div:nth-child(2) {
+    height: 100px;
+    padding: 20px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    color: #999;
+}
+.box form button {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #0D569B;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 40px;
+    cursor: pointer;
+
+}
+

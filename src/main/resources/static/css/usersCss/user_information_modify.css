@@ -1,0 +1,182 @@
+.box {
+    margin: 0 auto;
+    width: 430px;
+    margin-top: 80px;
+}
+.box > p:nth-child(1) {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 60px;
+}
+#modifyBox * {
+    font-size: 16px;
+}
+#modifyBox > p:not(:last-child) {
+    margin-bottom: 10px;
+}
+#modifyBox > p > span:nth-child(1) { /* 항목이름 span 일 때 */
+    box-sizing: border-box;
+    display: inline-block;
+    width: 33%;
+    line-height: 40px;
+    vertical-align: top;
+    font-weight: bold;
+}
+#modifyBox > p > label { /* 항목이름 label 일 때 */
+    box-sizing: border-box;
+    display: inline-block;
+    width: 33%;
+    line-height: 40px;
+    vertical-align: top;
+    font-weight: bold;
+}
+#modifyBox > p > span:nth-child(2) { /* 사용자정보, 오류창 감싸는 span */
+    display: inline-block;
+    width: 65%;
+}
+#modifyBox > p:nth-child(1) > span:nth-child(2) > span:nth-child(1),
+#modifyBox > p:nth-child(2) > span:nth-child(2) > span:nth-child(1) { /* 사용자정보 수정 불가능 할 때 - 아이디, 이름 */
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    padding: 9.5px 10px;
+    font-size: 16px;
+}
+#modifyBox > p > span:nth-child(2) > a:nth-child(1) { /* 사용자 정보 버튼 일 때 */
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+    border: 1px solid #0D569B;
+    color: #0D569B;
+    border-radius: 7px;
+    text-align: center;
+    font-weight: bold;
+    margin: 5.6px 5px 5.6px 0;
+}
+#modifyBox > p:nth-child(3) > span:nth-child(2) > span:nth-child(2) { /* 비밀번호 변경 완료 문구 창 */
+    font-size: 12px;
+    color: #999;
+    font-weight: bold;
+}
+#pwBox { /* 비밀번호 변경 창 */
+    display: none;
+    padding: 5px 0;
+}
+#pwBox > span { /* 비밀번호 변경 창에서 input, 오류창 감싸는 span */
+    display: inline-block;
+    width: 100%;
+}
+#pwBox > span:not(:last-child) {
+    margin-bottom: 10px;
+}
+#pwBox > span > input { /* 비밀번호 변경 input */
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#pwBox > span > span { /* 비밀번호 변경 오류창 */
+    padding-left: 5px;
+    font-size: 10px;
+}
+#pwBox > span:last-child { /* 비밀번호 변경 확인, 취소 감싸는 span */
+    margin-left: 5px;
+}
+#pwBox > span > button:nth-child(1) { /* 비밀번호 변경 확인 버튼 */
+    background-color: #0D569B;
+    padding: 5px 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+#pwBox > span > button:nth-child(2) { /* 비밀번호 변경 취소 버튼 */
+    background-color: white;
+    padding: 5px 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+#modifyBox > p > span:nth-child(2) > input:nth-child(1) { /* 사용자정보 수정 가능 할 때 */
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#modifyBox > p > span:nth-child(2) input::placeholder {
+    color: #ccc;
+    font-size: 12px;
+}
+#modifyBox > p:nth-child(4) > span:nth-child(2) > span:nth-child(2),
+#modifyBox > p:nth-child(5) > span:nth-child(2) > span:nth-child(2) { /* 연락처, 이메일 오류창 */
+    padding-left: 5px;
+    font-size: 10px;
+}
+#modifyBox > p:nth-child(7) > span:nth-child(2) { /* 수신 동의 */
+    box-sizing: border-box;
+    padding: 9.5px 0;
+}
+#modifyBox > p:nth-child(7) > span:nth-child(2) > span {
+    margin-right: 20px;
+}
+#modifyBox > p:nth-child(7) > span:nth-child(2) > span > label {
+    margin-left: 7px;
+    font-size: 16px;
+}
+.buttonBox {
+    text-align: center;
+    margin-top: 40px;
+}
+.buttonBox button:nth-child(1) {
+    box-sizing: border-box;
+    width: 49%;
+    background-color: #0D569B;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+}
+.buttonBox a:nth-child(2) {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 49%;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
+}
+.box form > p:last-child {
+    font-size: 12px;
+    margin-top: 20px;
+    text-align: right;
+}
+.box form > p:last-child a {
+    font-size: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    padding: 3px 4px;
+    margin-left: 10px;
+    color: white;
+    background-color: #0D569B;
+    text-decoration: none;
+    vertical-align: top;
+}
+

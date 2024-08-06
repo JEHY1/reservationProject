@@ -1,8 +1,10 @@
 package com.example.travel.domain;
 
+import com.example.travel.dto.login.UpdateUserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_tb")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @ToString
 public class User implements UserDetails {
@@ -84,5 +87,23 @@ public class User implements UserDetails {
         this.userSmsAgreement = userSmsAgreement;
         this.userEmailAgreement = userEmailAgreement;
         this.userRole = userRole;
+    }
+
+    // 회원정보 수정에서 비밀번호 변경
+    public void updatePassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    // 회원정보 수정(연락처, 이메일)
+    public void updateUser(UpdateUserRequest dto) {
+        this.userPhone = dto.getUserPhone();
+        this.userEmail = dto.getUserEmail();
+        this.userSmsAgreement = dto.getUserSmsAgreement();
+        this.userEmailAgreement = dto.getUserEmailAgreement();
+    }
+
+    // userDeleteDate 추가하기 - 회원 탈퇴
+    public void deleteUser() {
+        this.userDeleteDate = this.userDeleteDate == null? LocalDateTime.now() : this.userDeleteDate;
     }
 }

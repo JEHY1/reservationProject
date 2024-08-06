@@ -42,20 +42,16 @@ public class Qna {
     @Column(name = "qna_answer_date")
     private LocalDateTime qnaAnswerDate;
 
-    @Column(name = "qna_views", nullable = false)
-    private int qnaViews;
-
     @Column(name = "qna_secret", nullable = false)
     private boolean qnaSecret;
 
-    public Qna(Product product, User user, String qnaQuestion, String qnaAnswer, LocalDateTime qnaSubmitDate, LocalDateTime qnaAnswerDate, int qnaViews, boolean qnaSecret) {
+    public Qna(Product product, User user, String qnaQuestion, String qnaAnswer, LocalDateTime qnaSubmitDate, LocalDateTime qnaAnswerDate, boolean qnaSecret) {
         this.product = product;
         this.user = user;
         this.qnaQuestion = qnaQuestion;
         this.qnaAnswer = qnaAnswer;
         this.qnaSubmitDate = qnaSubmitDate;
         this.qnaAnswerDate = qnaAnswerDate;
-        this.qnaViews = qnaViews;
         this.qnaSecret = qnaSecret;
     }
 }

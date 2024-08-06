@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_product_insert.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <script src="/js/admin_product_insert.js"></script>
+    <title>관리자 - 상품 등록</title>
+</head>
+<body>
+<th:block th:include="layouts/admin_header"></th:block>
+<main>
+    <form action="/seller/product/create" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="productId" th:value="${product != null ? product.productId : null}">
+        <div class="box">
+            <p id="boxTitle" th:text="${product != null ? '상품 수정' : '상품 등록'}"></p>
+            <div id="insertBox">
+                <div>
+                    <p>▶ 상품 정보</p>
+                    <table>
+                        <tr>
+                            <th>상품상태</th>
+                            <td>
+                                <input type="radio" name="productStatus" id="normal" required value="정상" th:checked="${product != null && product.productStatus == '정상'}">
+                                <label for="normal">정상</label>
+                                <input type="radio" name="productStatus" id="soldout" required value="품절" th:checked="${product != null && product.productStatus == '품절'}">
+                                <label for="soldout">품절</label>
+                                <input type="radio" name="productStatus" id="hidden" required value="숨김" th:checked="${product != null && product.productStatus == '숨김'}">
+                                <label for="hidden">숨김</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품분류</th>
+                            <td>
+                                <select name="productRegionMainCategory" required>
+                                    <option value="" hidden>--대분류--</option>
+                                    <option value="국내여행">국내여행</option>
+                                    <option value="일본여행">일본여행</option>
+                                    <option value="중국여행">중국여행</option>
+                                    <option value="미국여행">미국여행</option>
+                                    <option value="유럽여행">유럽여행</option>
+                                    <option th:value="${product != null ? product.productRegionMainCategory : ''}" th:selected="${product != null}" hidden th:text="${product != null ? product.productRegionMainCategory : ''}"></option>
+                                </select>
+                                <select name="productRegionSubCategory" required>
+                                    <option value="" hidden>--중분류--</option>
+                                    <option value="">백팩</option>
+                                    <option value="">크로스백</option>
+                                    <option value="">지갑</option>
+                                    <option th:value="${product != null ? product.productRegionSubCategory : ''}" th:selected="${product != null}" hidden th:text="${product != null ? product.productRegionSubCategory : ''}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품명</th>
+                            <td>
+                                <input type="text" required name="productTitle" th:value="${product != null ? product.productTitle : ''}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>판매기간</th>
+                            <td>
+                                <input type="date" required name="productStartDate" th:value="${product != null ? product.productStartDate : ''}">
+                                ~
+                                <input type="date" required name="productEndDate" th:value="${product != null ? product.productEndDate : ''}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>정가</th>
+                            <td>
+                                <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="productRegularPrice" th:value="${product != null ? product.productRegularPrice : ''}">원
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>할인가</th>
+                            <td>
+                                <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="productDiscountPrice" th:value="${product != null ? product.productDiscountPrice : ''}">원
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>수량</th>
+                            <td>
+                                <input type="number" min="0" required name="productMaxCount" th:value="${product != null ? product.productMaxCount : ''}">개
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품설명</th>
+                            <td>
+                                <textarea placeholder="간단한 상품 설명을 입력하세요.(선택)" name="productInfo;" th:value="${product != null ? product.productInfo : ''}"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <p>▶ 상품 옵션<button type="button" id="add">추가</button></p>
+                    <div id="optionBox">
+                        <table class="option">
+                            <tr>
+                                <th>연령</th>
+                                <td>
+                                    <input type="text" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>정가</th>
+                                <td>
+                                    <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">원
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>할인가</th>
+                                <td>
+                                    <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">원
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <p>▶ 상품 이미지</p>
+                    <div>
+                        <input type="file" multiple id="mainImg">
+                        <div>
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                        </div>
+                    </div>
+                    <p>▶ 상세 이미지</p>
+                    <div>
+                        <input type="file" multiple id="detailImg">
+                        <div>
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                            <img src="/images/slide_img/autoslide_1.jpg">
+                        </div>
+                    </div>
+                </div>
+
+
+<!--                <ul>-->
+<!--                    <li>-->
+<!--                        <label for="mainImg">대표 이미지</label>-->
+<!--                        <input type="file" name="productRepImg"> &lt;!&ndash; 수정 &ndash;&gt;-->
+<!--                        <input type="hidden" th:value="${product != null ? product.productRepresentativeImgSrc : ''}"> &lt;!&ndash; 보류 &ndash;&gt;-->
+<!--                        <div>-->
+<!--                            <img id="mainImgShow" th:src="${product != null && product.productRepresentativeImgSrc != '' ? 'http://192.168.106.12/fileServer' + product.productRepresentativeImgSrc : ''}">-->
+<!--                        </div>-->
+<!--                    </li>-->
+
+<!--                    <li>-->
+<!--                        <label for="detailImg">상세 이미지</label>-->
+<!--                        <input type="file" multiple name="productExtImg">-->
+<!--                        <div id="detailImgShowBox">-->
+<!--                            <img th:each="productImg : ${productImgs}" class="detailImgShow" th:src="'http://192.168.106.12/fileServer' + ${productImg.productImgSrc}">-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
+            </div>
+            <div class="buttonBox">
+                <button type="submit" th:text="${product != null ? '수정' : '등록'}"></button>
+                <a th:href="${product != null ? '/admin/product/' + product.productId + '/show' : '/admin/product/index'}">취소</a>
+            </div>
+        </div>
+    </form>
+</main>
+</body>
+</html>

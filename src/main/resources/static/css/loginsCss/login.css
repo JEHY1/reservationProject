@@ -1,0 +1,85 @@
+.box {
+    margin: 0 auto;
+    width: 430px;
+    margin-top: 80px;
+}
+.box > p:nth-child(1) {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 60px;
+}
+#loginBox input {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#loginBox input::placeholder {
+    color: #ccc;
+}
+#loginBox > p:nth-of-type(1) { /* 오류창 */
+    padding-left: 5px;
+    font-size: 12px;
+}
+#loginBox > p:nth-of-type(2) {
+    text-align: right;
+    font-size: 15px;
+    color: #999;
+    margin-top: 10px;
+}
+#loginBox > p:nth-of-type(2) > a {
+    color: black;
+    text-decoration: none;
+    padding: 0 10px;
+    font-size: 13px;
+    color: #999;
+    font-weight: bold;
+}
+#loginBox button {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #0D569B;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+#joinBox {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid #ccc;
+}
+#joinBox p:nth-child(1) {
+    text-align: center;
+    font-size: 15px;
+}
+#joinBox p:nth-child(2) {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    color: #999;
+}
+#joinBox a {
+    box-sizing: border-box;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 30px;
+}

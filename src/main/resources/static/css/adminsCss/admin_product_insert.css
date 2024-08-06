@@ -1,0 +1,173 @@
+main { /* main 크기 고정 */
+    width: 1653px;
+}
+.box {
+    width: 1131px;
+    margin-left: 60px;
+}
+#boxTitle { /* 제목 */
+    margin-top: 40px;
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: bold;
+}
+#insertBox {
+    display: flex;
+}
+#insertBox > div > p {
+    margin: 10px 0;
+}
+#insertBox > div table { /* 테이블 전체 */
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+#insertBox > div > table:nth-of-type(1) {
+    height: 491px;
+}
+th, td {
+    border: 1px solid #ccc;
+    height: 53px;
+}
+th {
+    box-sizing: border-box;
+    width: 150px;
+    text-align: left;
+    padding-left: 30px;
+    background-color: #eee;
+}
+td {
+    width: 420px;
+}
+#insertBox > div > table tr:last-child { /* 상품설명 tr */
+    height: 100px;
+}
+#add { /* 추가 버튼 */
+    margin-left: 15px;
+    font-size: 15px;
+    vertical-align: top;
+    margin-top: 1px;
+}
+#optionBox { /* 상품 옵션 scroll div */
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    width: 585px;
+    height: 170px;
+}
+.option:not(:last-child) { /* option table 간 간격 */
+    margin-bottom: 10px;
+}
+input[type=radio] {
+    margin-left: 20px;
+}
+select:nth-of-type(1) {
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 150px;
+    outline: none;
+    margin-left: 5px;
+}
+select:nth-of-type(2) {
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 250px;
+    outline: none;
+}
+input:not([type=file]), textarea { /* input 선 색, padding, outline */
+    border: 1px solid #ccc;
+    padding: 10px;
+    outline: none;
+}
+input[type=date] {
+    width: 167px;
+    text-align: center;
+}
+input[type=date]:nth-of-type(1) {
+    margin-left: 5px;
+}
+#insertBox > div > table tr:nth-of-type(3) input[type=text],
+.option tr:nth-of-type(1) input[type=text] { /* 상품명, 연령 input */
+    width: 385px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-left: 5px;
+}
+.price, input[type=number] { /* 정가, 할인가, 수량 input */
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    text-align: right;
+    margin: 0 5px;
+}
+textarea {
+    width: 385px;
+    height: 60px;
+    margin-left: 5px;
+}
+
+#insertBox > div:nth-child(2) { /* 이미지 감싸는 flex 오른쪽 div */
+    margin-left: 50px;
+}
+#insertBox > div > div > div { /* 이미지 감싸는 div 테두리 */
+    margin-top: 7px;
+    padding: 7px 5px 3px 7px;
+    border: 1px solid #ccc;
+    width: 481px;
+}
+#insertBox > div > div:nth-of-type(1) > div { /* 상품 이미지 감싸는 div */
+    height: 240px;
+}
+#insertBox > div > div:nth-of-type(1) > div > img:first-child { /* 상품 대표 이미지 */
+    float: left;
+    margin-right: 7px;
+    width: 235px;
+    height: 235px;
+    object-fit: cover;
+}
+#insertBox > div > div:nth-of-type(1) > div > img:not(:first-child) { /* 상품 하위 이미지 */
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 5px;
+    width: 115px;
+    height: 115px;
+    object-fit: cover;
+}
+#insertBox > div > div:nth-of-type(2) > div { /* 상품 상세 이미지 감싸는 div */
+    height: 318px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+#insertBox > div > div:nth-of-type(2) > div > img { /* 상품 상세 이미지 */
+    width: 155px;
+    height: 155px;
+    object-fit: cover;
+}
+
+.buttonBox {
+    text-align: center;
+    margin-top: 30px;
+}
+.buttonBox button:nth-child(1) {
+    background-color: #0D569B;
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+}
+.buttonBox a:nth-child(2) {
+    box-sizing: border-box;
+    display: inline-block;
+    text-decoration: none;
+    background-color: white;
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    margin-left: 5px;
+    font-size: 18px;
+}

@@ -1,0 +1,78 @@
+/* footer css */
+footer {
+    margin-top: 80px;
+    margin-bottom: 10px;
+    padding: 0 100px;
+    border-top: 1px solid black;
+}
+footer > ul { /* 회사소개, 이용약관, 여행자보험, 개인정보취급방침 ul */
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: center;
+}
+footer > ul li {
+    display: inline-block;
+}
+footer > ul li a {
+    text-decoration: none;
+    color: black;
+}
+footer > ul li span {
+    margin: 0 10px 0 20px;
+}
+footer > div {
+    width: 1300px;
+    margin: 0 auto;
+}
+footer > div > a { /* 하단 로고 */
+    margin-top: 50px;
+    display: inline-block;
+    background-image: url('/images/logo_img/logo.png');
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 94px;
+    background-size: 200px;
+}
+footer > div > div {
+    display: inline-block;
+    vertical-align: top;
+}
+footer > div > div:nth-child(2) {
+    margin-left: 75px;
+    margin-right: 90px;
+}
+footer > div > div > p {
+    padding: 7px 0;
+}
+footer > div > div:nth-child(2) > p:last-child {
+    padding: 20px 15px;
+}
+footer > div > div:nth-child(3) {
+    width: 300px;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-top: 15px;
+}
+footer > div > div:nth-child(3) > p {
+    font-size: 16px;
+    padding: 5px 0;
+    color: #777;
+    font-weight: bold;
+}
+footer > div > div:nth-child(3) > p:first-child {
+    background-color: #0081CA;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 7px 0;
+}
+footer > div > div:nth-child(3) > p:nth-child(2) {
+    font-size: 28px;
+    font-weight: bold;
+    padding-top: 10px;
+    color: black;
+}
+footer > div > div:nth-child(3) > p:last-child {
+    padding-bottom: 15px;
+}
