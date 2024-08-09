@@ -1,15 +1,20 @@
 package com.example.travel.domain;
 
+import com.example.travel.dto.admin.InsertProductRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
 @Table(name = "product_tb")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @ToString
 public class Product {
@@ -82,6 +87,7 @@ public class Product {
     @JoinColumn(name = "product_id")
     private List<Review> reviewList;
 
+    @Builder
     public Product(User user, String productTitle, int productRegularPrice, Integer productDiscountPrice, LocalDateTime productStartDate, LocalDateTime productEndDate, String productInfo, String productStatus, String productRegionMainCategory, String productRegionSubCategory, int productMaxCount) {
         this.user = user;
         this.productTitle = productTitle;
@@ -95,4 +101,24 @@ public class Product {
         this.productRegionSubCategory = productRegionSubCategory;
         this.productMaxCount = productMaxCount;
     }
+
+    public Product updateProduct(InsertProductRequest dto) {
+
+        this.productStatus = dto.getProductStatus();
+        this.productRegionMainCategory = dto.getProductRegionMainCategory();
+        this.productRegionSubCategory = dto.getProductRegionSubCategory();
+        this.productTitle = dto.getProductTitle();
+        this.productStartDate = LocalDateTime.parse(dto.getProductStartDate() + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.productEndDate = LocalDateTime.parse(dto.getProductEndDate() + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.productRegularPrice = dto.getProductRegularPrice();
+        this.productDiscountPrice = dto. getProductDiscountPrice();
+        this.productMaxCount = dto.getProductMaxCount();
+        this.productInfo = dto.getProductInfo();
+        return this;
+    }
+
+    public void updateStatus(String productStatus){
+        this.productStatus = productStatus;
+    }
+
 }

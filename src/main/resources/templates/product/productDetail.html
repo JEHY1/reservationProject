@@ -238,7 +238,7 @@
       <form action="/order" method="post" id="orderForm">
         <input type="hidden" id="selectedDate" name="selectedDate">
         <input type="hidden" name="productId" id="productId" th:value="${productInfo.product.productId}">
-        <button type="submit" class="text-center mt-4" id="order-btn">구매하기</button>
+        <button type="button" class="text-center mt-4" id="order-btn">구매하기</button>
       </form>
 
 
@@ -256,7 +256,7 @@
     <div class="tapContent">
       <div class="productInfoTab row w-100 mx-auto viewTab">
         <div class="mt-5"></div>
-        <img class="mx-auto" th:each="productInfoImg : ${productInfo.product.productInfoImgList}" th:src="'http://localhost/travelFileServer/images/productInfo/' + ${productInfoImg.productImgSrc}">
+        <img class="mx-auto" th:each="productInfoImg : ${productInfo.product.productInfoImgList}" th:src="'http://localhost/travelFileServer/images/productInfo/' + ${productInfoImg.productInfoImgSrc}">
 
       </div>
       <div class="productReviewTap d-hidden">

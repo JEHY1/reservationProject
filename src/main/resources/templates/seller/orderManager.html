@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <style>
+      .content{
+        width: 1653px;
+        height: 953px;
+      }
+
+    .cursor{
+      cursor: pointer;
+    }
+
+    .border-navy-3{
+      border: 3px solid #2E2F42;
+    }
+
+    .order:hover{
+      background-color: gainsboro;
+    }
+
+
+
+    #prevPage-btn{
+      font-size: 25px;
+      background-color: white;
+      border: none;
+    }
+    #prevPage-btn:hover{
+      color: gray;
+    }
+    #prevPage-btn:disabled:hover{
+      color: gainsboro;
+    }
+    .page-btn{
+      font-size: 25px;
+      width : 47px;
+      height: 47px;
+      padding : 7px;
+      border-radius: 50%;
+      border: none;
+      background-color: white;
+    }
+    .page-btn:hover{
+      background-color: gainsboro;
+    }
+    .selectedPage-btn{
+      background-color : #0D569B !important;
+      color : white !important;
+    }
+    #nextPage-btn{
+      font-size: 25px;
+      background-color: white;
+      border: none;
+    }
+    #nextPage-btn:hover{
+      color: gray;
+    }
+    #nextPage-btn:disabled:hover{
+      color: gainsboro;
+    }
+    </style>
+</head>
+<body>
+
+<div class="content border ms-auto">
+  <div class="title">주문관리</div>
+  <div class="mt-4 py-3 searchBar border mx-auto" style="width: 1603px;">
+    <div class="row mx-auto w-100">
+      <div class="col-10">
+        <div class="row w-100 mx-auto">
+          <div class="col-auto">상품이름</div>
+          <select class="col-auto" style="width: 922px;" id="productId">
+            <option value="0">전체</option>
+            <option th:each="product : ${productList}" th:text="${product.productTitle}" th:value="${product.productId}"></option>
+          </select>
+          <div class="col-auto" style="margin-left: 17px;">주문상태</div>
+          <select class="col" id="orderStatus">
+            <option value="0">전체</option>
+            <option>미입금</option>
+            <option>입금확인대기</option>
+            <option>입금완료</option>
+            <option>환불대기</option>
+            <option>환불완료</option>
+            <option>주문취소</option>
+          </select>
+        </div>
+
+        <div class="row w-100 mx-auto mt-3">
+          <div class="col-auto">주문날짜</div>
+          <input class="col" type="date" id="orderDate1">
+          <div class="col-auto">~</div>
+          <input class="col" type="date" id="orderDate2">
+          <div class="col-auto">예약일자</div>
+          <input class="col" type="date" id="reservationDate1">
+          <div class="col-auto">~</div>
+          <input class="col" type="date" id="reservationDate2">
+        </div>
+
+        <div class="row w-100 mx-auto mt-3">
+          <div class="col-6 p-0">
+            <div class="row w-100 mx-auto">
+              <div class="col-auto">결제방식</div>
+              <input type="hidden" id="paymentType">
+              <input class="col-auto" type="radio" name="paymentType">
+              <label class="col-auto">전체</label>
+              <input class="col-auto" type="radio" name="paymentType">
+              <label class="col-auto">카드결제</label>
+              <input class="col-auto" type="radio" name="paymentType">
+              <label class="col-auto">무통장입금</label>
+              <div class="col-auto ps-0">입금자명</div>
+              <input class="col" placeholder="입금자명" id="depositorName">
+            </div>
+          </div>
+          <div class="col p-0">
+            <div class="row w-100 mx-auto">
+              <div class="col-auto">결제금액</div>
+              <input class="col" type="text" id="paymentPrice1">
+              <div class="col-auto">~</div>
+              <input class="col" type="text" id="paymentPrice2">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="col" id="search-btn">조회</button>
+    </div>
+  </div>
+
+  <div class="orderList mx-auto" style="height: 652px; width: 1603px;">
+    <div class="row w-100 mx-auto" style="height: 50px;">
+      <div class="col-auto pt-4" th:text="'총 ' + ${orderInfo.totalElements} + '건'">총 00건</div>
+    </div>
+    <div class="row w-100 mx-auto" style="height: 50px; border-bottom: 3px solid #2E2F42; border-top: 3px solid #2E2F42; border-radius: 10px;">
+      <div class="col-auto d-flex align-items-center justify-content-center">
+        <div style="width: 50px;">No.</div>
+      </div>
+      <div class="col d-flex align-items-center justify-content-center ps-0">주문번호</div>
+      <div class="col d-flex align-items-center justify-content-center">주문일자</div>
+      <div class="col d-flex align-items-center justify-content-center">예약일자</div>
+      <div class="col-5 d-flex align-items-center justify-content-center">상품이름</div>
+      <div class="col d-flex align-items-center justify-content-center">주문자명</div>
+      <div class="col d-flex align-items-center justify-content-center">주문금액</div>
+      <div class="col d-flex align-items-center justify-content-center">결제방식</div>
+      <div class="col d-flex align-items-center justify-content-center">상태</div>
+      <div class="col d-flex align-items-center justify-content-center">비고</div>
+    </div>
+    <div th:each="order : ${orderInfo.orderList}" class="row w-100 mx-auto order cursor" style="height: 50px; border-bottom: 1px solid #CCC;" th:onclick="|location.href='/seller/orderDetail/${order.orderId}'|">
+      <div class="col-auto d-flex align-items-center justify-content-center">
+        <div class="num" style="width: 50px;"></div>
+      </div>
+      <div class="col d-flex align-items-center justify-content-center ps-0" th:text="${order.orderId}">1103500</div>
+      <div class="col d-flex align-items-center justify-content-center" th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd')}">2024-08-09</div>
+      <div class="col d-flex align-items-center justify-content-center" th:text="${#temporals.format(order.orderDepartureDate, 'yyyy-MM-dd')}">2024-08-19</div>
+      <div class="col-5 d-flex align-items-center justify-content-center" th:text="${order.product.productTitle}">부산시티투어버스 모바일 탑승권(당일 1일권)</div>
+      <div class="col d-flex align-items-center justify-content-center" th:text="${order.user.userRealName}">김재현</div>
+      <div class="col d-flex align-items-center justify-content-center price" th:text="${order.orderTotalPrice}">1,100,100원</div>
+      <div class="col d-flex align-items-center justify-content-center" th:text="${order.orderPaymentType}">무통장입금</div>
+      <div class="col d-flex align-items-center justify-content-center" th:text="${order.orderStatus}">상태</div>
+      <div class="col d-flex align-items-center justify-content-center"></div>
+    </div>
+  </div>
+
+  <div class="row w-100 mx-auto mt-5 buttonSpace" style="height: 47px;" th:if="${orderInfo.totalPages != 0}">
+    <input type="hidden" id="totalPageSize" th:value="${orderInfo.totalPages}">
+    <button class="col-auto ms-auto" id="prevPage-btn">〈</button>
+    <div class="col-auto d-flex align-items-center justify-content-center" id="pageButtonField">
+    </div>
+    <button class="col-auto me-auto" id="nextPage-btn">〉</button>
+  </div>
+
+</div>
+
+<script src="/js/seller/orderManager.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <style>
+      .d-hidden{
+        display: none;
+      }
+
+      .cursor{
+        cursor: pointer;
+      }
+
+      .content{
+        width: 1300px;
+      }
+
+      .title{
+        font-weight: 600;
+        margin-bottom: 50px;
+      }
+
+      .color-white{
+        color: white;
+      }
+
+      .orderStatus{
+        font-size: 20px;
+        font-weight: 600;
+        color: white;
+      }
+
+      .bg-CCC{
+        background-color: #F0F0F0;
+      }
+
+      .border-b{
+        border-bottom: 1px solid gainsboro;
+      }
+
+      .border-radius-10{
+        border-radius: 10px;
+      }
+
+      .infoTitle{
+        background-color: #F0F0F0;
+        font-size: 17px;
+        font-weight: 600;
+        padding: 8px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        text-align: center;
+      }
+
+      .border-F0{
+        border: 1px solid #F0F0F0;
+      }
+
+      #list-btn{
+        background-color: gainsboro;
+        color: white;
+        padding: 10px;
+        border: none;
+        margin-right: 10px;
+      }
+
+      #list-btn:hover{
+        background-color: gray;
+
+      }
+
+      #orderCheck-btn{
+        background-color: #0081CA;
+        color: white;
+        padding: 10px;
+        border: none;
+        margin-left: 10px;
+      }
+
+      #orderCheck-btn:hover{
+        background-color: #0D569B;
+      }
+
+    </style>
+</head>
+<body>
+
+<div style="height: 160px;"></div>
+<div class="content mx-auto">
+  <h2 class="title text-center">주문내역</h2>
+  <input type="hidden" id="orderId" th:value="${order.orderId}">
+  <div class="orderStatus row w-100 mx-auto">
+    <div class="col text-center py-3" style="background-color: #0081CA;" th:text="'주문번호 : ' + ${order.orderId}">주문번호 : 1112</div>
+    <div class="col text-center py-3" style="background-color: #FA4169;" th:text="'주문상태 : ' + ${order.orderStatus}">주문상태 : 미입금</div>
+    <div class="col text-center py-3 cursor" style="background-color: #0D569B;" th:if="${order.orderPaymentType.equals('무통장입금') && (order.orderStatus.equals('미입금') || order.orderStatus.equals('결제확인대기'))}" th:text="${order.payment == null ? '결제확인 요청하기' : '결제확인 재요청하기'}"></div>
+    <div class="col text-center py-3 cursor" style="background-color: #0D569B;" th:if="${order.orderPaymentType.equals('카드결제') && order.orderStatus.equals('미입금')}">카드결제</div>
+  </div>
+
+  <div class="productInfo row w-100 mx-auto mt-5 border-b pb-4">
+    <div class="row w-100 mx-auto p-0">
+      <img src="#" class="col-auto p-0" style="width: 25px; height: 25px;">
+      <div class="col-auto">주문내역</div>
+    </div>
+
+    <div class="row w-100 mx-auto p-0 mt-3" th:each="orderDetail : ${order.orderDetailList}">
+      <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${order.product.productRepImgList[0].productRepImgSrc}" class="col-auto p-0 border" style="width: 224px; height: 224px; border-radius: 10px;">
+      <div class="col">
+        <div class="row w-100 mx-auto">
+          <div class="col-3 infoTitle" >상품명</div>
+          <div class="col border-F0 d-flex align-items-center" th:text="${order.product.productTitle}">[탑승권] 부산야경 요트투어</div>
+        </div>
+        <div class="row w-100 mx-auto mt-1">
+          <div class="col-3 infoTitle">옵션</div>
+          <div class="col border-F0 d-flex align-items-center" th:text="${orderDetail.productOption.productOptionAgeRange}">19시 출항 / 대인(중학생 이상)</div>
+        </div>
+        <div class="row w-100 mx-auto mt-1">
+          <div class="col-3 infoTitle">예약일</div>
+          <div class="col border-F0 d-flex align-items-center" th:text="${#temporals.format(order.orderDepartureDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(order.orderEndDate, 'yyyy-MM-dd')}">2024-08-19</div>
+        </div>
+        <div class="row w-100 mx-auto mt-1">
+          <div class="col-3 infoTitle">수량</div>
+          <div class="col border-F0 d-flex align-items-center" th:text="${orderDetail.orderDetailTravelerCount}">1 개</div>
+        </div>
+        <div class="row w-100 mx-auto mt-1">
+          <div class="col-3 infoTitle">금액</div>
+          <div class="col border-F0 d-flex align-items-center price" th:text="${orderDetail.orderDetailTotalSoldProductOptionDiscountPrice}">25,000 원</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="customerInfo mt-5 pb-4 border-b">
+    <div class="row w-100 mx-auto p-0">
+      <img src="#" class="col-auto p-0" style="width: 25px; height: 25px;">
+      <div class="col-auto">주문자 정보</div>
+    </div>
+
+    <div class="row w-100 mx-auto mt-3">
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">이름</div>
+        <div class="col border-F0 d-flex align-items-center" th:text="${order.user.userRealName}">김재현</div>
+      </div>
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">연락처</div>
+        <div class="col border-F0 d-flex align-items-center" th:text="${order.user.userPhone}">010-4852-7204</div>
+      </div>
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">이메일</div>
+        <div class="col border-F0 d-flex align-items-center" th:text="${order.user.userEmail}">travel@travel.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="paymentInfo  mt-5 pb-4 border-b">
+    <div class="row w-100 mx-auto p-0">
+      <img src="#" class="col-auto p-0" style="width: 25px; height: 25px;">
+      <div class="col-auto">결제 정보</div>
+    </div>
+
+    <div class="row w-100 mx-auto mt-3">
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">결제방식</div>
+        <div class="col border-F0 d-flex align-items-center" th:text="${order.orderPaymentType}">무통장</div>
+      </div>
+      <div class="row w-100 mx-auto mt-1 p-0" th:if="${order.orderPaymentType.equals('무통장입금')}">
+        <div class="col-2 infoTitle">입금자명</div>
+        <div class="col border-F0 d-flex align-items-center" th:text="${order.orderDepositor}">홍길동</div>
+      </div>
+      <div class="row w-100 mx-auto mt-1 p-0" th:if="${order.orderPaymentType.equals('무통장입금')}">
+        <div class="col-2 infoTitle">결제계좌</div>
+        <div class="col border-F0 d-flex align-items-center" th:text="${order.orderAccount}">국민은행 / KB국민은행 849501-01-333589 주식회사 부산여행특공대</div>
+      </div>
+<!--      <div class="row w-100 mx-auto mt-1 p-0">-->
+<!--        <div class="col-2 infoTitle">주문금액</div>-->
+<!--        <div class="col border-F0 d-flex align-items-center price" th:text="${order.">55,200원</div>-->
+<!--      </div>-->
+<!--      <div class="row w-100 mx-auto mt-1 p-0">-->
+<!--        <div class="col-2 infoTitle">할인금액</div>-->
+<!--        <div class="col border-F0 d-flex align-items-center">10,000원</div>-->
+<!--      </div>-->
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">결제금액</div>
+        <div class="col border-F0 d-flex align-items-center price" th:text="${order.orderTotalPrice}">45,200원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="refundInfo  mt-5 pb-4 border-b">
+    <div class="row w-100 mx-auto p-0">
+      <img src="#" class="col-auto p-0" style="width: 25px; height: 25px;">
+      <div class="col-auto">환불 계좌 정보</div>
+    </div>
+
+    <div class="row w-100 mx-auto mt-3">
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">환불 계좌 은행명</div>
+        <select class="col border-F0" id="paymentRefundAccountBank">
+          <option style="d-hidden">환불 계좌 은행을 선택해주세요.</option>
+          <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행1')}">은행1</option>
+          <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행2')}">은행2</option>
+          <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행3')}">은행3</option>
+          <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행4')}">은행4</option>
+        </select>
+      </div>
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">환불 계좌 예금주</div>
+        <input class="col border-F0" id="paymentRefundAccountName" placeholder="환불 계좌 예금주명을 입력해주세요" th:value="${order.payment != null ? order.payment.paymentRefundAccountName : null}">
+      </div>
+      <div class="row w-100 mx-auto mt-1 p-0">
+        <div class="col-2 infoTitle">환불 계좌 번호</div>
+        <input class="col border-F0" id="paymentRefundAccountNumber" placeholder="환불 계좌번호를 숫자만 입력해주세요 Ex)1234567890123456" th:value="${order.payment != null ? order.payment.paymentRefundAccount.split(' ')[1] : null}">
+      </div>
+    </div>
+  </div>
+
+  <div class="notice mt-5 pb-4">
+    <div class="row w-100 mx-auto p-0">
+      <img src="#" class="col-auto p-0" style="width: 25px; height: 25px;">
+      <div class="col-auto">취소 환불 규정</div>
+    </div>
+
+    <div class="col border px-3 mt-3">
+      <div style="font-weight: 800;" class="mt-3">【 취소 및 환불 규정 】</div>
+      <div>▪ 입장 전 취소 : 결제금액 전액 환불</div>
+      <div>▪ 입장 후 취소 : 환불 불가</div>
+      <div style="font-weight: 800;" class="mt-4">【 취소, 환불 요청 】</div>
+      <div>▪ 환불 요청은 변경/취소 요청 게시판으로만 접수</div>
+      <div>▪ 판매사 영업시간 이후 환불요청은 다음 영업일 요청으로 간주</div>
+      <div style="font-weight: 800;" class="mt-4">【 판매사 영업시간 】</div>
+      <div>▪ 평일 : 09시 ~ 18시</div>
+      <div>▪ 토요일 : 09시 ~ 13시</div>
+      <div class="mb-3">▪ 일요일 및 공휴일 : 휴무</div>
+    </div>
+  </div>
+
+  <div class="row w-100 mx-auto">
+    <button class="col-2 ms-auto" id="list-btn" onclick="location.href='/orderList'">나중에 결제</button>
+    <button class="col-3 me-auto" id="orderCheck-btn" th:text="${order.payment == null ? '결제확인 요청하기' : '결제확인 재요청하기'}">결제확인요청</button>
+  </div>
+</div>
+<div style="height: 1000px;"></div>
+</body>
+<script src="/js/order/orderDetail.js"></script>
+</html>

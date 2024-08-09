@@ -24,14 +24,14 @@ public class UserService {
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // ·Î±×ÀÎ µÈ »ç¿ëÀÚ User Entity °¡Á®¿À±â
+    // ë¡œê·¸ì¸ ëœ ì‚¬ìš©ì User Entity ê°€ì ¸ì˜¤ê¸°
     public User getUserByPrincipal(Principal principal){
 
         return userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalArgumentException("not found user"));
     }
 
-    // ·Î±×ÀÎ µÈ »ç¿ëÀÚ UserId °¡Á®¿À±â
+    // ë¡œê·¸ì¸ ëœ ì‚¬ìš©ì UserId ê°€ì ¸ì˜¤ê¸°
     public long getUserId(Principal principal){
         return userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalArgumentException("not found user")).getUserId();
@@ -45,7 +45,7 @@ public class UserService {
         return accountRepository.findAll();
     }
 
-    // È¸¿ø°¡ÀÔ - È¸¿øÁ¤º¸ µî·Ï
+    // íšŒì›ê°€ì… - íšŒì›ì •ë³´ ë“±ë¡
     public Long save(JoinRequest dto) {
         return userRepository.save(User.builder()
                 .username(dto.getUsername())
@@ -59,140 +59,140 @@ public class UserService {
                 .build()).getUserId();
     }
 
-    // userId·Î User °¡Á®¿À±â
+    // userIdë¡œ User ê°€ì ¸ì˜¤ê¸°
     public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("not found user"));
     }
 
-    // userEmail·Î User °¡Á®¿À±â
+    // userEmailë¡œ User ê°€ì ¸ì˜¤ê¸°
     public User findByUserEmail(String userEmail) {
         return userRepository.findByUserEmail(userEmail).orElse(null);
     }
 
-    // È¸¿ø°¡ÀÔ ½Ã ¾ÆÀÌµğ Áßº¹ Ã¼Å© - join.js¿¡ ajax ¿¬°á
+    // íšŒì›ê°€ì… ì‹œ ì•„ì´ë”” ì¤‘ë³µ ì²´í¬ - join.jsì— ajax ì—°ê²°
     public String idCheck(String username) {
         User user = userRepository.findByUsername(username).orElse(null);
         if(user == null) {
-            // ¾ÆÀÌµğ »ç¿ë°¡´É
+            // ì•„ì´ë”” ì‚¬ìš©ê°€ëŠ¥
             return "available";
         }
-        // ¾ÆÀÌµğ Áßº¹
+        // ì•„ì´ë”” ì¤‘ë³µ
         return "duplicated";
     }
 
-    // È¸¿ø°¡ÀÔ ½Ã ¿¬¶ôÃ³ Áßº¹ Ã¼Å© - join.js¿¡ ajax ¿¬°á
+    // íšŒì›ê°€ì… ì‹œ ì—°ë½ì²˜ ì¤‘ë³µ ì²´í¬ - join.jsì— ajax ì—°ê²°
     public String phoneCheck(String userPhone) {
         User user = userRepository.findByUserPhone(userPhone).orElse(null);
         if(user == null) {
-            // ÈŞ´ëÆù¹øÈ£ »ç¿ë°¡´É
+            // íœ´ëŒ€í°ë²ˆí˜¸ ì‚¬ìš©ê°€ëŠ¥
             return "available";
         }
-        // ÈŞ´ëÆù¹øÈ£ Áßº¹
+        // íœ´ëŒ€í°ë²ˆí˜¸ ì¤‘ë³µ
         return "duplicated";
     }
 
-    // È¸¿ø°¡ÀÔ ½Ã ÀÌ¸ŞÀÏ Áßº¹ Ã¼Å© - join.js¿¡ ajax ¿¬°á
+    // íšŒì›ê°€ì… ì‹œ ì´ë©”ì¼ ì¤‘ë³µ ì²´í¬ - join.jsì— ajax ì—°ê²°
     public String emailCheck(String userEmail) {
         User user = findByUserEmail(userEmail);
         if(user == null) {
-            // ÀÌ¸ŞÀÏ »ç¿ë°¡´É
+            // ì´ë©”ì¼ ì‚¬ìš©ê°€ëŠ¥
             return "available";
         }
-        // ÀÌ¸ŞÀÏ Áßº¹
+        // ì´ë©”ì¼ ì¤‘ë³µ
         return "duplicated";
     }
 
-    // ·Î±×ÀÎ ½Ã ¾ÆÀÌµğ, ºñ¹Ğ¹øÈ£ È®ÀÎ - login.js¿¡ ajax ¿¬°á
+    // ë¡œê·¸ì¸ ì‹œ ì•„ì´ë””, ë¹„ë°€ë²ˆí˜¸ í™•ì¸ - login.jsì— ajax ì—°ê²°
     public String loginCheck(String username, String userPassword) {
         User user = userRepository.findByUsername(username).orElse(null);
-        // ¾ø´Â user ÀÌ°Å³ª Å»ÅğÇÑ user ÀÏ °æ¿ì
+        // ì—†ëŠ” user ì´ê±°ë‚˜ íƒˆí‡´í•œ user ì¼ ê²½ìš°
         if(user == null || user.getUserDeleteDate() != null) {
-            // ¾ÆÀÌµğ ¿À·ù
+            // ì•„ì´ë”” ì˜¤ë¥˜
             return "error_id";
         }
         else {
-            // ºñ¹Ğ¹øÈ£ ÀÏÄ¡ È®ÀÎ
+            // ë¹„ë°€ë²ˆí˜¸ ì¼ì¹˜ í™•ì¸
             if(bCryptPasswordEncoder.matches(userPassword, user.getUserPassword())) {
-                // ·Î±×ÀÎ ¼º°ø
+                // ë¡œê·¸ì¸ ì„±ê³µ
                 return "success_login";
             }
             else {
-                // ºñ¹Ğ¹øÈ£ ¿À·ù
+                // ë¹„ë°€ë²ˆí˜¸ ì˜¤ë¥˜
                 return "error_pw";
             }
         }
     }
 
-    // ±âÁ¸ ºñ¹Ğ¹øÈ£ ÀÏÄ¡ ¿©ºÎ È®ÀÎ - user_information_confirm/modify.js, user_delete_confirm.js¿¡ ajax ¿¬°á
+    // ê¸°ì¡´ ë¹„ë°€ë²ˆí˜¸ ì¼ì¹˜ ì—¬ë¶€ í™•ì¸ - user_information_confirm/modify.js, user_delete_confirm.jsì— ajax ì—°ê²°
     public String pwCheck(String userPassword, Principal principal) {
-        // ±âÁ¸ ºñ¹Ğ¹øÈ£ ÀÏÄ¡ ¿©ºÎ È®ÀÎ
+        // ê¸°ì¡´ ë¹„ë°€ë²ˆí˜¸ ì¼ì¹˜ ì—¬ë¶€ í™•ì¸
         boolean pwCheck = bCryptPasswordEncoder.matches(userPassword, getUserByPrincipal(principal).getUserPassword());
         if(pwCheck) {
-            // ºñ¹Ğ¹øÈ£ ÀÏÄ¡
+            // ë¹„ë°€ë²ˆí˜¸ ì¼ì¹˜
             return "accord";
         }
-        // ºñ¹Ğ¹øÈ£ ºÒÀÏÄ¡
+        // ë¹„ë°€ë²ˆí˜¸ ë¶ˆì¼ì¹˜
         return "discord";
     }
 
-    // È¸¿øÁ¤º¸ ¼öÁ¤¿¡¼­ ºñ¹Ğ¹øÈ£ º¯°æ
+    // íšŒì›ì •ë³´ ìˆ˜ì •ì—ì„œ ë¹„ë°€ë²ˆí˜¸ ë³€ê²½
     @Transactional
     public void updatePassword(UpdatePasswordRequest dto, Principal principal) {
         getUserByPrincipal(principal).updatePassword(bCryptPasswordEncoder.encode(dto.getUserPassword()));
     }
 
-    // È¸¿øÁ¤º¸ ¼öÁ¤(¿¬¶ôÃ³, ÀÌ¸ŞÀÏ)
+    // íšŒì›ì •ë³´ ìˆ˜ì •(ì—°ë½ì²˜, ì´ë©”ì¼)
     @Transactional
     public void updateUser(UpdateUserRequest dto, Principal principal) {
         getUserByPrincipal(principal).updateUser(dto);
     }
 
-    // ºñ¹Ğ¹øÈ£ Ã£±â¿¡¼­ ºñ¹Ğ¹øÈ£ Àç¼³Á¤
+    // ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸°ì—ì„œ ë¹„ë°€ë²ˆí˜¸ ì¬ì„¤ì •
     @Transactional
     public void resetPassword(ResetPasswordRequest dto) {
         findById(dto.getUserId()).updatePassword(bCryptPasswordEncoder.encode(dto.getUserPassword()));
     }
 
-    // È¸¿øÁ¤º¸ ¼öÁ¤ ½Ã ±âÁ¸ ¿¬¶ôÃ³ ¹× Áßº¹ Ã¼Å© - user_information_modify.js¿¡ ajax ¿¬°á
+    // íšŒì›ì •ë³´ ìˆ˜ì • ì‹œ ê¸°ì¡´ ì—°ë½ì²˜ ë° ì¤‘ë³µ ì²´í¬ - user_information_modify.jsì— ajax ì—°ê²°
     public String phoneReCheck(String userPhone, Principal principal) {
         User user = userRepository.findByUserPhone(userPhone).orElse(null);
         if(user == null) {
-            // ¿¬¶ôÃ³ »ç¿ë°¡´É
+            // ì—°ë½ì²˜ ì‚¬ìš©ê°€ëŠ¥
             return "available";
         }
         else {
             if(userPhone.equals(getUserByPrincipal(principal).getUserPhone())) {
-                // ±âÁ¸ ¿¬¶ôÃ³¿Í µ¿ÀÏ
+                // ê¸°ì¡´ ì—°ë½ì²˜ì™€ ë™ì¼
                 return "equal";
             }
             else {
-                // ¿¬¶ôÃ³ Áßº¹
+                // ì—°ë½ì²˜ ì¤‘ë³µ
                 return "duplicated";
             }
         }
     }
 
-    // È¸¿øÁ¤º¸ ¼öÁ¤ ½Ã ±âÁ¸ ÀÌ¸ŞÀÏ ¹× Áßº¹ Ã¼Å© - user_information_modify.js¿¡ ajax ¿¬°á
+    // íšŒì›ì •ë³´ ìˆ˜ì • ì‹œ ê¸°ì¡´ ì´ë©”ì¼ ë° ì¤‘ë³µ ì²´í¬ - user_information_modify.jsì— ajax ì—°ê²°
     public String emailReCheck(String userEmail, Principal principal) {
         User user = userRepository.findByUserEmail(userEmail).orElse(null);
         if(user == null) {
-            // ÀÌ¸ŞÀÏ »ç¿ë°¡´É
+            // ì´ë©”ì¼ ì‚¬ìš©ê°€ëŠ¥
             return "available";
         }
         else {
             if(userEmail.equals(getUserByPrincipal(principal).getUserEmail())) {
-                // ±âÁ¸ ÀÌ¸ŞÀÏ°ú µ¿ÀÏ
+                // ê¸°ì¡´ ì´ë©”ì¼ê³¼ ë™ì¼
                 return "equal";
             }
             else {
-                // ÀÌ¸ŞÀÏ Áßº¹
+                // ì´ë©”ì¼ ì¤‘ë³µ
                 return "duplicated";
             }
         }
     }
 
-    // ·Î±×ÀÎ µÈ »ç¿ëÀÚ userDeleteDate Ãß°¡ÇÏ±â - È¸¿ø Å»Åğ
+    // ë¡œê·¸ì¸ ëœ ì‚¬ìš©ì userDeleteDate ì¶”ê°€í•˜ê¸° - íšŒì› íƒˆí‡´
     @Transactional
     public void deleteUser(Principal principal) {
         getUserByPrincipal(principal).deleteUser();

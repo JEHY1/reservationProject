@@ -1,5 +1,6 @@
 package com.example.travel.domain;
 
+import com.example.travel.dto.admin.InsertProductOptionRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,5 +35,13 @@ public class ProductOption {
         this.productOptionAgeRange = productOptionAgeRange;
         this.productOptionRegularPrice = productOptionRegularPrice;
         this.productOptionDiscountPrice = productOptionDiscountPrice;
+    }
+
+    public ProductOption updateProductOption(InsertProductOptionRequest dto) {
+        this.productOptionAgeRange = dto.getProductOptionAgeRange();
+        this.productOptionRegularPrice = dto.getProductOptionRegularPrice();
+        this.productOptionDiscountPrice = dto.getProductOptionDiscountPrice();
+
+        return this;
     }
 }

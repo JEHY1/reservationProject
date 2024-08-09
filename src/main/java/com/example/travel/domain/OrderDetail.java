@@ -23,17 +23,21 @@ public class OrderDetail {
     @JoinColumn(name = "product_option_id")
     private ProductOption productOption;
 
-    @Column(name = "payment_detail_traveler_count", nullable = false)
-    private int paymentDetailTravelerCount;
+    @Column(name = "order_detail_traveler_count", nullable = false)
+    private int orderDetailTravelerCount;
 
-    @Column(name = "payment_sold_product_option_price", nullable = false)
-    private int paymentSoldProductOptionPrice;
+    @Column(name = "order_detail_total_sold_product_option_regular_price", nullable = false)
+    private int orderDetailTotalSoldProductOptionRegularPrice;
+
+    @Column(name ="order_detail_total_sold_product_option_discount_price", nullable = false)
+    private int orderDetailTotalSoldProductOptionDiscountPrice;
 
     @Builder
-    public OrderDetail(com.example.travel.domain.Order order, ProductOption productOption, int paymentDetailTravelerCount, int paymentSoldProductOptionPrice) {
-        Order = order;
+    public OrderDetail(com.example.travel.domain.Order order, ProductOption productOption, int orderDetailTravelerCount, int orderDetailTotalSoldProductOptionRegularPrice, int orderDetailTotalSoldProductOptionDiscountPrice) {
+        this.Order = order;
         this.productOption = productOption;
-        this.paymentDetailTravelerCount = paymentDetailTravelerCount;
-        this.paymentSoldProductOptionPrice = paymentSoldProductOptionPrice;
+        this.orderDetailTravelerCount = orderDetailTravelerCount;
+        this.orderDetailTotalSoldProductOptionRegularPrice = orderDetailTotalSoldProductOptionRegularPrice;
+        this.orderDetailTotalSoldProductOptionDiscountPrice = orderDetailTotalSoldProductOptionDiscountPrice;
     }
 }

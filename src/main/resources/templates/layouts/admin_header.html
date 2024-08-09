@@ -1,8 +1,10 @@
 <header xmlns:sec="http://www.w3.org/1999/xhtml">
     <div id="menu">
         <a id="logo" href="/"></a>
+        <span sec:authorize="hasRole('ADMIN')">관리자 페이지</span>
+        <span sec:authorize="hasRole('SELLER')">판매자 페이지</span>
         <p><span sec:authentication="name"></span>님 <a href="/logout">로그아웃</a></p>
-        <a href="/">홈페이지로 돌아가기</a>
+        <a href="/">메인 홈페이지로 돌아가기</a>
         <ul>
             <li>
                 <a href="javascript:void(0)"><span>주문관리</span><span>﹀</span></a>
@@ -13,8 +15,8 @@
             <li>
                 <a href="javascript:void(0)"><span>상품관리</span><span>﹀</span></a>
                 <ul>
-                    <li><a href="/admin/product/index">목록조회</a></li>
-                    <li><a href="/admin/product/insert">상품등록</a></li>
+                    <li><a href="/seller/product/index">목록조회</a></li>
+                    <li><a href="/seller/product/insert">상품등록</a></li>
                 </ul>
             </li>
             <li>

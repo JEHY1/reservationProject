@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
-    @Query("SELECT SUM(od.paymentDetailTravelerCount) " +
+    @Query("SELECT SUM(od.orderDetailTravelerCount) " +
             "FROM OrderDetail od " +
             "JOIN od.Order o " +
             "WHERE o.orderDepartureDate BETWEEN :startDate AND :endDate " +

@@ -469,6 +469,24 @@ if(qnaContent){
     });
 }
 
+const orderButton = document.getElementById('order-btn');
+
+if(orderButton){
+    orderButton.addEventListener('click', () => {
+        if(document.getElementById('selectedDate').value === ''){
+            alert('날짜를 선택하세요.');
+            return;
+        }
+
+        if(document.getElementById('orderForm').children.length === 3){
+            alert('옵션을 선택하세요.')
+            return;
+        }
+
+        document.getElementById('orderForm').submit();
+    });
+}
+
 //초기값 설정
 if(document.getElementById('discountPercentage')){
     let percentage = document.getElementById('discountPercentage');

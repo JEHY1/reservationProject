@@ -1,0 +1,201 @@
+main { /* main 크기 고정 */
+    width: 1720px;
+}
+.box {
+    width: 1660px;
+    height: 913px;
+    margin: 0 auto;
+    position: relative;
+}
+#boxTitle { /* 제목 */
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+}
+#selectBox {
+    margin-bottom: 25px;
+    padding: 25px 10px;
+    background-color: #eee;
+    border-radius: 10px;
+    box-shadow : 0 0 7px #999;
+}
+#selectBox select:not(:nth-of-type(3)) {
+    padding: 10px;
+    width: 150px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    outline: none;
+}
+#selectBox select:nth-of-type(3) {
+    padding: 10px;
+    width: 200px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    outline: none;
+}
+#selectBox input {
+    padding: 10.5px;
+    width: 1017px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    outline: none;
+}
+#selectBox button {
+    background-color: #0D569B;
+    width: 92px;
+    padding: 9.5px;
+    border: 1px solid #0D569B;
+    border-radius: 7px;
+    color: white;
+    vertical-align: top;
+    font-size: 18px;
+}
+#upperLine {
+    margin-bottom: 10px;
+}
+#upperLine p:nth-child(1) {
+    display: inline-block;
+    font-size: 16px;
+    width: 75%;
+    padding-left: 7px;
+    vertical-align: bottom;
+}
+#upperLine p:nth-child(1) span {
+    padding: 0 3px 0 5px;
+    font-weight: bold;
+    color: #0D569B;
+    font-size: 18px;
+}
+#upperLine p:nth-child(2) {
+    display: inline-block;
+    width: 24%;
+    text-align: right;
+}
+#upperLine p:nth-child(2) a {
+    box-sizing: border-box;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #0D569B;
+    padding: 7px 10.2px;
+    border: 1px solid #0D569B;
+    border-radius: 7px;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    font-size: 16px;
+}
+#upperLine p:nth-child(2) a:nth-of-type(2) {
+    margin-right: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-radius : 10px;
+    border-style : hidden;
+    overflow: hidden;
+    box-shadow : 0 0 7px #999;
+}
+th {
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #ccc;
+    height: 45px;
+    background-color: #eee;
+    font-size: 16px;
+}
+td {
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 16px;
+}
+tr:last-child td {
+    border-bottom: 1px solid #999;
+}
+th:nth-child(1), td:nth-child(1) {
+    padding-left: 10px;
+}
+td:nth-child(5) {
+    text-align: left;
+    padding: 0 15px;
+}
+td:nth-child(5) a {
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+}
+td:nth-child(5) a:hover {
+    font-weight: bold;
+}
+th:nth-child(14), td:nth-child(14) {
+    padding-right: 10px;
+}
+td:nth-child(14) a:nth-child(1) {
+    font-size: 15px;
+    text-decoration: none;
+    background-color: #0D569B;
+    padding: 3px 5px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    vertical-align: top;
+}
+td:nth-child(14) a:nth-child(2) {
+    font-size: 15px;
+    text-decoration: none;
+    background-color: white;
+    padding: 3px 5px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    display: inline-block;
+    vertical-align: top;
+}
+#blank img {
+    width: 200px;
+    height: 200px;
+    margin-top: 40px;
+}
+#blank p {
+    color: #bbb;
+    font-weight: bold;
+    font-size: 24px;
+    margin: 5px 0 50px;
+}
+#pageBox {
+    text-align: center;
+    margin: 25px 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+#pageBox a {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    padding: 5px;
+    margin: 0 5px;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+}
+#pageBox a:first-child, #pageBox a:last-child {
+    font-weight: bold;
+}
+#pageBox a:first-child:hover, #pageBox a:last-child:hover {
+    color: #0D569B;
+}
+#pageBox a:not(:first-child, :last-child):hover {
+    background-color: #eee;
+}

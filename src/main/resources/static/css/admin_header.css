@@ -3,12 +3,12 @@
     font-size: 20px;
 }
 body {
-    width: 1903px;
+    width: 1920px;
     display: flex;
 }
 /* header css */
 header {
-    width: 250px;
+    width: 200px;
     min-height: 953px;
     z-index: 1;
 }
@@ -18,11 +18,23 @@ header {
 }
 #logo { /* 로고 */
     display: inline-block;
-    background-image: url('../images/logo_img/logo.png');
+    background-image: url('/images/logo_img/logo.png');
     width: 120px;
     height: 57px;
-    margin: 30px 65px 20px 65px;
+    margin: 40px 40px 10px;
     background-size: 120px;
+}
+#menu > span { /* 페이지 종류 */
+    display: inline-block;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 0 44px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 100px;
+    text-align: center;
+    background-color: #eee;
 }
 #menu > p { /* 유저 이름 및 로그아웃 */
     text-align: center;
@@ -38,19 +50,17 @@ header {
     padding-left: 10px;
     font-size: 15px;
 }
-header #menu > p {
-    display: block;
-}
 #menu > a:nth-of-type(2) { /* 홈페이지로 돌아가기 */
-    padding: 5px 10px;
-    width: 140px;
+    padding: 5px;
+    width: 166px;
     box-sizing: border-box;
     text-decoration: none;
     color: black;
-    margin: 15px 55px 20px 55px;
+    margin: 15px 17px 20px;
     text-align: center;
     border: 1px solid black;
-    border-radius: 15px;
+    background-color: #eee;
+    border-radius: 5px;
     font-size: 12px;
 }
 header #menu > a:nth-of-type(2) {
@@ -66,14 +76,14 @@ header #menu > a:nth-of-type(2) {
     color: black;
     font-weight: bold;
     padding: 20px 20px;
-    width: 220px;
+    width: 180px;
     margin: 0 auto;
     box-sizing: border-box;
     border-bottom: 1px solid #ccc;
 }
 #menu > ul > li > a > span:nth-child(1) {
     display: inline-block;
-    width: 88%;
+    width: 85%;
 }
 #menu > ul > li > a > span:nth-child(2) { /* 중분류 여는 화살표 */
     display: inline-block;
@@ -89,7 +99,7 @@ header #menu > a:nth-of-type(2) {
     display: none;
     list-style: none;
     padding: 0;
-    width: 220px;
+    width: 180px;
     box-sizing: border-box;
     margin: 0 auto;
     background-color: #f3f3f3;

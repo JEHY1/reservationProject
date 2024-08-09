@@ -1,10 +1,7 @@
 package com.example.travel.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -45,6 +42,7 @@ public class Qna {
     @Column(name = "qna_secret", nullable = false)
     private boolean qnaSecret;
 
+    @Builder
     public Qna(Product product, User user, String qnaQuestion, String qnaAnswer, LocalDateTime qnaSubmitDate, LocalDateTime qnaAnswerDate, boolean qnaSecret) {
         this.product = product;
         this.user = user;

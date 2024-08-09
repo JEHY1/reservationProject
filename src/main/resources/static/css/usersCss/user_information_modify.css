@@ -123,14 +123,14 @@
     padding-left: 5px;
     font-size: 10px;
 }
-#modifyBox > p:nth-child(7) > span:nth-child(2) { /* 수신 동의 */
+#modifyBox > p:nth-child(6) > span:nth-child(2) { /* 수신 동의 */
     box-sizing: border-box;
     padding: 9.5px 0;
 }
-#modifyBox > p:nth-child(7) > span:nth-child(2) > span {
+#modifyBox > p:nth-child(6) > span:nth-child(2) > span {
     margin-right: 20px;
 }
-#modifyBox > p:nth-child(7) > span:nth-child(2) > span > label {
+#modifyBox > p:nth-child(6) > span:nth-child(2) > span > label {
     margin-left: 7px;
     font-size: 16px;
 }

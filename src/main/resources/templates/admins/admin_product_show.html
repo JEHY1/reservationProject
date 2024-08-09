@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_product_show.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <script src="/js/admin_product_show.js"></script>
+    <title>관리자 - 상품 보기</title>
+</head>
+<body>
+<th:block th:include="layouts/admin_header"></th:block>
+<main>
+    <div class="box">
+        <p id="boxTitle">상품 보기</p>
+        <div id="registerInfo">
+            <p>등록자 :<span th:text="${product.user.username + ' (' + product.user.userRealName + ')'}"></span></p>
+            <p>등록일 :<span th:text="${#temporals.format(product.productRegistrationDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        </div>
+        <div id="showBox">
+            <div>
+                <p>▶ 상품 정보</p>
+                <table>
+                    <tr>
+                        <th>상품상태</th>
+                        <td th:text="${product.productStatus}"></td>
+                    </tr>
+                    <tr>
+                        <th>상품분류</th>
+                        <td th:text="${product.productRegionMainCategory + ' - ' + product.productRegionSubCategory}"></td>
+                    </tr>
+                    <tr>
+                        <th>상품명</th>
+                        <td th:text="${product.productTitle}"></td>
+                    </tr>
+                    <tr>
+                        <th>판매기간</th>
+                        <td th:text="${#temporals.format(product.productStartDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(product.productEndDate, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                    <tr>
+                        <th>정가</th>
+                        <td th:text="${product.productRegularPrice}"></td>
+                    </tr>
+                    <tr>
+                        <th>할인가</th>
+                        <td th:text="${product.productDiscountPrice != null ? product.productDiscountPrice : '-'}"></td>
+                    </tr>
+                    <tr>
+                        <th>수량</th>
+                        <td th:text="${product.productMaxCount}"></td>
+                    </tr>
+                    <tr>
+                        <th>상품설명</th>
+                        <td th:text="${product.productInfo}"></td>
+                    </tr>
+                </table>
+                <p>▶ 상품 옵션</p>
+                <div id="optionBox">
+                    <table class="option" th:each="productOption : ${productOptions}"> <!-- 옵션 추가 -->
+                        <tr>
+                            <th>연령</th>
+                            <td th:text="${productOption.productOptionAgeRange}"></td>
+                        </tr>
+                        <tr>
+                            <th>정가</th>
+                            <td th:text="${productOption.productOptionRegularPrice}"></td>
+                        </tr>
+                        <tr>
+                            <th>할인가</th>
+                            <td th:text="${productOption.productOptionDiscountPrice != null ? productOption.productOptionDiscountPrice : '-'}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <p>▶ 상품 이미지</p>
+                <div>
+                    <div>
+                        <img th:each="productRepImg : ${productRepImgs}" th:src="'http://192.168.106.12/travelFileServer' + ${productRepImg.productRepImgSrc}">
+                        <p th:if="${productRepImgs.isEmpty()}">첨부된 이미지가 없습니다.</p>
+                    </div>
+                </div>
+                <p>▶ 상세 이미지</p>
+                <div>
+                    <div>
+                        <img th:each="productInfoImg : ${productInfoImgs}" th:src="'http://192.168.106.12/travelFileServer' + ${productInfoImg.productInfoImgSrc}">
+                        <p th:if="${productInfoImgs.isEmpty()}">첨부된 이미지가 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttonBox">
+            <a th:href="'/seller/product/' + ${product.productId} + '/insert'">수정</a>
+            <a href="/seller/product/index">목록</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

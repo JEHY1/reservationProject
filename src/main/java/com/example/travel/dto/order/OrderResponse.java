@@ -14,7 +14,9 @@ import java.util.List;
 @ToString
 public class OrderResponse {
 
+    private long productId;
     private String productRepImg;
+    private String productTitle;
     private List<OptionCountForm> optionList;
     private int totalRegularPrice;
     private int totalDiscount;
@@ -23,8 +25,10 @@ public class OrderResponse {
     private String departDate;
 
     @Builder
-    public OrderResponse(String productRepImg, List<OptionCountForm> optionList, int totalRegularPrice, int totalDiscount, List<Account> accountList, User user, String departDate) {
+    public OrderResponse(long productId, String productRepImg, String productTitle, List<OptionCountForm> optionList, int totalRegularPrice, int totalDiscount, List<Account> accountList, User user, String departDate) {
+        this.productId = productId;
         this.productRepImg = productRepImg;
+        this.productTitle = productTitle;
         this.optionList = optionList;
         this.totalRegularPrice = totalRegularPrice;
         this.totalDiscount = totalDiscount;

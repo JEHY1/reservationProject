@@ -1,17 +1,16 @@
 package com.example.travel.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payment_tb")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @ToString
 public class Payment {
@@ -22,7 +21,7 @@ public class Payment {
     private long paymentId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @Column(name = "payment_price", nullable = false)
@@ -47,7 +46,14 @@ public class Payment {
     @Column(name = "payment_status", nullable = false)
     private String paymentStatus;
 
-    public Payment(Order order, int paymentPrice, String paymentType, String paymentDepositor, String paymentCardCompany, String paymentCardNumber, String paymentStatus) {
+    @Column(name = "payment_refund_account")
+    private String paymentRefundAccount;
+
+    @Column(name = "payment_refund_account_name")
+    private String paymentRefundAccountName;
+
+    @Builder
+    public Payment(Order order, int paymentPrice, String paymentType, String paymentDepositor, String paymentCardCompany, String paymentCardNumber, String paymentStatus, String paymentRefundAccount, String paymentRefundAccountName) {
 
         this.order = order;
         this.paymentPrice = paymentPrice;
@@ -56,5 +62,7 @@ public class Payment {
         this.paymentCardCompany = paymentCardCompany;
         this.paymentCardNumber = paymentCardNumber;
         this.paymentStatus = paymentStatus;
+        this.paymentRefundAccount = paymentRefundAccount;
+        this.paymentRefundAccountName = paymentRefundAccountName;
     }
 }

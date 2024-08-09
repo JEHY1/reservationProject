@@ -20,12 +20,12 @@ public class ProductInfoImg {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "product_img_src")
-    private String productImgSrc;
+    @Column(name = "product_info_img_src")
+    private String productInfoImgSrc;
 
     @Builder
-    public ProductInfoImg(Product product, String productImgSrc) {
+    public ProductInfoImg(Product product, String productInfoImgSrc) {
         this.product = product;
-        this.productImgSrc = productImgSrc;
+        this.productInfoImgSrc = productInfoImgSrc;
     }
 }

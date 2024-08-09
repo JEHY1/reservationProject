@@ -17,9 +17,20 @@ header {
     background-color: #0D569B;
     text-align: center;
 }
+#upper > span {
+    display: inline-block;
+    padding: 0 15px;
+    box-sizing: border-box;
+    width: 186px;
+}
+#upper > span > a {
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+}
 #upper ul {
     display: inline-block;
-    width: 1300px;
+    width: 1107px;
     text-align: right;
     list-style: none;
     padding: 0 10px;

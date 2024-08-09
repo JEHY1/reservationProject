@@ -46,9 +46,9 @@
                                 </select>
                                 <select name="productRegionSubCategory" required>
                                     <option value="" hidden>--중분류--</option>
-                                    <option value="">백팩</option>
-                                    <option value="">크로스백</option>
-                                    <option value="">지갑</option>
+                                    <option value="부산">부산</option>
+                                    <option value="오사카">오사카</option>
+                                    <option value="스웨덴">스웨덴</option>
                                     <option th:value="${product != null ? product.productRegionSubCategory : ''}" th:selected="${product != null}" hidden th:text="${product != null ? product.productRegionSubCategory : ''}"></option>
                                 </select>
                             </td>
@@ -62,9 +62,9 @@
                         <tr>
                             <th>판매기간</th>
                             <td>
-                                <input type="date" required name="productStartDate" th:value="${product != null ? product.productStartDate : ''}">
+                                <input type="date" required name="productStartDate" th:value="${product != null ? #temporals.format(product.productStartDate, 'yyyy-MM-dd') : ''}">
                                 ~
-                                <input type="date" required name="productEndDate" th:value="${product != null ? product.productEndDate : ''}">
+                                <input type="date" required name="productEndDate" th:value="${product != null ? #temporals.format(product.productEndDate, 'yyyy-MM-dd') : ''}">
                             </td>
                         </tr>
                         <tr>
@@ -76,7 +76,7 @@
                         <tr>
                             <th>할인가</th>
                             <td>
-                                <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="productDiscountPrice" th:value="${product != null ? product.productDiscountPrice : ''}">원
+                                <input type="text" class="price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="productDiscountPrice" th:value="${product != null ? product.productDiscountPrice : ''}">원
                             </td>
                         </tr>
                         <tr>
@@ -88,29 +88,54 @@
                         <tr>
                             <th>상품설명</th>
                             <td>
-                                <textarea placeholder="간단한 상품 설명을 입력하세요.(선택)" name="productInfo;" th:value="${product != null ? product.productInfo : ''}"></textarea>
+                                <textarea placeholder="간단한 상품 설명을 입력하세요.(선택)" name="productInfo" th:text="${product != null ? product.productInfo : ''}"></textarea>
                             </td>
                         </tr>
                     </table>
                     <p>▶ 상품 옵션<button type="button" id="add">추가</button></p>
                     <div id="optionBox">
-                        <table class="option">
+                        <table class="option" th:if="${productId} == null"> <!-- 옵션 추가 -->
                             <tr>
                                 <th>연령</th>
                                 <td>
-                                    <input type="text" required>
+                                    <input type="text" required class="age" th:name="productOptions[0].productOptionAgeRange">
                                 </td>
                             </tr>
                             <tr>
                                 <th>정가</th>
                                 <td>
-                                    <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">원
+                                    <input type="text" class="price regular" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                           th:name="productOptions[0].productOptionRegularPrice">원
                                 </td>
                             </tr>
                             <tr>
                                 <th>할인가</th>
                                 <td>
-                                    <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">원
+                                    <input type="text" class="price discount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                           th:name="productOptions[0].productOptionDiscountPrice">원
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="option" th:each="productOption : ${productOptions}"> <!-- 옵션 추가 -->
+                            <input type="hidden" th:name="productOptions[__${productOptionStat.index}__].productOptionId" th:value="${productOption.productOptionId}">
+                            <tr>
+                                <th>연령</th>
+                                <td>
+                                    <input type="text" required th:name="productOptions[__${productOptionStat.index}__].productOptionAgeRange" th:value="${productOption.productOptionAgeRange}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>정가</th>
+                                <td>
+                                    <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                           th:name="productOptions[__${productOptionStat.index}__].productOptionRegularPrice" th:value="${productOption.productOptionRegularPrice}">원
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>할인가</th>
+                                <td>
+                                    <input type="text" class="price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                           th:name="productOptions[__${productOptionStat.index}__].productOptionDiscountPrice" th:value="${productOption.productOptionDiscountPrice}">원
                                 </td>
                             </tr>
                         </table>
@@ -119,53 +144,23 @@
                 <div>
                     <p>▶ 상품 이미지</p>
                     <div>
-                        <input type="file" multiple id="mainImg">
-                        <div>
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
+                        <input type="file" multiple id="mainImg" name="productRepImg">
+                        <div id="mainImgShowBox">
+                            <img th:each="productRepImg : ${productRepImgs}" class="mainImgShow" th:src="'http://192.168.106.12/travelFileServer' + ${productRepImg.productRepImgSrc}">
                         </div>
                     </div>
                     <p>▶ 상세 이미지</p>
                     <div>
-                        <input type="file" multiple id="detailImg">
-                        <div>
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
-                            <img src="/images/slide_img/autoslide_1.jpg">
+                        <input type="file" multiple id="detailImg" name="productInfoImg">
+                        <div id="detailImgShowBox">
+                            <img th:each="productInfoImg : ${productInfoImgs}" class="detailImgShow" th:src="'http://192.168.106.12/travelFileServer' + ${productInfoImg.productInfoImgSrc}">
                         </div>
                     </div>
                 </div>
-
-
-<!--                <ul>-->
-<!--                    <li>-->
-<!--                        <label for="mainImg">대표 이미지</label>-->
-<!--                        <input type="file" name="productRepImg"> &lt;!&ndash; 수정 &ndash;&gt;-->
-<!--                        <input type="hidden" th:value="${product != null ? product.productRepresentativeImgSrc : ''}"> &lt;!&ndash; 보류 &ndash;&gt;-->
-<!--                        <div>-->
-<!--                            <img id="mainImgShow" th:src="${product != null && product.productRepresentativeImgSrc != '' ? 'http://192.168.106.12/fileServer' + product.productRepresentativeImgSrc : ''}">-->
-<!--                        </div>-->
-<!--                    </li>-->
-
-<!--                    <li>-->
-<!--                        <label for="detailImg">상세 이미지</label>-->
-<!--                        <input type="file" multiple name="productExtImg">-->
-<!--                        <div id="detailImgShowBox">-->
-<!--                            <img th:each="productImg : ${productImgs}" class="detailImgShow" th:src="'http://192.168.106.12/fileServer' + ${productImg.productImgSrc}">-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                </ul>-->
             </div>
             <div class="buttonBox">
                 <button type="submit" th:text="${product != null ? '수정' : '등록'}"></button>
-                <a th:href="${product != null ? '/admin/product/' + product.productId + '/show' : '/admin/product/index'}">취소</a>
+                <a th:href="${product != null ? '/seller/product/' + product.productId + '/show' : '/seller/product/index'}">취소</a>
             </div>
         </div>
     </form>

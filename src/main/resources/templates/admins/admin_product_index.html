@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_product_index.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <script src="/js/admin_product_index.js"></script>
+    <title>관리자 - 상품 목록</title>
+</head>
+<body>
+<th:block th:include="layouts/admin_header"></th:block>
+<main>
+    <div class="box">
+        <p id="boxTitle">상품 목록</p>
+        <div id="selectBox">
+            <select>
+                <option value="전체" th:selected="${status} == '전체'">전체상품</option>
+                <option value="정상" th:selected="${status} == '정상'">정상상품</option>
+                <option value="품절" th:selected="${status} == '품절'">품절상품</option>
+                <option value="숨김" th:selected="${status} == '숨김'">숨김상품</option>
+            </select>
+            <select>
+                <option value="" th:selected="${mainCategory} == ''">--대분류--</option>
+                <option value="국내여행" th:selected="${mainCategory} == '국내여행'">국내여행</option>
+                <option value="일본여행" th:selected="${mainCategory} == '일본여행'">일본여행</option>
+                <option value="중국여행" th:selected="${mainCategory} == '중국여행'">중국여행</option>
+                <option value="미국여행" th:selected="${mainCategory} == '미국여행'">미국여행</option>
+                <option value="유럽여행" th:selected="${mainCategory} == '유럽여행'">유럽여행</option>
+            </select>
+            <select>
+                <option value="" th:selected="${subCategory} == ''">--중분류--</option>
+                <option value="오사카" th:selected="${subCategory} == '오사카'">오사카</option>
+                <option value="베이징" th:selected="${subCategory} == '베이징'">베이징</option>
+                <option value="오스트레일리아" th:selected="${subCategory} == '오스트레일리아'">오스트레일리아</option>
+                <option value="체코" th:selected="${subCategory} == '체코'">체코</option>
+                <option value="캐나다" th:selected="${subCategory} == '캐나다'">캐나다</option>
+            </select>
+            <input type="search" placeholder="상품명을 입력해주세요." th:value="${param.searchKeyword}">
+            <button type="button">검색</button>
+        </div>
+        <div id="upperLine">
+            <p>총<span th:text="${products.getTotalElements()}"></span>건</p>
+            <p>
+                <a href="/seller/product/insert">상품 등록</a>
+                <a href="#">선택 숨김</a>
+            </p>
+        </div>
+        <div id="indexBox">
+            <table>
+                <colgroup>
+                    <col width="35px">
+                    <col width="30px">
+                    <col width="120px">
+                    <col width="160px">
+                    <col width="390px">
+                    <col width="120px">
+                    <col width="15px">
+                    <col width="120px">
+                    <col width="140px">
+                    <col width="140px">
+                    <col width="70px">
+                    <col width="70px">
+                    <col width="130px">
+                    <col width="110px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="all"></th>
+                        <th>No</th>
+                        <th>대분류</th>
+                        <th>중분류</th>
+                        <th>상품명</th>
+                        <th colspan="3">판매기간</th>
+                        <th>원가</th>
+                        <th>할인가</th>
+                        <th>수량</th>
+                        <th>상태</th>
+                        <th>등록일</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${products.isEmpty()}" id="blank">
+                        <td colspan="14">
+                            <img src="/images/icon_img/exclamationMark.png">
+                            <p>검색결과가 없습니다.</p>
+                        </td>
+                    </tr>
+                    <tr th:each="product : ${products}" th:style="${product.productStatus == '숨김' ? 'background-color: #eee;' : ''}"> <!-- 리스트 하나 -->
+                        <td><input type="checkbox" th:value="${product.productId}" class="check"></td>
+                        <td th:text="${productStat.count + (nowPage-1)*10}"></td>
+                        <td th:text="${product.productRegionMainCategory}"></td>
+                        <td th:text="${product.productRegionSubCategory}"></td>
+                        <td><a th:href="'/seller/product/' + ${product.productId} + '/show'" th:text="${product.productTitle}"></a></td>
+                        <td th:text="${#temporals.format(product.productStartDate, 'yyyy-MM-dd')}"></td>
+                        <td>~</td>
+                        <td th:text="${#temporals.format(product.productEndDate, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${product.productRegularPrice}"></td>
+                        <td th:text="${product.productDiscountPrice != null ? product.productDiscountPrice : '-'}"></td>
+                        <td th:text="${product.productMaxCount}"></td>
+                        <td th:text="${product.productStatus}"></td>
+                        <td th:text="${#temporals.format(product.productRegistrationDate, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <a th:href="'/seller/product/' + ${product.productId} + '/show'">보기</a>
+                            <a th:href="'/seller/product/' + ${product.productId} + '/delete?page=' + ${products.getNumberOfElements() != 1 ? nowPage-1 : nowPage-2} + '&status=' + ${status} + '&mainCategory=' + ${mainCategory} + '&subCategory=' + ${subCategory} + '&searchKeyword=' + ${searchKeyword}">숨김</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="pageBox">
+            <a th:href="${products.hasPrevious() ? '/seller/product/index?page=' + (nowPage-2) + '&status=' + status + '&mainCategory=' + mainCategory + '&subCategory=' + subCategory + '&searchKeyword=' + searchKeyword : 'javascript:void(0)'}" th:style="${products.hasPrevious() ? '' : 'color:#ccc'}">〈</a>
+            <a th:each="page : ${#numbers.sequence(startPage, endPage)}" th:text="${page}" th:href="${page == nowPage ? 'javascript:void(0)' : '/seller/product/index?page=' + (page - 1) + '&status=' + status + '&mainCategory=' + mainCategory + '&subCategory=' + subCategory +'&searchKeyword=' + searchKeyword}" th:style="${page == nowPage ? 'background-color: #0D569B; color: white;' : '' }"></a>
+            <a th:href="${products.hasNext() ? '/seller/product/index?page=' + nowPage + '&status=' + status + '&mainCategory=' + mainCategory + '&subCategory=' + subCategory + '&searchKeyword=' + searchKeyword : 'javascript:void(0)'}" th:style="${products.hasNext() ? '' : 'color:#ccc'}">〉</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
