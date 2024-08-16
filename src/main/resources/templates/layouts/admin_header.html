@@ -15,20 +15,29 @@
             <li>
                 <a href="javascript:void(0)"><span>상품관리</span><span>﹀</span></a>
                 <ul>
-                    <li><a href="/seller/product/index">목록조회</a></li>
-                    <li><a href="/seller/product/insert">상품등록</a></li>
+                    <li>
+                        <a sec:authorize="hasRole('ADMIN')" href="/admin/product/index">목록조회</a>
+                        <a sec:authorize="hasRole('SELLER')" href="/seller/product/index">목록조회</a>
+                    </li>
+                    <li><a sec:authorize="hasRole('SELLER')" href="/seller/product/insert">상품등록</a></li>
                 </ul>
             </li>
             <li>
                 <a href="javascript:void(0)"><span>게시판관리</span><span>﹀</span></a>
                 <ul>
-                    <li><a href="/admin/notice/index">공지사항</a></li>
-                    <li><a href="/admin/qna/index">상품문의</a></li>
-                    <li><a href="/admin/review/index">리뷰</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a href="/admin/notice/index">공지사항</a></li>
+                    <li>
+                        <a sec:authorize="hasRole('ADMIN')" href="/admin/qna/index">상품문의</a>
+                        <a sec:authorize="hasRole('SELLER')" href="/seller/qna/index">상품문의</a>
+                    </li>
+                    <li>
+                        <a sec:authorize="hasRole('ADMIN')" href="/admin/review/index">리뷰</a>
+                        <a sec:authorize="hasRole('SELLER')" href="/seller/review/index">리뷰</a>
+                    </li>
                 </ul>
             </li>
             <li>
-                <a href="javascript:void(0)"><span>회원관리</span><span>﹀</span></a>
+                <a sec:authorize="hasRole('ADMIN')" href="javascript:void(0)"><span>회원관리</span><span>﹀</span></a>
                 <ul>
                     <li><a href="/admin/user/index">전체조회</a></li>
                 </ul>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/mainsCss/main.css">
     <link rel="stylesheet" href="/css/footer.css">
     <script src="/js/jquery.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="/js/product/main.js"></script>
     <title>re;code</title>
 </head>
 <body>
@@ -59,77 +59,11 @@
     </div>
     <div id="newBox">
         <div id="grid2">
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>상품이름상품이름상품이름상품이름</p>
-                <p>상품설명상품설명상품설명상품설명상품설명</p>
-                <p><span>100000</span><span>70000</span>원<span>30%</span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>상품이름상품이름상품이름상품이름</p>
-                <p>상품설명상품설명상품설명상품설명상품설명</p>
-                <p><span>100000</span><span>70000</span>원<span>30%</span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>상품이름상품이름상품이름상품이름</p>
-                <p>상품설명상품설명상품설명상품설명상품설명</p>
-                <p><span>100000</span><span>70000</span>원<span>30%</span></p>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <p>가방이름1</p>
-                <p>#Red #여행용가방</p>
-                <p><span>100000</span><span>70000</span>원<span></span></p>
+            <div th:each="product : ${newProducts}" th:onclick="|location.href='/product/${product.productId}'|"> <!-- 아이템 하나 -->
+                <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${product.productRepImgList.isEmpty() ? 'noImg.gif' : product.productRepImgList[0].productRepImgSrc}">
+                <p th:text="${product.productTitle}"></p>
+                <p th:utext="${product.productInfo}"></p>
+                <p><span th:text="${product.productRegularPrice}" th:style="${product.productDiscountPrice != null ? '' : 'font-size: 25px; text-decoration: none; color: black;'}"></span><span th:text="${product.productDiscountPrice != null ? product.productDiscountPrice : ''}" th:style="${product.productDiscountPrice != null ? '' : 'margin-left: 0;'}"></span>원<span th:if="${product.productDiscountPrice != null}"></span></p>
             </div>
         </div>
     </div>

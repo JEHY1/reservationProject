@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRAVEL 상품후기 작성 페이지</title>
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/mypage/reviewSubmit.css">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/header.js"></script>
+
+  <style>
+    #submit-btn{
+        border-radius: 5px;
+        border: 1px solid #0D569B;
+        background-color: white;
+        color: #0D569B;
+        padding: 10px 50px;
+        font-size: 25px;
+    }
+
+    #cancel-btn{
+        border-radius: 5px;
+        border: none;
+        background-color: #0D569B;
+        color: white;
+        padding: 10px 50px;
+        font-size: 25px;
+    }
+
+    #list-btn{
+        border: 1px solid #CCC;
+        background-color: white;
+        color: #999;
+        margin-left: 0px;
+        margin-top: 15px;
+        cursor: pointer;
+        padding: 10px 20px;
+    }
+
+    #list-btn:hover{
+        transition: 0.9s;
+        color: black;
+        border-color: black;
+    }
+
+
+
+
+
+  </style>
+</head>
+
+<body>
+<th:block th:include="layouts/header"></th:block>
+
+<div class="container">
+  <div class="content">
+    <div class="titleArea">
+      <h2 th:if="${review == null}">후기작성</h2>
+      <h2 th:if="${review != null}">후기수정</h2>
+    </div>
+    <form action="/myPage/reviewPost" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="reviewId" th:value="${review != null ? review.reviewId : ''}">
+      <input type="hidden" name="orderId" th:value="${orderId}">
+      <table>
+        <colgroup>
+          <!-- 컬럼 그룹 설정 -->
+        </colgroup>
+        <tr>
+          <td>제목</td>
+          <td>
+            <div class="txtarea">
+              <input type="text" name="reviewTitle" placeholder="(제목 필수)" required th:value="${review != null ? review.reviewTitle : null}">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>상품설명</td>
+          <td>
+            <div class="input">
+              <textarea name="reviewContent" cols="87" rows="10" maxlength="500" placeholder="설명 내용을 입력해주세요(최소 10글자 이상 ~ 500자 내외)" required th:text="${review != null ? review.reviewContent : null}" style="width: 887px;"></textarea>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>평점</td>
+          <td>
+            <div class="star-rating" id="scoreField">
+              <label>
+                <input type="radio" name="reviewScore" value="1" th:checked="${review !=null && review.reviewScore == 1}"> 1
+              </label>
+              <label>
+                <input type="radio" name="reviewScore" value="2" th:checked="${review !=null && review.reviewScore == 2}"> 2
+              </label>
+              <label>
+                <input type="radio" name="reviewScore" value="3" th:checked="${review !=null && review.reviewScore == 3}"> 3
+              </label>
+              <label>
+                <input type="radio" name="reviewScore" value="4" th:checked="${review !=null && review.reviewScore == 4}"> 4
+              </label>
+              <label>
+                <input type="radio" name="reviewScore" value="5" th:checked="${review !=null && review.reviewScore == 5}"> 5
+              </label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>사진등록</td>
+          <td>
+            <input type="file" name="files" id="detailImg" multiple> <!-- 수정된 부분 -->
+            <div class="insert" th:if="${review != null}">
+              <img th:each="src : ${review.reviewImgList}" th:src="'http://192.168.106.12/travelFileServer/images/reviewImg/' + ${src.reviewImgSrc}" class="file-list" id="file-list">
+            </div>
+            <div class="insert" th:if="${review == null}"></div>
+          </td>
+        </tr>
+      </table>
+<!--      <div class="btn-list" id="list-btn" th:onclick="|location.href='/myReviews?tap=${review == null ? 0 : 1}'|"> 목록-->
+<!--        &lt;!&ndash;                <a th:href="'/myReviews?tap=' + ${review.reviewId == null ? 0 : 1}" class="back-btn" >목록</a>&ndash;&gt;-->
+
+<!--      </div>-->
+      <div class="btn-div">
+        <button id="submit-btn" th:text="${review == null ? '등록' : '수정'}" type="submit"></button>
+        <input id="cancel-btn" type="reset" value="취소">
+      </div>
+    </form>
+  </div>
+</div>
+
+<th:block th:include="layouts/footer"></th:block>
+
+<script src="/js/myPage/reviewSubmit.js"></script>
+</body>
+
+</html>

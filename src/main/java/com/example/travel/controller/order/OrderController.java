@@ -24,15 +24,12 @@ public class OrderController {
     @PostMapping("/order")
     public String orderPage(OrderRequest request, Principal principal, Model model){
         System.err.println(request);
-        System.err.println(productService.orderResponse(request, principal));
         model.addAttribute("orderInfo", productService.orderResponse(request, principal));
         return "/order/order";
     }
 
     @GetMapping("/orderList")
     public String orderListPage(Principal principal, @PageableDefault(page = 0, size = 10, sort = "orderDate", direction = Sort.Direction.DESC) Pageable pageable, Model model){
-        System.err.println(paymentService.findOrderByPrincipalWithPage(principal, pageable).getTotalPages());
-
         model.addAttribute("orderList", paymentService.findOrderByPrincipalWithPage(principal, pageable));
         return "/order/orderList";
     }
@@ -41,7 +38,7 @@ public class OrderController {
     public String orderDetailPage(Principal principal, Model model, @PathVariable long orderId){
 
         model.addAttribute("order", paymentService.findOrderByOrderId(orderId));
-
+        model.addAttribute("isOrderUpdatable", paymentService.isReservationUpdatable(orderId));
 
         return "/order/orderDetail";
     }

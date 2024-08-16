@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_qna_index.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <script src="/js/admin/admin_qna_index.js"></script>
+    <title>관리자 - 상품문의 목록</title>
+</head>
+<body>
+    <th:block th:include="layouts/admin_header"></th:block>
+    <main>
+        <div class="box">
+            <p id="boxTitle">상품문의 목록</p>
+            <div id="selectBox">
+                <select>
+                    <option value="1" th:selected="${group} == '1'">전체문의</option>
+                    <option value="2" th:selected="${group} == '2'">답변미완료</option>
+                    <option value="3" th:selected="${group} == '3'">답변완료</option>
+                </select>
+                <select>
+                    <option value="1" th:selected="${category} == '1'">상품명</option>
+                    <option value="2" th:selected="${category} == '2'">질문</option>
+                    <option value="3" th:selected="${category} == '3'">작성자 (아이디)</option>
+                    <option value="4" th:selected="${category} == '4'">작성자 (이름)</option>
+                </select>
+                <input type="search" th:value="${param.searchKeyword}">
+                <button type="button">검색</button>
+            </div>
+            <div id="upperLine">
+                <p>총<span th:text="${qnas.getTotalElements()}"></span>건</p>
+                <p>
+                    <input type="hidden" id="auth" th:value="${auth}">
+                    <a href="#">선택 삭제</a>
+                </p>
+            </div>
+            <div id="indexBox">
+                <table>
+                    <colgroup>
+                        <col width="35px">
+                        <col width="30px">
+                        <col width="385px">
+                        <col width="60px">
+                        <col width="550px">
+                        <col width="230px">
+                        <col width="250px">
+                        <col width="110px">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="all"></th>
+                            <th>No</th>
+                            <th>상품명</th>
+                            <th colspan="2">질문</th>
+                            <th>작성자</th>
+                            <th>등록일</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${qnas.isEmpty()}" id="blank">
+                            <td colspan="8">
+                                <img src="/images/icon_img/exclamationMark.png">
+                                <p>검색결과가 없습니다.</p>
+                            </td>
+                        </tr>
+                        <tr th:each="qna : ${qnas}"> <!-- 리스트 하나 -->
+                            <td><input type="checkbox" th:value="${qna.qnaId}" class="check"></td>
+                            <td th:text="${qnaStat.count + (nowPage-1)*10}"></td>
+                            <td><a th:href="'/' + ${auth} + '/product/' + ${qna.product.productId} + '/show'" th:text="${qna.product.productTitle}"></a></td> <!-- 링크 고치기 -->
+                            <td><span th:text="${qna.qnaAnswer == null ? '미완료' : '답변완료'}" th:style="${qna.qnaAnswer == null ? 'border: 1px solid red; background-color:red; color:white;' : ''}"></span></td>
+                            <td>
+                                <a th:href="${qna.qnaAnswer == null ? '/' + auth + '/qna/' + qna.qnaId + '/insert' : '/' + auth + '/qna/' + qna.qnaId + '/show'}" th:text="${qna.qnaQuestion}"></a>
+                                <img src="/images/icon_img/lock.png" th:if="${qna.qnaSecret} == 1">
+                            </td>
+                            <td>
+                                <span th:if="${auth == 'seller'}" th:text="${qna.user.username} + ' (' + ${qna.user.userRealName} +')'"></span>
+                                <a th:if="${auth == 'admin'}" th:href="'/admin/user/' + ${qna.user.userId} + '/show'" th:text="${qna.user.username} + ' (' + ${qna.user.userRealName} +')'"></a>
+                            </td>
+                            <td th:text="${#temporals.format(qna.qnaSubmitDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <a th:href="${qna.qnaAnswer == null ? '/' + auth + '/qna/' + qna.qnaId + '/insert' : '/' + auth + '/qna/' + qna.qnaId + '/show'}">보기</a>
+                                <a th:href="'/' + ${auth} + '/qna/' + ${qna.qnaId} + '/delete?page=' + ${qnas.getNumberOfElements() != 1 ? nowPage-1 : nowPage-2} + '&group=' + ${group} + '&category=' + ${category} + '&searchKeyword=' + ${searchKeyword}">삭제</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="pageBox">
+                <a th:href="${qnas.hasPrevious() ? '/' + auth + '/qna/index?page=' + (nowPage-2) + '&group=' + group + '&category=' + category + '&searchKeyword=' + searchKeyword : 'javascript:void(0)'}" th:style="${qnas.hasPrevious() ? '' : 'color:#ccc'}">〈</a>
+                <a th:each="page : ${#numbers.sequence(startPage, endPage)}" th:text="${page}" th:href="${page == nowPage ? 'javascript:void(0)' : '/' + auth + '/qna/index?page=' + (page - 1) + '&group=' + group + '&category=' + category + '&searchKeyword=' + searchKeyword}" th:style="${page == nowPage ? 'background-color: #0D569B; color: white;' : '' }"></a>
+                <a th:href="${qnas.hasNext() ? '/' + auth + '/qna/index?page=' + nowPage + '&group=' + group + '&category=' + category + '&searchKeyword=' + searchKeyword : 'javascript:void(0)'}" th:style="${qnas.hasNext() ? '' : 'color:#ccc'}">〉</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

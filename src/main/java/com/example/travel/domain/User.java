@@ -1,5 +1,6 @@
 package com.example.travel.domain;
 
+import com.example.travel.dto.admin.AdminUserRequest;
 import com.example.travel.dto.login.UpdateUserRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -89,12 +90,12 @@ public class User implements UserDetails {
         this.userRole = userRole;
     }
 
-    // È¸¿øÁ¤º¸ ¼öÁ¤¿¡¼­ ºñ¹Ğ¹øÈ£ º¯°æ
+    // íšŒì›ì •ë³´ ìˆ˜ì •ì—ì„œ ë¹„ë°€ë²ˆí˜¸ ë³€ê²½
     public void updatePassword(String userPassword) {
         this.userPassword = userPassword;
     }
 
-    // È¸¿øÁ¤º¸ ¼öÁ¤(¿¬¶ôÃ³, ÀÌ¸ŞÀÏ)
+    // íšŒì›ì •ë³´ ìˆ˜ì •(ì—°ë½ì²˜, ì´ë©”ì¼)
     public void updateUser(UpdateUserRequest dto) {
         this.userPhone = dto.getUserPhone();
         this.userEmail = dto.getUserEmail();
@@ -102,8 +103,20 @@ public class User implements UserDetails {
         this.userEmailAgreement = dto.getUserEmailAgreement();
     }
 
-    // userDeleteDate Ãß°¡ÇÏ±â - È¸¿ø Å»Åğ
+    // userDeleteDate ì¶”ê°€í•˜ê¸° - íšŒì› íƒˆí‡´
     public void deleteUser() {
         this.userDeleteDate = this.userDeleteDate == null? LocalDateTime.now() : this.userDeleteDate;
+    }
+
+    // ê´€ë¦¬ì í˜ì´ì§€ì—ì„œ íšŒì›ì •ë³´ ìˆ˜ì •
+    public User updateAdminUser(AdminUserRequest dto) {
+        this.userPassword = dto.getUserPassword();
+        this.userRealName = dto.getUserRealName();
+        this.userPhone = dto.getUserPhone();
+        this.userEmail = dto.getUserEmail();
+        this.userRole = dto.getUserRole();
+        this.userSmsAgreement = dto.getUserSmsAgreement();
+        this.userEmailAgreement = dto.getUserEmailAgreement();
+        return this;
     }
 }

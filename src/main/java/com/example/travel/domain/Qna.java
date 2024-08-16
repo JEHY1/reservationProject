@@ -1,5 +1,6 @@
 package com.example.travel.domain;
 
+import com.example.travel.dto.login.QnaAnswerRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -51,5 +52,19 @@ public class Qna {
         this.qnaSubmitDate = qnaSubmitDate;
         this.qnaAnswerDate = qnaAnswerDate;
         this.qnaSecret = qnaSecret;
+    }
+
+    // 상품문의 답변 등록&수정
+    public Qna saveAnswer(QnaAnswerRequest dto) {
+        this.qnaAnswer = dto.getQnaAnswer();
+        this.qnaAnswerDate = this.qnaAnswerDate == null ? LocalDateTime.now() : this.qnaAnswerDate;
+        return this;
+    }
+
+    // 상품문의 답변 삭제
+    public Qna deleteAnswer() {
+        this.qnaAnswer = null;
+        this.qnaAnswerDate = null;
+        return this;
     }
 }

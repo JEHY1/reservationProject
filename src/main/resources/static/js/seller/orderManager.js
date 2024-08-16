@@ -27,6 +27,10 @@ function toWon(price){
     return price + PriceText + '원';
 }
 
+function prevElementClick(comp){
+    comp.previousElementSibling.click();
+}
+
 const searchButton = document.getElementById('search-btn');
 
 if(searchButton){
@@ -38,7 +42,13 @@ if(searchButton){
         let orderDate2 = document.getElementById('orderDate2').value;
         let reservationDate1 = document.getElementById('reservationDate1').value;
         let reservationDate2 = document.getElementById('reservationDate2').value;
-        let paymentType = document.getElementById('paymentType').value;
+        let paymentType = '';
+        Array.from(document.getElementsByClassName('radio-btn')).forEach(button => {
+            if(button.checked){
+                paymentType = button.value;
+            }
+        });
+
         let depositorName = document.getElementById('depositorName').value;
         let paymentPrice1 = document.getElementById('paymentPrice1').value;
         let paymentPrice2 = document.getElementById('paymentPrice2').value;
@@ -57,6 +67,23 @@ if(searchButton){
         location.href = '/seller/orderList?' + params;
     });
 }
+
+//무통장입금 입금자명칸 표시, 미표시
+if(document.getElementsByClassName('radio-btn')){
+    Array.from(document.getElementsByClassName('radio-btn')).forEach(button => {
+        button.addEventListener('click', () => {
+            if(button.value === '무통장입금'){
+                document.getElementById('depositorName').classList.remove('d-hidden');
+                document.getElementById('depositorName').previousElementSibling.classList.remove('d-hidden');
+            }
+            else{
+                document.getElementById('depositorName').classList.add('d-hidden');
+                document.getElementById('depositorName').previousElementSibling.classList.add('d-hidden');
+            }
+        });
+    });
+}
+
 
 //페이징
 const pageButtonField = document.getElementById('pageButtonField');
@@ -82,16 +109,35 @@ if(pageButtonField){
         let divWrap = document.createElement('div');
 
 
-        let param = '';
-//        param += getUrlParameter("unitPeriod") !== null ? '&unitPeriod=' + getUrlParameter("unitPeriod") : '';
-//        param += getUrlParameter("startDate") !== null ? '&startDate=' + getUrlParameter("startDate") : '';
-//        param += getUrlParameter("endDate") !== null ? '&endDate=' + getUrlParameter("endDate") : '';
+        let params = '';
+        let productId = getUrlParameter('productId');
+        let orderStatus = getUrlParameter('orderStatus');
+        let orderDate1 = getUrlParameter('orderDate1');
+        let orderDate2 = getUrlParameter('orderDate2');
+        let reservationDate1 = getUrlParameter('reservationDate1');
+        let reservationDate2 = getUrlParameter('reservationDate2');
+        let paymentType = getUrlParameter('paymentType');
+        let depositorName = getUrlParameter('depositorName');
+        let paymentPrice1 = getUrlParameter('paymentPrice1');
+        let paymentPrice2 = getUrlParameter('paymentPrice2');
+
+        params += productId === null || productId === '0' ? '' : '&productId=' + productId;
+        params += orderStatus === null || orderStatus === '0' ? '' : '&orderStatus=' + orderStatus;
+        params += orderDate1 === null ? '' : '&orderDate1=' + orderDate1;
+        params += orderDate2 === null ? '' : '&orderDate2=' + orderDate2;
+        params += reservationDate1 === null ? '' : '&reservationDate1=' + reservationDate1;
+        params += reservationDate2 === null ? '' : '&reservationDate2=' + reservationDate2;
+        params += paymentType === null ? '' : '&paymentType=' + paymentType;
+        params += depositorName === null ? '' : '&depositorName=' + depositorName;
+        params += paymentPrice1 === null ? '' : '&paymentPrice1=' + paymentPrice1;
+        params += paymentPrice2 === null ? '' : '&paymentPrice2=' + paymentPrice2;
+
 
         if(currentPageNum + 1 === currentPageGroupNum  * 5 + i + 1){
             pageButton.classList.add('selectedPage-btn');
         }
         else{
-            pageButton.setAttribute('onclick', "location.href='/seller/orderList?" + param + "&page=" + (currentPageGroupNum * 5 + i) + "'");
+            pageButton.setAttribute('onclick', "location.href='/seller/orderList?" + params + "&page=" + (currentPageGroupNum * 5 + i) + "'");
         }
 
         pageButtonField.appendChild(divWrap);
@@ -110,21 +156,59 @@ if(pageButtonField){
 const prevPageButton = document.getElementById('prevPage-btn');
 
 if(prevPageButton){
-    let param = '';
-//    param += getUrlParameter("unitPeriod") !== null ? '&unitPeriod=' + getUrlParameter("unitPeriod") : '';
-//    param += getUrlParameter("startDate") !== null ? '&startDate=' + getUrlParameter("startDate") : '';
-//    param += getUrlParameter("endDate") !== null ? '&endDate=' + getUrlParameter("endDate") : '';
-    prevPageButton.setAttribute('onclick', "location.href='/seller/orderList?" + param + "&page=" + (parseInt(getUrlParameter('page')) - 1) + "'");
+    let params = '';
+    let productId = getUrlParameter('productId');
+    let orderStatus = getUrlParameter('orderStatus');
+    let orderDate1 = getUrlParameter('orderDate1');
+    let orderDate2 = getUrlParameter('orderDate2');
+    let reservationDate1 = getUrlParameter('reservationDate1');
+    let reservationDate2 = getUrlParameter('reservationDate2');
+    let paymentType = getUrlParameter('paymentType');
+    let depositorName = getUrlParameter('depositorName');
+    let paymentPrice1 = getUrlParameter('paymentPrice1');
+    let paymentPrice2 = getUrlParameter('paymentPrice2');
+
+    params += productId === null || productId === '0' ? '' : '&productId=' + productId;
+    params += orderStatus === null || orderStatus === '0' ? '' : '&orderStatus=' + orderStatus;
+    params += orderDate1 === null ? '' : '&orderDate1=' + orderDate1;
+    params += orderDate2 === null ? '' : '&orderDate2=' + orderDate2;
+    params += reservationDate1 === null ? '' : '&reservationDate1=' + reservationDate1;
+    params += reservationDate2 === null ? '' : '&reservationDate2=' + reservationDate2;
+    params += paymentType === null ? '' : '&paymentType=' + paymentType;
+    params += depositorName === null ? '' : '&depositorName=' + depositorName;
+    params += paymentPrice1 === null ? '' : '&paymentPrice1=' + paymentPrice1;
+    params += paymentPrice2 === null ? '' : '&paymentPrice2=' + paymentPrice2;
+
+    prevPageButton.setAttribute('onclick', "location.href='/seller/orderList?" + params + "&page=" + (parseInt(getUrlParameter('page')) - 1) + "'");
 }
 
 const nextPageButton = document.getElementById('nextPage-btn');
 
 if(nextPageButton){
-    let param = '';
-//    param += getUrlParameter("unitPeriod") !== null ? '&unitPeriod=' + getUrlParameter("unitPeriod") : '';
-//    param += getUrlParameter("startDate") !== null ? '&startDate=' + getUrlParameter("startDate") : '';
-//    param += getUrlParameter("endDate") !== null ? '&endDate=' + getUrlParameter("endDate") : '';
-    nextPageButton.setAttribute('onclick', "location.href='/seller/orderList?" + param + "&page=" + (parseInt(getUrlParameter('page') === null ? 0 : parseInt(getUrlParameter('page'))) + 1) + "'");
+    let params = '';
+    let productId = getUrlParameter('productId');
+    let orderStatus = getUrlParameter('orderStatus');
+    let orderDate1 = getUrlParameter('orderDate1');
+    let orderDate2 = getUrlParameter('orderDate2');
+    let reservationDate1 = getUrlParameter('reservationDate1');
+    let reservationDate2 = getUrlParameter('reservationDate2');
+    let paymentType = getUrlParameter('paymentType');
+    let depositorName = getUrlParameter('depositorName');
+    let paymentPrice1 = getUrlParameter('paymentPrice1');
+    let paymentPrice2 = getUrlParameter('paymentPrice2');
+
+    params += productId === null || productId === '0' ? '' : '&productId=' + productId;
+    params += orderStatus === null || orderStatus === '0' ? '' : '&orderStatus=' + orderStatus;
+    params += orderDate1 === null ? '' : '&orderDate1=' + orderDate1;
+    params += orderDate2 === null ? '' : '&orderDate2=' + orderDate2;
+    params += reservationDate1 === null ? '' : '&reservationDate1=' + reservationDate1;
+    params += reservationDate2 === null ? '' : '&reservationDate2=' + reservationDate2;
+    params += paymentType === null ? '' : '&paymentType=' + paymentType;
+    params += depositorName === null ? '' : '&depositorName=' + depositorName;
+    params += paymentPrice1 === null ? '' : '&paymentPrice1=' + paymentPrice1;
+    params += paymentPrice2 === null ? '' : '&paymentPrice2=' + paymentPrice2;
+
+    nextPageButton.setAttribute('onclick', "location.href='/seller/orderList?" + params + "&page=" + (parseInt(getUrlParameter('page') === null ? 0 : parseInt(getUrlParameter('page'))) + 1) + "'");
 }
 
 //넘버링
@@ -134,4 +218,8 @@ if(document.getElementsByClassName('num')){
     Array.from(document.getElementsByClassName('num')).forEach((comp, index) => {
         comp.textContent = pageNum * 10 + index + 1;
     });
+}
+
+if(document.getElementsByClassName('price')){
+    Array.from(document.getElementsByClassName('price')).forEach(comp => comp.textContent = toWon(comp.textContent));
 }

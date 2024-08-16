@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="/css/adminsCss/admin_product_insert.css">
     <script src="/js/jquery.js"></script>
     <script src="/js/admin_header.js"></script>
-    <script src="/js/admin_product_insert.js"></script>
+    <script src="/js/admin/admin_product_insert.js"></script>
     <title>관리자 - 상품 등록</title>
 </head>
 <body>
 <th:block th:include="layouts/admin_header"></th:block>
 <main>
-    <form action="/seller/product/create" method="post" enctype="multipart/form-data">
+    <form th:action="'/' + ${auth} + '/product/create'" method="post" enctype="multipart/form-data">
         <input type="hidden" name="productId" th:value="${product != null ? product.productId : null}">
         <div class="box">
             <p id="boxTitle" th:text="${product != null ? '상품 수정' : '상품 등록'}"></p>
@@ -23,7 +23,7 @@
                     <table>
                         <tr>
                             <th>상품상태</th>
-                            <td>
+                            <td colspan="3">
                                 <input type="radio" name="productStatus" id="normal" required value="정상" th:checked="${product != null && product.productStatus == '정상'}">
                                 <label for="normal">정상</label>
                                 <input type="radio" name="productStatus" id="soldout" required value="품절" th:checked="${product != null && product.productStatus == '품절'}">
@@ -34,7 +34,7 @@
                         </tr>
                         <tr>
                             <th>상품분류</th>
-                            <td>
+                            <td colspan="3">
                                 <select name="productRegionMainCategory" required>
                                     <option value="" hidden>--대분류--</option>
                                     <option value="국내여행">국내여행</option>
@@ -55,13 +55,13 @@
                         </tr>
                         <tr>
                             <th>상품명</th>
-                            <td>
+                            <td colspan="3">
                                 <input type="text" required name="productTitle" th:value="${product != null ? product.productTitle : ''}">
                             </td>
                         </tr>
                         <tr>
                             <th>판매기간</th>
-                            <td>
+                            <td colspan="3">
                                 <input type="date" required name="productStartDate" th:value="${product != null ? #temporals.format(product.productStartDate, 'yyyy-MM-dd') : ''}">
                                 ~
                                 <input type="date" required name="productEndDate" th:value="${product != null ? #temporals.format(product.productEndDate, 'yyyy-MM-dd') : ''}">
@@ -72,14 +72,18 @@
                             <td>
                                 <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="productRegularPrice" th:value="${product != null ? product.productRegularPrice : ''}">원
                             </td>
-                        </tr>
-                        <tr>
                             <th>할인가</th>
                             <td>
                                 <input type="text" class="price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="productDiscountPrice" th:value="${product != null ? product.productDiscountPrice : ''}">원
                             </td>
                         </tr>
                         <tr>
+                        </tr>
+                        <tr>
+                            <th>여행일수</th>
+                            <td>
+                                <input type="number" min="0" name="productTravelDays" th:value="${product != null ? product.productTravelDays : ''}" required>일
+                            </td>
                             <th>수량</th>
                             <td>
                                 <input type="number" min="0" required name="productMaxCount" th:value="${product != null ? product.productMaxCount : ''}">개
@@ -87,7 +91,7 @@
                         </tr>
                         <tr>
                             <th>상품설명</th>
-                            <td>
+                            <td colspan="3">
                                 <textarea placeholder="간단한 상품 설명을 입력하세요.(선택)" name="productInfo" th:text="${product != null ? product.productInfo : ''}"></textarea>
                             </td>
                         </tr>
@@ -97,7 +101,7 @@
                         <table class="option" th:if="${productId} == null"> <!-- 옵션 추가 -->
                             <tr>
                                 <th>연령</th>
-                                <td>
+                                <td colspan="3">
                                     <input type="text" required class="age" th:name="productOptions[0].productOptionAgeRange">
                                 </td>
                             </tr>
@@ -107,8 +111,6 @@
                                     <input type="text" class="price regular" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                            th:name="productOptions[0].productOptionRegularPrice">원
                                 </td>
-                            </tr>
-                            <tr>
                                 <th>할인가</th>
                                 <td>
                                     <input type="text" class="price discount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
@@ -120,7 +122,7 @@
                             <input type="hidden" th:name="productOptions[__${productOptionStat.index}__].productOptionId" th:value="${productOption.productOptionId}">
                             <tr>
                                 <th>연령</th>
-                                <td>
+                                <td colspan="3">
                                     <input type="text" required th:name="productOptions[__${productOptionStat.index}__].productOptionAgeRange" th:value="${productOption.productOptionAgeRange}">
                                 </td>
                             </tr>
@@ -130,8 +132,6 @@
                                     <input type="text" class="price" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                            th:name="productOptions[__${productOptionStat.index}__].productOptionRegularPrice" th:value="${productOption.productOptionRegularPrice}">원
                                 </td>
-                            </tr>
-                            <tr>
                                 <th>할인가</th>
                                 <td>
                                     <input type="text" class="price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
@@ -160,7 +160,7 @@
             </div>
             <div class="buttonBox">
                 <button type="submit" th:text="${product != null ? '수정' : '등록'}"></button>
-                <a th:href="${product != null ? '/seller/product/' + product.productId + '/show' : '/seller/product/index'}">취소</a>
+                <a th:href="${product != null ? '/' + auth + '/product/' + product.productId + '/show' : '/' + auth + '/product/index'}">취소</a>
             </div>
         </div>
     </form>

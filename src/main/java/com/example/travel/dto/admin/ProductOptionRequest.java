@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InsertProductOptionRequest {
+public class ProductOptionRequest {
 
     private long productOptionId;
     private String productOptionAgeRange;

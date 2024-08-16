@@ -1,5 +1,6 @@
 package com.example.travel.service;
 
+import com.example.travel.dto.admin.AdminUserRequest;
 import com.example.travel.dto.login.ResetPasswordRequest;
 import com.example.travel.domain.Account;
 import com.example.travel.domain.User;
@@ -9,11 +10,15 @@ import com.example.travel.dto.login.UpdateUserRequest;
 import com.example.travel.repository.AccountRepository;
 import com.example.travel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -196,6 +201,140 @@ public class UserService {
     @Transactional
     public void deleteUser(Principal principal) {
         getUserByPrincipal(principal).deleteUser();
+    }
+
+    // 관리자페이지에서 회원 조회
+    public Page<User> userList(Integer group, Integer category, String searchKeyword, Pageable pageable) {
+        Page<User> userList = null;
+        // 검색 안했을 때
+        if(searchKeyword == null || searchKeyword.equals("")) {
+            // 가입회원(1) 조회
+            if(group == 1) {
+                userList = userRepository.findByUserDeleteDateIsNull(pageable)
+                        .orElseThrow(() -> new IllegalArgumentException("not found user"));
+            }
+            // 탈퇴회원(2) 조회
+            else if(group == 2) {
+                userList = userRepository.findByUserDeleteDateNotNull(pageable)
+                        .orElseThrow(() -> new IllegalArgumentException("not found user"));
+            }
+            // 전체회원(3) 조회
+            else if(group == 3) {
+                userList = userRepository.findAll(pageable);
+            }
+        }
+        // searchKeyword 로 검색 했을 때
+        else {
+            // 가입회원(1) 일 경우
+            if(group == 1) {
+                // category 가 '아이디'일 때
+                if(category == 1) {
+                    // userName 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUsernameContainingAndUserDeleteDateIsNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '이름'일 때
+                else if(category == 2) {
+                    // userRealName 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserRealNameContainingAndUserDeleteDateIsNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '연락처'일 때
+                else if(category == 3) {
+                    // userPhone 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserPhoneContainingAndUserDeleteDateIsNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '이메일'일 때
+                else if(category == 4) {
+                    // userEmail 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserEmailContainingAndUserDeleteDateIsNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+            }
+            // 탈퇴회원(2) 일 경우
+            else if(group == 2) {
+                // category 가 '아이디'일 때
+                if(category == 1) {
+                    // userName 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUsernameContainingAndUserDeleteDateNotNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '이름'일 때
+                else if(category == 2) {
+                    // userRealName 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserRealNameContainingAndUserDeleteDateNotNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '연락처'일 때
+                else if(category == 3) {
+                    // userPhone 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserPhoneContainingAndUserDeleteDateNotNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '이메일'일 때
+                else if(category == 4) {
+                    // userEmail 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserEmailContainingAndUserDeleteDateNotNull(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+
+            }
+            // 전체회원(3) 일 경우
+            else if(group == 3) {
+                // category 가 '아이디'일 때
+                if(category == 1) {
+                    // userName 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUsernameContaining(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '이름'일 때
+                else if(category == 2) {
+                    // userRealName 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserRealNameContaining(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '연락처'일 때
+                else if(category == 3) {
+                    // userPhone 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserPhoneContaining(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+                // category 가 '이메일'일 때
+                else if(category == 4) {
+                    // userEmail 으로 검색해서 페이징 처리한 Page<User>
+                    userList = userRepository.findByUserEmailContaining(searchKeyword, pageable)
+                            .orElseThrow(() -> new IllegalArgumentException("not found user"));
+                }
+            }
+        }
+        return userList;
+    }
+
+    // userId로 userDeleteDate 추가하기 - 관리자페이지에서 회원 탈퇴
+    @Transactional
+    public void deleteUser(Long userId) {
+        findById(userId).deleteUser();
+    }
+
+    // userIds List 로 userDeleteDate 추가하기 - 관리자페이지에서 회원 탈퇴
+    @Transactional
+    public void deleteByIds(List<Long> userIds) {
+        for (Long userId : userIds) {
+            findById(userId).deleteUser();
+        }
+    }
+
+    // 관리자 페이지에서 회원정보 수정
+    @Transactional
+    public void updateAdminUser(AdminUserRequest dto) {
+        User userEntity = findById(dto.getUserId());
+        // 비밀번호 수정했는지 확인
+        if(!dto.getUserPassword().equals(userEntity.getUserPassword())) {
+            // 비밀번호 encode
+            dto.setUserPassword(bCryptPasswordEncoder.encode(dto.getUserPassword()));
+        }
+        userEntity.updateAdminUser(dto);
     }
 
 }

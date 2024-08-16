@@ -5,9 +5,23 @@
   <title></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/admin_header_boot.css">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/admin_header.js"></script>
   <style>
+
+    .board{
+      box-shadow: 5px 5px 5px gainsboro;
+      border-radius: 10px;
+      border: 1px solid gainsboro;
+    }
+
+      .d-hidden{
+        display: none;
+      }
+
       .content{
-        width: 1653px;
+        width: 1700px;
         height: 953px;
       }
 
@@ -63,116 +77,136 @@
     #nextPage-btn:disabled:hover{
       color: gainsboro;
     }
+
+    #search-btn{
+      width: 220px;
+      border: 3px solid #2E2F42;
+      background-color: white;
+      color: #2E2F42;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+    #search-btn:hover{
+      border: none;
+      background-color: #2E2F42;
+      color: white;
+    }
     </style>
 </head>
 <body>
+<th:block th:include="layouts/admin_header"></th:block>
+<main>
+  <div class="content ms-auto">
+    <div class="title text-center fs-3 pt-4" style="font-weight: 600;">주문관리</div>
+    <div class="mt-4 py-3 searchBar board mx-auto" style="width: 1653px;">
+      <div class="row mx-auto w-100">
+        <div class="col-10">
+          <div class="row w-100 mx-auto">
+            <div class="col-auto">상품이름</div>
+            <select class="col-auto" style="width: 952px;" id="productId">
+              <option value="0">전체</option>
+              <option th:each="product : ${productList}" th:text="${product.productTitle}" th:value="${product.productId}" th:selected="${(param.productId + '').equals(product.productId + '')}"></option>
+            </select>
+            <div class="col-auto" style="margin-left: 17px;">주문상태</div>
+            <select class="col" id="orderStatus">
+              <option value="0">전체</option>
+              <option th:selected="${(param.orderStatus + '').equals('미입금')}">미입금</option>
+              <option th:selected="${(param.orderStatus + '').equals('입금미확인')}">입금미확인</option>
+              <option th:selected="${(param.orderStatus + '').equals('결제완료')}">결제완료</option>
+              <option th:selected="${(param.orderStatus + '').equals('환불진행')}">환불진행</option>
+              <option th:selected="${(param.orderStatus + '').equals('환불완료')}">환불완료</option>
+              <option th:selected="${(param.orderStatus + '').equals('주문취소')}">주문취소</option>
+            </select>
+          </div>
 
-<div class="content border ms-auto">
-  <div class="title">주문관리</div>
-  <div class="mt-4 py-3 searchBar border mx-auto" style="width: 1603px;">
-    <div class="row mx-auto w-100">
-      <div class="col-10">
-        <div class="row w-100 mx-auto">
-          <div class="col-auto">상품이름</div>
-          <select class="col-auto" style="width: 922px;" id="productId">
-            <option value="0">전체</option>
-            <option th:each="product : ${productList}" th:text="${product.productTitle}" th:value="${product.productId}"></option>
-          </select>
-          <div class="col-auto" style="margin-left: 17px;">주문상태</div>
-          <select class="col" id="orderStatus">
-            <option value="0">전체</option>
-            <option>미입금</option>
-            <option>입금확인대기</option>
-            <option>입금완료</option>
-            <option>환불대기</option>
-            <option>환불완료</option>
-            <option>주문취소</option>
-          </select>
-        </div>
+          <div class="row w-100 mx-auto mt-3">
+            <div class="col-auto">주문날짜</div>
+            <input class="col" type="date" id="orderDate1" th:value="${param.orderDate1}">
+            <div class="col-auto">~</div>
+            <input class="col" type="date" id="orderDate2"  th:value="${param.orderDate2}">
+            <div class="col-auto">예약일자</div>
+            <input class="col" type="date" id="reservationDate1" th:value="${param.reservationDate1}">
+            <div class="col-auto">~</div>
+            <input class="col" type="date" id="reservationDate2" th:value="${param.reservationDate2}">
+          </div>
 
-        <div class="row w-100 mx-auto mt-3">
-          <div class="col-auto">주문날짜</div>
-          <input class="col" type="date" id="orderDate1">
-          <div class="col-auto">~</div>
-          <input class="col" type="date" id="orderDate2">
-          <div class="col-auto">예약일자</div>
-          <input class="col" type="date" id="reservationDate1">
-          <div class="col-auto">~</div>
-          <input class="col" type="date" id="reservationDate2">
-        </div>
-
-        <div class="row w-100 mx-auto mt-3">
-          <div class="col-6 p-0">
-            <div class="row w-100 mx-auto">
-              <div class="col-auto">결제방식</div>
-              <input type="hidden" id="paymentType">
-              <input class="col-auto" type="radio" name="paymentType">
-              <label class="col-auto">전체</label>
-              <input class="col-auto" type="radio" name="paymentType">
-              <label class="col-auto">카드결제</label>
-              <input class="col-auto" type="radio" name="paymentType">
-              <label class="col-auto">무통장입금</label>
-              <div class="col-auto ps-0">입금자명</div>
-              <input class="col" placeholder="입금자명" id="depositorName">
+          <div class="row w-100 mx-auto mt-3">
+            <div class="col-6 p-0">
+              <div class="row w-100 mx-auto">
+                <div class="col-auto">결제방식</div>
+                <input class="col-auto radio-btn cursor" type="radio" name="paymentType" th:checked="${param.paymentType == null}" value="" style="height: 24px;">
+                <label class="col-auto ps-1 cursor" onclick="prevElementClick(this)">전체</label>
+                <input class="col-auto radio-btn cursor" type="radio" name="paymentType" th:checked="${(param.paymentType + '').equals('카드결제')}" value="카드결제" style="height: 24px;">
+                <label class="col-auto ps-1 cursor" onclick="prevElementClick(this)">카드결제</label>
+                <input class="col-auto radio-btn cursor" type="radio" name="paymentType" th:checked="${(param.paymentType + '').equals('무통장입금')}" value="무통장입금" style="height: 24px;">
+                <label class="col-auto ps-1 cursor" onclick="prevElementClick(this)">무통장입금</label>
+                <div th:class="${param.paymentType != null && (param.paymentType + '').equals('무통장입금') ? 'col-auto' : 'col-auto d-hidden'}">입금자명</div>
+                <input th:class="${param.paymentType != null && (param.paymentType + '').equals('무통장입금') ? 'col' : 'col d-hidden'}" placeholder="입금자명" id="depositorName" th:value="${param.depositorName}">
+              </div>
+            </div>
+            <div class="col p-0">
+              <div class="row w-100 mx-auto">
+                <div class="col-auto">결제금액</div>
+                <input class="col" type="text" id="paymentPrice1" th:value="${param.paymentPrice1}">
+                <div class="col-auto">~</div>
+                <input class="col" type="text" id="paymentPrice2" th:value="${param.paymentPrice2}">
+              </div>
             </div>
           </div>
-          <div class="col p-0">
-            <div class="row w-100 mx-auto">
-              <div class="col-auto">결제금액</div>
-              <input class="col" type="text" id="paymentPrice1">
-              <div class="col-auto">~</div>
-              <input class="col" type="text" id="paymentPrice2">
-            </div>
-          </div>
         </div>
+        <button class="col-auto mx-auto" id="search-btn">조회</button>
       </div>
-      <button class="col" id="search-btn">조회</button>
+    </div>
+
+    <div class="orderList mx-auto board mt-3 px-3" style="height: 632px; width: 1653px;">
+      <div class="row w-100 mx-auto" style="height: 50px;">
+        <div class="col-auto pt-4" th:text="'총 ' + ${orderInfo.totalElements} + '건'">총 00건</div>
+      </div>
+      <div class="row w-100 mx-auto" style="height: 50px; border-bottom: 3px solid #2E2F42; border-top: 3px solid #2E2F42; border-radius: 10px;">
+        <div class="col-auto d-flex align-items-center justify-content-center">
+          <div style="width: 50px;">No.</div>
+        </div>
+        <div class="col-auto d-flex align-items-center justify-content-center ps-0" style="width: 90px">주문번호</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 110px">주문일자</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 110px">예약일자</div>
+        <div class="col d-flex align-items-center justify-content-center">상품이름</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 90px">주문자명</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 90px;">수량</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 120px">주문금액</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 110px">결제방식</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 110px">상태</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 110px">비고</div>
+      </div>
+      <div th:each="order : ${orderInfo.orderList}" class="row w-100 mx-auto order cursor" style="height: 50px; border-bottom: 1px solid #CCC;" th:onclick="|location.href='/seller/orderDetail/${order.orderId}'|">
+        <div class="col-auto d-flex align-items-center justify-content-center">
+          <div class="num" style="width: 50px;"></div>
+        </div>
+        <div class="col-auto d-flex align-items-center justify-content-center ps-0" th:text="${order.orderId}" style="width: 90px">1103500</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd')}" style="width: 110px">2024-08-09</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" th:text="${#temporals.format(order.orderDepartureDate, 'yyyy-MM-dd')}" style="width: 110px">2024-08-19</div>
+        <div class="col d-flex align-items-center justify-content-center" th:text="${order.product.productTitle}">부산시티투어버스 모바일 탑승권(당일 1일권)</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" th:text="${order.user.userRealName}" style="width: 90px">김재현</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" style="width: 90px;" th:text="${order.totalCount}">수량</div>
+        <div class="col-auto d-flex align-items-center justify-content-center price" th:text="${order.orderTotalPrice}" style="width: 120px">1,100,100원</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" th:text="${order.orderPaymentType}" style="width: 110px">무통장입금</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" th:text="${order.orderStatus}" style="width: 110px">상태</div>
+        <div class="col-auto d-flex align-items-center justify-content-center" th:text="${order.payment != null ? order.payment.paymentCheck : ''}" style="width: 110px"></div>
+      </div>
+
+      <div class="border-b mb-5 row w-100 mx-auto mt-5" th:if="${orderInfo.totalElements == 0}">
+        <img class="mx-auto p-0 mt-5 mb-2" src="/images/icon_img/exclamationMark.png" style="width: 200px; height: 200px;">
+        <div class="text-center py-2 color-gray">주문내역이 없습니다.</div>
+      </div>
+    </div>
+
+    <div class="row w-100 mx-auto buttonSpace mt-3" style="height: 47px;" th:if="${orderInfo.totalElements != 0}">
+      <input type="hidden" id="totalPageSize" th:value="${orderInfo.totalPages}">
+      <button class="col-auto ms-auto" id="prevPage-btn">〈</button>
+      <div class="col-auto d-flex align-items-center justify-content-center" id="pageButtonField"></div>
+      <button class="col-auto me-auto" id="nextPage-btn">〉</button>
     </div>
   </div>
-
-  <div class="orderList mx-auto" style="height: 652px; width: 1603px;">
-    <div class="row w-100 mx-auto" style="height: 50px;">
-      <div class="col-auto pt-4" th:text="'총 ' + ${orderInfo.totalElements} + '건'">총 00건</div>
-    </div>
-    <div class="row w-100 mx-auto" style="height: 50px; border-bottom: 3px solid #2E2F42; border-top: 3px solid #2E2F42; border-radius: 10px;">
-      <div class="col-auto d-flex align-items-center justify-content-center">
-        <div style="width: 50px;">No.</div>
-      </div>
-      <div class="col d-flex align-items-center justify-content-center ps-0">주문번호</div>
-      <div class="col d-flex align-items-center justify-content-center">주문일자</div>
-      <div class="col d-flex align-items-center justify-content-center">예약일자</div>
-      <div class="col-5 d-flex align-items-center justify-content-center">상품이름</div>
-      <div class="col d-flex align-items-center justify-content-center">주문자명</div>
-      <div class="col d-flex align-items-center justify-content-center">주문금액</div>
-      <div class="col d-flex align-items-center justify-content-center">결제방식</div>
-      <div class="col d-flex align-items-center justify-content-center">상태</div>
-      <div class="col d-flex align-items-center justify-content-center">비고</div>
-    </div>
-    <div th:each="order : ${orderInfo.orderList}" class="row w-100 mx-auto order cursor" style="height: 50px; border-bottom: 1px solid #CCC;" th:onclick="|location.href='/seller/orderDetail/${order.orderId}'|">
-      <div class="col-auto d-flex align-items-center justify-content-center">
-        <div class="num" style="width: 50px;"></div>
-      </div>
-      <div class="col d-flex align-items-center justify-content-center ps-0" th:text="${order.orderId}">1103500</div>
-      <div class="col d-flex align-items-center justify-content-center" th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd')}">2024-08-09</div>
-      <div class="col d-flex align-items-center justify-content-center" th:text="${#temporals.format(order.orderDepartureDate, 'yyyy-MM-dd')}">2024-08-19</div>
-      <div class="col-5 d-flex align-items-center justify-content-center" th:text="${order.product.productTitle}">부산시티투어버스 모바일 탑승권(당일 1일권)</div>
-      <div class="col d-flex align-items-center justify-content-center" th:text="${order.user.userRealName}">김재현</div>
-      <div class="col d-flex align-items-center justify-content-center price" th:text="${order.orderTotalPrice}">1,100,100원</div>
-      <div class="col d-flex align-items-center justify-content-center" th:text="${order.orderPaymentType}">무통장입금</div>
-      <div class="col d-flex align-items-center justify-content-center" th:text="${order.orderStatus}">상태</div>
-      <div class="col d-flex align-items-center justify-content-center"></div>
-    </div>
-  </div>
-
-  <div class="row w-100 mx-auto mt-5 buttonSpace" style="height: 47px;" th:if="${orderInfo.totalPages != 0}">
-    <input type="hidden" id="totalPageSize" th:value="${orderInfo.totalPages}">
-    <button class="col-auto ms-auto" id="prevPage-btn">〈</button>
-    <div class="col-auto d-flex align-items-center justify-content-center" id="pageButtonField">
-    </div>
-    <button class="col-auto me-auto" id="nextPage-btn">〉</button>
-  </div>
-
-</div>
+</main>
 
 <script src="/js/seller/orderManager.js"></script>
 </body>

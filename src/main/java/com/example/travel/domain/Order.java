@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @ToString
 public class Order {
 
@@ -67,6 +68,9 @@ public class Order {
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Payment payment;
 
+    @Transient
+    private int totalCount;
+
     @Builder
     public Order(Product product, User user, LocalDateTime orderDepartureDate, LocalDateTime orderEndDate, String orderStatus, String orderPaymentType, int orderTotalPrice, String orderAccount, String orderDepositor) {
         this.product = product;
@@ -78,5 +82,9 @@ public class Order {
         this.orderTotalPrice = orderTotalPrice;
         this.orderAccount = orderAccount;
         this.orderDepositor = orderDepositor;
+    }
+
+    public void updateStatus(String status){
+        this.orderStatus = status;
     }
 }

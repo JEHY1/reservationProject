@@ -43,6 +43,7 @@ header {
 #menu > p span {
     font-weight: bold;
     font-size: 15px;
+    padding-right: 3px;
 }
 #menu > p a {
     color: #777;

@@ -1,6 +1,6 @@
 package com.example.travel.domain;
 
-import com.example.travel.dto.admin.InsertProductRequest;
+import com.example.travel.dto.admin.ProductRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -62,6 +62,9 @@ public class Product {
     @Column(name = "product_max_count", nullable = false)
     private int productMaxCount;
 
+    @Column(name = "product_travel_days")
+    private int productTravelDays;
+
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -88,7 +91,7 @@ public class Product {
     private List<Review> reviewList;
 
     @Builder
-    public Product(User user, String productTitle, int productRegularPrice, Integer productDiscountPrice, LocalDateTime productStartDate, LocalDateTime productEndDate, String productInfo, String productStatus, String productRegionMainCategory, String productRegionSubCategory, int productMaxCount) {
+    public Product(User user, String productTitle, int productRegularPrice, Integer productDiscountPrice, LocalDateTime productStartDate, LocalDateTime productEndDate, String productInfo, String productStatus, String productRegionMainCategory, String productRegionSubCategory, int productMaxCount, int productTravelDays) {
         this.user = user;
         this.productTitle = productTitle;
         this.productRegularPrice = productRegularPrice;
@@ -100,9 +103,10 @@ public class Product {
         this.productRegionMainCategory = productRegionMainCategory;
         this.productRegionSubCategory = productRegionSubCategory;
         this.productMaxCount = productMaxCount;
+        this.productTravelDays = productTravelDays;
     }
 
-    public Product updateProduct(InsertProductRequest dto) {
+    public Product updateProduct(ProductRequest dto) {
 
         this.productStatus = dto.getProductStatus();
         this.productRegionMainCategory = dto.getProductRegionMainCategory();

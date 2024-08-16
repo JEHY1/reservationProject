@@ -24,16 +24,19 @@ public class SellerController {
 
     @GetMapping("/seller/orderList")
     public String orderListPage(SearchOrderRequest request, @PageableDefault(page = 0, size = 10) Pageable pageable, Principal principal, Model model){
-        System.err.println(request);
-        paymentService.searchOrder(request, principal, pageable);
+
         model.addAttribute("productList", productService.findProductByPrincipal(principal));
         model.addAttribute("orderInfo", paymentService.searchOrder(request, principal, pageable));
+
         return "/seller/orderManager";
     }
 
     @GetMapping("/seller/orderDetail/{orderId}")
     public String orderDetailPage(@PathVariable long orderId, Principal principal, Model model){
+
+        paymentService.orderCheck(orderId);
         model.addAttribute("order", paymentService.findOrderByOrderId(orderId));
+        model.addAttribute("isOrderUpdatable", paymentService.isReservationUpdatable(orderId));
 
         return "/seller/orderDetailManager";
     }

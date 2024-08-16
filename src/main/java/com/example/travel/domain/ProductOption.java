@@ -1,6 +1,6 @@
 package com.example.travel.domain;
 
-import com.example.travel.dto.admin.InsertProductOptionRequest;
+import com.example.travel.dto.admin.ProductOptionRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,7 +37,7 @@ public class ProductOption {
         this.productOptionDiscountPrice = productOptionDiscountPrice;
     }
 
-    public ProductOption updateProductOption(InsertProductOptionRequest dto) {
+    public ProductOption updateProductOption(ProductOptionRequest dto) {
         this.productOptionAgeRange = dto.getProductOptionAgeRange();
         this.productOptionRegularPrice = dto.getProductOptionRegularPrice();
         this.productOptionDiscountPrice = dto.getProductOptionDiscountPrice();

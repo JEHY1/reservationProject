@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_qna_show.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <title>관리자 - 상품문의/답변 보기</title>
+</head>
+<body>
+    <th:block th:include="layouts/admin_header"></th:block>
+    <main>
+        <div class="box">
+            <p class="boxTitle">상품문의 보기</p>
+            <div class="registerInfo">
+                <p>등록일 :<span th:text="${#temporals.format(qna.qnaSubmitDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            </div>
+            <div id="showBox">
+                <table>
+                    <tr>
+                        <th>상품명</th>
+                        <td><a th:href="'/' + ${auth} + '/product/' + ${qna.product.productId} + '/show'" th:text="${qna.product.productTitle}"></a></td>
+                        <th>작성자</th>
+                        <td th:text="${qna.user.username + ' (' + qna.user.userRealName + ')'}"></td>
+                    </tr>
+                    <tr>
+                        <th>질문<img src="/images/icon_img/lock.png" th:if="${qna.qnaSecret} == 1"></th>
+                        <td colspan="3" th:text="${qna.qnaQuestion}">질문 내용</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonBox">
+                <a th:href="'/' + ${auth} + '/qna/' + ${qna.qnaId} + '/delete?page=0&group=1&category=1&searchKeyword='">삭제</a>
+                <a th:href="'/' + ${auth} + '/qna/index'">목록</a>
+            </div>
+            <p class="boxTitle">문의답변 보기</p>
+            <div class="registerInfo">
+                <p th:utext="${qna.qnaAnswer != null ? '등록일 :<span>' + #temporals.format(qna.qnaAnswerDate, 'yyyy-MM-dd HH:mm:ss') + '</span>' : ''}"></p>
+            </div>
+            <div id="answerBox">
+                <table>
+                    <tr>
+                        <th>답변</th>
+                        <td th:text="${qna.qnaAnswer}"></td>
+                    </tr>
+                </table>
+                <div class="buttonBox">
+                    <a th:href="'/' + ${auth} + '/qna/' + ${qna.qnaId} + '/insert'">수정</a>
+                    <a th:href="'/' + ${auth} + '/qna/' + ${qna.qnaId} + '/answer/delete'">삭제</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

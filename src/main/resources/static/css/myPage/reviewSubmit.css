@@ -1,0 +1,147 @@
+.container {
+    display: flex;
+    /* Flexbox 사용 */
+    justify-content: center;
+    /* 가운데 정렬 */
+    align-items: center;
+    /* 세로 가운데 정렬 */
+    width: 1903px;
+    min-width: 500px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.content {
+    text-align: center;
+}
+
+.titleArea {
+    margin-bottom: 60px;
+    min-height: 30px;
+    text-align: center;
+}
+
+.titleArea>h2 {
+    color: #2e2e2e;
+    font-size: 26px;
+}
+
+select {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.txtarea>input {
+    display: inline-block;
+    height: 25px;
+    width: 885px;
+
+}
+
+.priceBox>input {
+    width: 200px;
+    height: 25px;
+}
+
+label>input {
+    margin-left: 10px;
+    height: 25px;
+}
+
+tr>td:first-child {
+    text-align: center;
+    width: 150px;
+}
+
+.btn-list {
+    width: 40px;
+    border: solid #ccc 1px;
+    background-color: #eee;
+    text-align: center;
+    color: black;
+    text-decoration-line: none;
+    padding: 5px;
+    margin: 5px;
+}
+
+.btn-lis>a {
+    color: white;
+    text-decoration: none;
+}
+
+.btn-lis:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.btn-div {
+    margin: 10px;
+    text-align: center;
+}
+
+table{
+     border-collapse: collapse;
+}
+
+td {
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+
+}
+
+.txtEm {
+    color: black;
+    text-decoration: none;
+    padding: 20px;
+
+}
+
+.txtLight {
+    color: gray
+}
+
+.txtLight>a {
+    color: gray;
+    text-decoration: none;
+}
+
+.txtLight>a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+
+
+tr>td:nth-child(2) {
+    width: 900px;
+    text-align: left;
+    font-size: 13px;
+}
+
+tr>td:nth-child(3) {
+    width: 200px;
+}
+
+tr>td:nth-child(4),
+td:nth-child(5) {
+    width: 150px;
+    color: #999;
+}
+
+.txtBody {
+    text-align: left;
+    color: black;
+    padding-left: 110px;
+    border-top: none;
+    line-height: 1.8em;
+}
+
+.file-list{
+    max-width: 200px;
+    max-height: 200px;
+    padding: 10px;
+    vertical-align: top;
+}

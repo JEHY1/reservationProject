@@ -52,8 +52,11 @@ public class Payment {
     @Column(name = "payment_refund_account_name")
     private String paymentRefundAccountName;
 
+    @Column(name = "payment_check")
+    private String paymentCheck;
+
     @Builder
-    public Payment(Order order, int paymentPrice, String paymentType, String paymentDepositor, String paymentCardCompany, String paymentCardNumber, String paymentStatus, String paymentRefundAccount, String paymentRefundAccountName) {
+    public Payment(Order order, int paymentPrice, String paymentType, String paymentDepositor, String paymentCardCompany, String paymentCardNumber, String paymentStatus, String paymentRefundAccount, String paymentRefundAccountName, String paymentCheck) {
 
         this.order = order;
         this.paymentPrice = paymentPrice;
@@ -64,5 +67,14 @@ public class Payment {
         this.paymentStatus = paymentStatus;
         this.paymentRefundAccount = paymentRefundAccount;
         this.paymentRefundAccountName = paymentRefundAccountName;
+        this.paymentCheck = paymentCheck;
+    }
+
+    public void updatePaymentCheck(String check){
+        this.paymentCheck = check;
+    }
+
+    public void updatePaymentStatus(String paymentStatus){
+        this.paymentStatus = paymentStatus;
     }
 }

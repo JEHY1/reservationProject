@@ -1,26 +1,29 @@
 package com.example.travel.service;
 
-import com.example.travel.domain.Order;
-import com.example.travel.domain.OrderDetail;
-import com.example.travel.domain.Payment;
-import com.example.travel.domain.Product;
+import com.example.travel.domain.*;
+import com.example.travel.dto.order.OrderControlRequest;
 import com.example.travel.dto.order.OrderSubmitRequest;
 import com.example.travel.dto.order.SearchOrderRequest;
 import com.example.travel.dto.order.SearchOrderResponse;
 import com.example.travel.dto.payment.PaymentSubmitRequest;
+import com.example.travel.dto.review.MyWritableReview;
+import com.example.travel.dto.review.MyWritableReviewResponse;
+import com.example.travel.dto.review.MyWrittenReview;
+import com.example.travel.dto.review.MyWrittenReviewResponse;
+import com.example.travel.dto.user.OrderHistoryResponse;
 import com.example.travel.repository.OrderDetailRepository;
 import com.example.travel.repository.OrderRepository;
 import com.example.travel.repository.PaymentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,8 +68,20 @@ public class PaymentService {
     }
 
     public Page<Order> findOrderByPrincipalWithPage(Principal principal, Pageable pageable){
-        return orderRepository.findAllByUserUserId(userService.getUserId(principal), pageable)
+        Page<Order> orderList = orderRepository.findAllByUserUserId(userService.getUserId(principal), pageable)
                 .orElseThrow(() -> new IllegalArgumentException("not found Order"));
+
+        orderList.getContent().forEach(order -> {
+            if(!order.getOrderDetailList().isEmpty()){
+                order.getOrderDetailList().forEach(orderDetail -> {
+                    order.setTotalCount(order.getTotalCount() + orderDetail.getOrderDetailTravelerCount());
+                    System.err.println("totalCount : " + order.getTotalCount());
+                });
+            }
+        });
+        System.err.println("complete");
+
+        return orderList;
     }
 
     public Order findOrderByOrderId(long orderId){
@@ -74,27 +89,52 @@ public class PaymentService {
                 .orElseThrow(() -> new IllegalArgumentException("not found order"));
     }
 
+    @Transactional
     public Payment payment(PaymentSubmitRequest request){
         Order order = findOrderByOrderId(request.getOrderId());
         String[] account = request.getPaymentRefundAccount().split(" ");
 
-        return paymentRepository.save(Payment.builder()
-                .order(order)
-                .paymentPrice(order.getOrderTotalPrice())
-                .paymentType(order.getOrderPaymentType())
-                .paymentDepositor(order.getOrderDepositor())
-                .paymentCardCompany(account[0])
-                .paymentCardNumber(account[1])
-                .paymentStatus("결제확인대기")
-                .paymentRefundAccount(request.getPaymentRefundAccount())
-                .paymentRefundAccountName(request.getPaymentRefundAccountName())
-                .build());
+        order.updateStatus("입금미확인");
+
+        Payment payment = findPaymentByOrderId(request.getOrderId());
+
+        if(payment == null){
+            paymentRepository.save(Payment.builder()
+                    .order(order)
+                    .paymentPrice(order.getOrderTotalPrice())
+                    .paymentType(order.getOrderPaymentType())
+                    .paymentDepositor(order.getOrderDepositor())
+                    .paymentCardCompany(account[0])
+                    .paymentCardNumber(account[1])
+                    .paymentStatus("입금미확인")
+                    .paymentRefundAccount(request.getPaymentRefundAccount())
+                    .paymentRefundAccountName(request.getPaymentRefundAccountName())
+                    .paymentCheck("확인요청")
+                    .build());
+
+            return Payment.builder()
+                    .paymentCheck("신규 결제 성공")
+                    .build();
+        }
+        else{
+            System.err.println(payment);
+            if(payment.getPaymentCheck() == null){
+                payment.updatePaymentCheck("확인재요청");
+                return Payment.builder()
+                        .paymentCheck("재요청 성공")
+                        .build();
+            }
+
+            return Payment.builder()
+                    .paymentCheck("유효한 요청이 있음")
+                    .build();
+        }
     }
 
     public SearchOrderResponse searchOrder(SearchOrderRequest request, Principal principal, Pageable pageable){
 
         List<Product> productList = productService.findProductByPrincipal(principal);
-        List<Order> orderList = findOrderByProductIdIn(productList.stream().mapToLong(Product::getProductId).boxed().collect(Collectors.toList()));
+        List<Order> orderList = findOrderByProductIdInSortByOrderDate(productList.stream().mapToLong(Product::getProductId).boxed().collect(Collectors.toList()));
 
         //상품 id로 필터
         if(request.getProductId() != null){
@@ -146,15 +186,178 @@ public class PaymentService {
             orderList = orderList.stream().filter(order -> order.getOrderStatus().equals(request.getOrderStatus())).collect(Collectors.toList());
         }
 
+        List<Order> subList = orderList.subList(pageable.getPageNumber() * 10, Math.min(orderList.size(), (pageable.getPageNumber() + 1) * 10));
+        if(!subList.isEmpty()){
+            subList.forEach(order -> {
+                if(!order.getOrderDetailList().isEmpty()){
+                    order.getOrderDetailList().forEach(orderDetail -> {
+                        order.setTotalCount(order.getTotalCount() + orderDetail.getOrderDetailTravelerCount());
+                    });
+                }
+            });
+        }
+
         return SearchOrderResponse.builder()
                 .orderList(orderList.subList(pageable.getPageNumber() * 10, Math.min(orderList.size(), (pageable.getPageNumber() + 1) * 10)))
                 .totalElements(orderList.size())
-                .totalPages(orderList.size() / 10 + 1)
+                .totalPages((orderList.size() - 1) / 10 + 1)
                 .build();
     }
 
-    public List<Order> findOrderByProductIdIn(List<Long> productIdList){
-        return orderRepository.findAllByProductProductIdIn(productIdList)
+    public List<Order> findOrderByProductIdInSortByOrderDate(List<Long> productIdList){
+        return orderRepository.findAllByProductProductIdInOrderByOrderDateDesc(productIdList)
+                .orElseThrow(() -> new IllegalArgumentException("not found Order"));
+    }
+
+    public Payment findPaymentByOrderId(long orderId){
+        return paymentRepository.findByOrderOrderId(orderId)
+                .orElse(null);
+    }
+
+    @Transactional
+    public void orderCancel(OrderControlRequest request){
+        Order order = findOrderByOrderId(request.getOrderId());
+        Payment payment = order.getPayment();
+        String updateStatus = order.getOrderStatus().equals("결제완료") ? "환불진행" : "주문취소";
+
+        order.updateStatus(updateStatus);
+
+        if(payment != null){
+            payment.updatePaymentCheck(null);
+            payment.updatePaymentStatus(updateStatus);
+            order.updateStatus(updateStatus);
+        }
+    }
+
+    public boolean isReservationUpdatable(long orderId){
+        return findOrderByOrderId(orderId).getOrderDepartureDate().isAfter(LocalDate.now().atStartOfDay());
+    }
+
+    @Transactional
+    public Order updateOrderAndPaymentStatus(OrderControlRequest request, String status){
+        Order order = findOrderByOrderId(request.getOrderId());
+        Payment payment = order.getPayment();
+        order.updateStatus(status);
+        if(payment != null){
+            payment.updatePaymentStatus(status);
+        }
+        return order;
+    }
+
+    @Transactional
+    public void orderCheck(long orderId){
+        Payment payment = findOrderByOrderId(orderId).getPayment();
+        if(payment != null && payment.getPaymentCheck() != null){
+            payment.updatePaymentCheck(null);
+        }
+    }
+
+    public MyWritableReviewResponse myWritableReviewList(Principal principal, Pageable pageable){
+        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderEndDateIsAfterAndOrderStatus(userService.getUserId(principal), LocalDateTime.now(), LocalDate.now().atStartOfDay().minusDays(31), "결제완료").orElse(null);
+
+        System.err.println("deadLine : " + LocalDate.now().atStartOfDay().minusDays(31));
+
+        if(writableReviewAndWrittenReviewList != null){
+            writableReviewAndWrittenReviewList = writableReviewAndWrittenReviewList.stream().filter(order -> order.getReview() == null).collect(Collectors.toList());
+
+            if(!writableReviewAndWrittenReviewList.isEmpty()){
+                System.err.println("start : " + pageable.getPageNumber() * 10 + "end : " +  Math.min(writableReviewAndWrittenReviewList.size(), (pageable.getPageNumber() + 1) * 10));
+                return MyWritableReviewResponse.builder()
+                        .myWritableReviewList(writableReviewAndWrittenReviewList.stream().map(this::toMyWritableReview).collect(Collectors.toList()).subList(pageable.getPageNumber() * 10, Math.min(writableReviewAndWrittenReviewList.size(), (pageable.getPageNumber() + 1) * 10)))
+                        .totalElements(writableReviewAndWrittenReviewList.size())
+                        .totalPages((writableReviewAndWrittenReviewList.size() - 1) / 10 + 1)
+                        .build();
+            }
+        }
+        return MyWritableReviewResponse.builder()
+                .totalPages(0)
+                .totalElements(0)
+                .build();
+    }
+
+    public MyWritableReview toMyWritableReview(Order order){
+        return MyWritableReview.builder()
+                .orderId(order.getOrderId())
+                .productId(order.getProduct().getProductId())
+                .orderDepartureDate(order.getOrderDepartureDate())
+                .orderEndDate(order.getOrderEndDate())
+                .productName(order.getProduct().getProductTitle())
+                .productRepImg(order.getProduct().getProductRepImgList().get(0).getProductRepImgSrc())
+                .productId(order.getProduct().getProductId())
+                .deadLine(order.getOrderEndDate().plusDays(31))
+                .build();
+    }
+
+    public MyWrittenReviewResponse myWrittenReviewList(Principal principal, Pageable pageable){
+        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatus(userService.getUserId(principal), LocalDateTime.now(), "결제완료").orElse(null);
+
+        if(writableReviewAndWrittenReviewList != null){
+            writableReviewAndWrittenReviewList = writableReviewAndWrittenReviewList.stream().filter(order -> order.getReview() != null).collect(Collectors.toList());
+            return MyWrittenReviewResponse.builder()
+                    .myWrittenReviewList(writableReviewAndWrittenReviewList.stream().map(this::toMyWrittenReview).collect(Collectors.toList()).subList(pageable.getPageNumber() * 10, Math.min(writableReviewAndWrittenReviewList.size(), (pageable.getPageNumber() + 1) * 10)))
+                    .totalElements(writableReviewAndWrittenReviewList.size())
+                    .totalPages((writableReviewAndWrittenReviewList.size() + 1) / 10 + 1)
+                    .build();
+        }
+        return MyWrittenReviewResponse.builder()
+                .totalPages(0)
+                .totalElements(0)
+                .build();
+    }
+
+    public MyWrittenReview toMyWrittenReview(Order order){
+        return MyWrittenReview.builder()
+                .review(order.getReview())
+                .productName(order.getProduct().getProductTitle())
+                .reviewRepImg(order.getReview().getReviewImgList().isEmpty() ? null : order.getReview().getReviewImgList().get(0).getReviewImgSrc())
+                .productRepImg(order.getProduct().getProductRepImgList().get(0).getProductRepImgSrc())
+                .isReviewUpdatable(LocalDateTime.now().isBefore(order.getReview().getReviewSubmitDate().toLocalDate().atStartOfDay().plusDays(91).minusSeconds(1)))
+                .build();
+    }
+
+    public OrderHistoryResponse myOrderHistory(Principal principal){
+        int nonDeposit = 0;
+        int depositNonCheck = 0;
+        int paymentComplete = 0;
+        int orderCancel = 0;
+        int refunding = 0;
+        int refundComplete = 0;
+
+        List<Order> orderList = findOrderByPrincipal(principal);
+
+        for(Order order : orderList){
+            if(order.getOrderStatus().equals("미입금")){
+                nonDeposit++;
+            }
+            else if(order.getOrderStatus().equals("입금미확인")){
+                depositNonCheck++;
+            }
+            else if(order.getOrderStatus().equals("결제완료")){
+                paymentComplete++;
+            }
+            else if(order.getOrderStatus().equals("주문취소")){
+                orderCancel++;
+            }
+            else if(order.getOrderStatus().equals("환불진행")){
+                refunding++;
+            }
+            else if(order.getOrderStatus().equals("환불완료")){
+                refundComplete++;
+            }
+        }
+
+        return OrderHistoryResponse.builder()
+                .nonDeposit(nonDeposit)
+                .depositNonCheck(depositNonCheck)
+                .paymentComplete(paymentComplete)
+                .orderCancel(orderCancel)
+                .refunding(refunding)
+                .refundComplete(refundComplete)
+                .build();
+    }
+
+    public List<Order> findOrderByPrincipal(Principal principal){
+        return orderRepository.findAllByUserUserId(userService.getUserId(principal))
                 .orElseThrow(() -> new IllegalArgumentException("not found Order"));
     }
 }

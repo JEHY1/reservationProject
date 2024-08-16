@@ -22,7 +22,7 @@ public class CustomRequestCacheFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         // history 저장에 포함하지 않을 요청들
-        if (!requestURI.equals("/login") && !requestURI.startsWith("/login/") && !requestURI.equals("/checkLogin") && !requestURI.startsWith("/css") && !requestURI.startsWith("/js") && !requestURI.startsWith("/images") && !requestURI.startsWith("/join") && !requestURI.startsWith("/favicon.ico")) {
+        if (!requestURI.equals("/login") && !requestURI.startsWith("/login/") && !requestURI.equals("/checkLogin") && !requestURI.startsWith("/css") && !requestURI.startsWith("/js") && !requestURI.startsWith("/images") && !requestURI.startsWith("/join") && !requestURI.startsWith("/favicon.ico") && !requestURI.startsWith("/find")) {
             requestCache.saveRequest(request, response);
         }
 

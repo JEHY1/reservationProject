@@ -1,15 +1,13 @@
 package com.example.travel.service;
 
-import com.example.travel.domain.Product;
-import com.example.travel.domain.ProductInfoImg;
-import com.example.travel.domain.ProductOption;
-import com.example.travel.domain.ProductRepImg;
-import com.example.travel.dto.admin.InsertProductOptionRequest;
-import com.example.travel.dto.admin.InsertProductRequest;
+import com.example.travel.domain.*;
+import com.example.travel.dto.admin.ProductOptionRequest;
+import com.example.travel.dto.admin.ProductRequest;
 import com.example.travel.dto.order.OptionCountForm;
 import com.example.travel.dto.order.OrderRequest;
 import com.example.travel.dto.order.OrderResponse;
 import com.example.travel.dto.product.ProductDetailInfoResponse;
+import com.example.travel.dto.product.SearchProductResponse;
 import com.example.travel.dto.product.StockRequest;
 import com.example.travel.dto.product.StockResponse;
 import com.example.travel.repository.*;
@@ -146,10 +144,10 @@ public class ProductService {
 
     //상품 등록&수정
     @Transactional
-    public Product insertProduct(InsertProductRequest request, Principal principal){
+    public Product insertProduct(ProductRequest request, Principal principal){
 
         Product product = null;
-        List<InsertProductOptionRequest> list = request.getProductOptions();
+        List<ProductOptionRequest> list = request.getProductOptions();
 
         if(request.getProductId() != null) {
             // 상품정보 수정
@@ -175,10 +173,11 @@ public class ProductService {
                     .productMaxCount(request.getProductMaxCount())
                     .productInfo(request.getProductInfo())
                     .user(userService.getUserByPrincipal(principal))
+                    .productTravelDays(request.getProductTravelDays())
                     .build());
 
             // 상품옵션 등록
-            for (InsertProductOptionRequest productOption : list) {
+            for (ProductOptionRequest productOption : list) {
                 productOptionRepository.save(ProductOption.builder()
                         .product(product)
                         .productOptionAgeRange(productOption.getProductOptionAgeRange())
@@ -207,7 +206,7 @@ public class ProductService {
 
                 productRepImgRepository.save(ProductRepImg.builder()
                         .product(product)
-                        .productRepImgSrc("/images/productRep/product" + product.getProductId() + "RepImg" + imgNum++ + extension)
+                        .productRepImgSrc("product" + product.getProductId() + "RepImg" + imgNum++ + extension)
                         .build());
             }
 
@@ -232,7 +231,7 @@ public class ProductService {
 
                 productInfoImgRepository.save(ProductInfoImg.builder()
                         .product(product)
-                        .productInfoImgSrc("/images/productInfo/product" + product.getProductId() + "InfoImg" + imgNum++ + extension)
+                        .productInfoImgSrc("product" + product.getProductId() + "InfoImg" + imgNum++ + extension)
                         .build());
 
             }
@@ -256,83 +255,168 @@ public class ProductService {
         }
     }
 
-    // 관리자페이지에서 상품 검색
-    public Page<Product> productList(String status, String mainCategory, String subCategory, String searchKeyword, Pageable pageable) {
+    // 관리자페이지에서 상품 조회
+    public Page<Product> productList(String status, String mainCategory, String subCategory, String searchKeyword, Principal principal, Pageable pageable) {
         Page<Product> productList = null;
-        // 검색 안했을 때
-        if(searchKeyword == null || searchKeyword.equals("")) {
-            // 전체상품 조회
-            if(status.equals("전체")) {
-                // 대분류, 중분류 모두 선택 안했을 때
-                if(mainCategory.equals("") && subCategory.equals("")) {
-                    productList = productRepository.findAll(pageable);
+        User userEntity = userService.getUserByPrincipal(principal);
+        // userRole "ADMIN"일 때
+        if(userEntity.getUserRole().equals("ADMIN")) {
+            // 검색 안했을 때
+            if(searchKeyword == null || searchKeyword.equals("")) {
+                // 전체상품 조회
+                if(status.equals("전체")) {
+                    // 대분류, 중분류 모두 선택 안했을 때
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        productList = productRepository.findAll(pageable);
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductRegionMainCategory(mainCategory, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductRegionMainCategoryAndProductRegionSubCategory(mainCategory, subCategory, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
-                // 대분류만 선택 했을 때
-                else if(subCategory.equals("")) {
-                    productList = productRepository.findByProductRegionMainCategory(mainCategory, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
-                }
-                // 대분류, 중분류 모두 선택 했을 때
+                // 정상상품, 품절상품, 숨김상품 조회
                 else {
-                    productList = productRepository.findByProductRegionMainCategoryAndProductRegionSubCategory(mainCategory, subCategory, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    // 대분류, 중분류 모두 선택 안했을 때
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        productList = productRepository.findByProductStatus(status, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategory(status, mainCategory, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductRegionSubCategory(status, mainCategory, subCategory, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
             }
-            // 정상상품, 품절상품, 숨김상품 조회
+            // searchKeyword 로 검색 했을 때
             else {
-                // 대분류, 중분류 모두 선택 안했을 때
-                if(mainCategory.equals("") && subCategory.equals("")) {
-                    productList = productRepository.findByProductStatus(status, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                // 전체상품 조회
+                if(status.equals("전체")) {
+                    // 대분류, 중분류 모두 선택 안했을 때
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        productList = productRepository.findByProductTitleContaining(searchKeyword, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductRegionMainCategoryAndProductTitleContaining(mainCategory, searchKeyword, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductRegionMainCategoryAndProductRegionSubCategoryAndProductTitleContaining(mainCategory, subCategory, searchKeyword, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
-                // 대분류만 선택 했을 때
-                else if(subCategory.equals("")) {
-                    productList = productRepository.findByProductStatusAndProductRegionMainCategory(status, mainCategory, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
-                }
-                // 대분류, 중분류 모두 선택 했을 때
+                // 정상상품, 품절상품, 숨김상품 조회
                 else {
-                    productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductRegionSubCategory(status, mainCategory, subCategory, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        // 대분류, 중분류 모두 선택 안했을 때
+                        productList = productRepository.findByProductStatusAndProductTitleContaining(status, searchKeyword, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductTitleContaining(status, mainCategory, searchKeyword, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductRegionSubCategoryAndProductTitleContaining(status, mainCategory, subCategory, searchKeyword, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
             }
         }
-        // searchKeyword 로 검색 됐을 때
-        else {
-            // 전체상품 조회
-            if(status.equals("전체")) {
-                // 대분류, 중분류 모두 선택 안했을 때
-                if(mainCategory.equals("") && subCategory.equals("")) {
-                    productList = productRepository.findByProductTitleContaining(searchKeyword, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+        // userRole "SELLER"일 때
+        else if(userEntity.getUserRole().equals("SELLER")) {
+            // 검색 안했을 때
+            if(searchKeyword == null || searchKeyword.equals("")) {
+                // 전체상품 조회
+                if(status.equals("전체")) {
+                    // 대분류, 중분류 모두 선택 안했을 때
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        productList = productRepository.findByUser(userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductRegionMainCategoryAndUser(mainCategory, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductRegionMainCategoryAndProductRegionSubCategoryAndUser(mainCategory, subCategory, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
-                // 대분류만 선택 했을 때
-                else if(subCategory.equals("")) {
-                    productList = productRepository.findByProductRegionMainCategoryAndProductTitleContaining(mainCategory, searchKeyword, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
-                }
-                // 대분류, 중분류 모두 선택 했을 때
+                // 정상상품, 품절상품, 숨김상품 조회
                 else {
-                    productList = productRepository.findByProductRegionMainCategoryAndProductRegionSubCategoryAndProductTitleContaining(mainCategory, subCategory, searchKeyword, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    // 대분류, 중분류 모두 선택 안했을 때
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        productList = productRepository.findByProductStatusAndUser(status, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndUser(status, mainCategory, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductRegionSubCategoryAndUser(status, mainCategory, subCategory, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
             }
-            // 정상상품, 품절상품, 숨김상품 조회
+            // searchKeyword 로 검색 했을 때
             else {
-                if(mainCategory.equals("") && subCategory.equals("")) {
+                // 전체상품 조회
+                if(status.equals("전체")) {
                     // 대분류, 중분류 모두 선택 안했을 때
-                    productList = productRepository.findByProductStatusAndProductTitleContaining(status, searchKeyword, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        productList = productRepository.findByProductTitleContainingAndUser(searchKeyword, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductRegionMainCategoryAndProductTitleContainingAndUser(mainCategory, searchKeyword, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductRegionMainCategoryAndProductRegionSubCategoryAndProductTitleContainingAndUser(mainCategory, subCategory, searchKeyword, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
-                // 대분류만 선택 했을 때
-                else if(subCategory.equals("")) {
-                    productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductTitleContaining(status, mainCategory, searchKeyword, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
-                }
-                // 대분류, 중분류 모두 선택 했을 때
+                // 정상상품, 품절상품, 숨김상품 조회
                 else {
-                    productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductRegionSubCategoryAndProductTitleContaining(status, mainCategory, subCategory, searchKeyword, pageable)
-                            .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    if(mainCategory.equals("") && subCategory.equals("")) {
+                        // 대분류, 중분류 모두 선택 안했을 때
+                        productList = productRepository.findByProductStatusAndProductTitleContainingAndUser(status, searchKeyword, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류만 선택 했을 때
+                    else if(subCategory.equals("")) {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductTitleContainingAndUser(status, mainCategory, searchKeyword, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
+                    // 대분류, 중분류 모두 선택 했을 때
+                    else {
+                        productList = productRepository.findByProductStatusAndProductRegionMainCategoryAndProductRegionSubCategoryAndProductTitleContainingAndUser(status, mainCategory, subCategory, searchKeyword, userEntity, pageable)
+                                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+                    }
                 }
             }
         }
@@ -353,5 +437,51 @@ public class ProductService {
             // productId로 Product 숨김처리
             findProductByProductId(productId).updateStatus("숨김");
         }
+    }
+
+    public SearchProductResponse searchProduct(String mainCategory, String subCategory, String searchText, Pageable pageable){
+        List<Product> productList = null;
+        List<Product> subList = null;
+        System.err.println(mainCategory);
+        System.err.println(subCategory);
+        System.err.println(searchText);
+
+        if(searchText != null){
+            productList = findProductByProductNameContaining(searchText);
+        }
+        else if(mainCategory != null){
+            productList = findProductByProductMainCategory(mainCategory);
+        }
+        else{
+            productList = findProductByProductSubCategory(subCategory);
+        }
+
+        subList = productList.subList(pageable.getPageNumber() * 12, Math.min(productList.size(), (pageable.getPageNumber() + 1) * 12));
+
+        return SearchProductResponse.builder()
+                .productList(subList)
+                .totalElements(productList.size())
+                .totalPages(productList.size() / 12 + productList.size() % 12 == 0 ? 0 : 1)
+                .build();
+    }
+
+    public List<Product> findProductByProductNameContaining(String searchText){
+        return productRepository.findAllByProductTitleContaining(searchText)
+                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+    }
+
+    public List<Product> findProductByProductMainCategory(String mainCategory){
+        return productRepository.findAllByProductRegionMainCategory(mainCategory)
+                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+    }
+
+    public List<Product> findProductByProductSubCategory(String subCategory){
+        return productRepository.findAllByProductRegionSubCategory(subCategory)
+                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+    }
+
+    public List<Product> newProduct() {
+        return productRepository.newProduct()
+                .orElseThrow(() -> new IllegalArgumentException("not found product"));
     }
 }

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVEL 내 후기현황</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/myPage/myReviewList.css">
+
+    <script src="/js/jquery.js"></script>
+
+    <style>
+        .d-hidden{
+            display: none;
+        }
+
+        #writablePrevPage-btn{
+          font-size: 25px;
+          background-color: white;
+          border: none;
+        }
+        #writablePrevPage-btn:hover{
+            color: gray;
+        }
+        #writablePrevPage-btn:disabled:hover{
+            color: gainsboro;
+        }
+
+        #writableNextPage-btn{
+            font-size: 25px;
+            background-color: white;
+            border: none;
+        }
+
+        #writableNextPage-btn:hover{
+            color: gray;
+        }
+        #writableNextPage-btn:disabled:hover{
+            color: gainsboro;
+        }
+
+
+        #writtenPrevPage-btn{
+          font-size: 25px;
+          background-color: white;
+          border: none;
+        }
+        #writtenPrevPage-btn:hover{
+            color: gray;
+        }
+        #writtenPrevPage-btn:disabled:hover{
+            color: gainsboro;
+        }
+
+        #writtenNextPage-btn{
+            font-size: 25px;
+            background-color: white;
+            border: none;
+        }
+
+        #writtenNextPage-btn:hover{
+            color: gray;
+        }
+        #writtenNextPage-btn:disabled:hover{
+            color: gainsboro;
+        }
+        .page-btn{
+            font-size: 25px;
+            width : 47px;
+            height: 47px;
+            padding : 7px;
+            border-radius: 50%;
+            border: none;
+            background-color: white;
+        }
+
+        .selectedPage-btn{
+            background-color : #0D569B; !important;
+            color : white !important;
+        }
+
+        .page-btn:hover{
+            background-color: gainsboro;
+        }
+
+        .row{--bs-gutter-x:1.5rem;--bs-gutter-y:0;display:flex;flex-wrap:wrap;margin-top:calc(var(--bs-gutter-y) * -1);margin-right:calc(var(--bs-gutter-x) * -.5);margin-left:calc(var(--bs-gutter-x) * -.5)}.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x) * .5);padding-left:calc(var(--bs-gutter-x) * .5);margin-top:var(--bs-gutter-y)}
+        .col-auto{flex:0 0 auto;width:auto}
+        .ms-auto{margin-left:auto!important}
+        .w-100{width:100%!important}
+        .mx-auto{margin-right:auto!important;margin-left:auto!important}
+        .mt-5{margin-top:3rem!important}
+        .d-flex{display:flex!important}
+        .align-items-center{align-items:center!important}
+        .justify-content-center{justify-content:center!important}
+        .p-0{padding:0!important}
+        .mx-1{margin-right:.25rem!important;margin-left:.25rem!important}
+        .me-auto{margin-right:auto!important}
+
+        .delete-btn{
+            border : none;
+            background-color: #0D569B;
+            border-radius: 10px;
+            color: white;
+            padding : 5px 10px;
+            cursor : pointer;
+        }
+
+        #selectedDelete-btn{
+            border : none;
+            background-color: #0D569B;
+            border-radius: 10px;
+            color: white;
+            padding : 10px 20px;
+            font-size: 23px;
+            cursor : pointer;
+        }
+
+        .update-btn{
+            border: 1px solid #0D569B;
+            color: #0D569B;
+            border-radius: 10px;
+            background-color: white;
+            padding : 5px 10px;
+            margin-right: 10px;
+            cursor : pointer;
+        }
+
+        .submit-btn{
+            border: 1px solid #0D569B;
+            color: #0D569B;
+            border-radius: 10px;
+            background-color: white;
+            padding : 5px 10px;
+            margin-right: 10px;
+            cursor : pointer;
+        }
+
+        .row{--bs-gutter-x:1.5rem;--bs-gutter-y:0;display:flex;flex-wrap:wrap;margin-top:calc(var(--bs-gutter-y) * -1);margin-right:calc(var(--bs-gutter-x) * -.5);margin-left:calc(var(--bs-gutter-x) * -.5)}.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x) * .5);padding-left:calc(var(--bs-gutter-x) * .5);margin-top:var(--bs-gutter-y)}
+        .mx-auto{margin-right:auto!important;margin-left:auto!important}
+        .w-100{width:100%!important}
+        .col{flex:100%}
+        .col-auto{flex:0 0 auto;width:auto}
+        .border-b-green{
+            border-bottom: 3px solid #0D569B;
+        }
+        .border-t-green{
+            border-top: 3px solid #0D569B;
+        }
+        .border-r-green{
+            border-right: 3px solid #0D569B;
+        }
+        .border-l-green{
+            border-left: 3px solid #0D569B;
+        }
+        .border-t-gray{
+            border-top: 3px solid gray;
+        }
+        .border-b-gray{
+            border-bottom: 3px solid gray;
+        }
+        .border-r-gray{
+            border-right: 3px solid gray;
+        }
+        .border-l-gray{
+            border-left: 3px solid gray;
+        }
+
+        .color-green{
+            color: #0D569B;
+        }
+
+        .color-gray{
+            color: gray;
+        }
+
+        .py-10{
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .cursor{
+            cursor: pointer;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+<th:block th:include="layouts/header"></th:block>
+<div class="container">
+    <div class="content">
+        <div class="titleArea">
+            <h2>내 후기현황</h2>
+        </div>
+        <div id="tabArea" class="row mx-auto w-100" style="margin-bottom: 40px;">
+
+            <div class="col-auto p-0 border-b-green" style="width: 417px;"></div>
+            <div id="showWritableReview-btn" style="width: 500px; font-size: 23px; font-weight: 700;">작성가능</div>
+            <div id="showWrittenReview-btn" style="width: 500px; font-size: 23px; font-weight: 700;">작성완료</div>
+            <div class="col-auto p-0 border-b-green" style="width: 417px;"></div>
+            <input type="hidden" id="currentTab">
+        </div>
+        <div id="writtenReviews" class="tabContent">
+            <div class="btnDiv" style="margin-bottom: 10px;">
+                <button id="selectedDelete-btn">삭제</button>
+            </div>
+
+            <table style="width: 1880px;">
+                <thead>
+                <tr>
+                    <td><input type="checkbox" id="all"></td>
+                    <td>번호</td>
+                    <td style="width: 150px;">작성 날짜</td>
+                    <td style="width: 100px;">리뷰 이미지</td>
+                    <td style="width: 230px;">상품명</td>
+                    <td style="width: 700px;">제목</td>
+                    <td style="width: 100px;">평점</td>
+                    <td>기능</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="review : ${myWrittenReviewPage.myWrittenReviewList}">
+
+                    <td><input type="checkbox" class="check" th:value="${review.reviewId}"></td>
+                    <td class="writtenReviewNum"></td>
+                    <td th:text="${#temporals.format(review.reviewCreateDate, 'yyyy-MM-dd HH:mm:ss')}" style="width: 130px;"></td>
+                    <td style="width: 100px;">
+                        <img th:src="${review.reviewRepImg != null ?  'http://192.168.106.12/travelFileServer/images/reviewImg/' + review.reviewRepImg : 'http://192.168.106.12/travelFileServer/images/productRep/' + review.productRepImg}" alt="상품 이미지" style="padding: 0px; width: 100px; height: 100px;">
+                    </td>
+                    <td th:text="${review.productName}"></td>
+                    <td th:text="${review.reviewTitle}" style="width: 700px;"></td>
+
+                    <td style="width: 100px;">
+                        <div class="star-rating" >
+                            <label th:each="star : ${#numbers.sequence(1, 5)}"
+                                   th:classappend="${star <= review.reviewScore} ? 'red' : ''"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <button th:if="${review.isReviewUpdatable}" class="update-btn" th:onclick="|location.href='/myPage/reviewPost?reviewId=${review.reviewId}'|">수정</button>
+                        <button class="delete-btn">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <div class="row w-100 mx-auto mt-5" style="height: 47px;" th:if="${myWrittenReviewPage.totalElements != 0}">
+                <input type="hidden" id="writtenReviewTotalPageSize" th:value="${myWrittenReviewPage.totalPages}">
+                <button class="col-auto ms-auto" id="writtenPrevPage-btn">〈</button>
+                <div class="col-auto d-flex align-items-center justify-content-center" id="writtenReviewsPageButtonField">
+                </div>
+                <button class="col-auto me-auto" id="writtenNextPage-btn">〉</button>
+            </div>
+        </div>
+
+        <div id="writableReviews" class="tabContent">
+            <table style="width: 1880px;">
+                <thead>
+                <tr>
+                    <td>번호</td>
+                    <td style="width: 200px;">여행 기간</td>
+                    <td style="width: 100px;">상품 이미지</td>
+                    <td style="width: 800px;">상품명</td>
+                    <td>작성 마감일</td>
+                    <td>기능</td>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="review : ${myWritableReviewPage.myWritableReviewList}">
+
+                        <td class="writableReviewNum"></td>
+                        <td th:text="${#temporals.format(review.orderDepartureDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(review.orderEndDate, 'yyyy-MM-dd')} "></td>
+                        <td style="width: 100px;">
+                            <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${review.productRepImg}" alt="상품 이미지" style="padding: 0px; width: 100px; height: 100px;">
+                        </td>
+                        <td th:text="${review.productName}" style="width: 800px;"></td>
+                        <td th:text="${#temporals.format(review.deadLine, 'yyyy-MM-dd')}">2024-08-09</td>
+                        <td>
+                            <button class="submit-btn" th:onclick="|location.href='/myPage/reviewPost?orderId=${review.orderId}'|" style="marin: 0px;">후기등록</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row w-100 mx-auto mt-5" style="height: 47px;" th:if="${myWritableReviewPage.totalPages != 0}">
+                <input type="hidden" id="writableReviewTotalPageSize" th:value="${myWritableReviewPage.totalPages}">
+                <button class="col-auto ms-auto" id="writablePrevPage-btn">〈</button>
+                <div class="col-auto d-flex align-items-center justify-content-center" id="writableReviewsPageButtonField">
+                </div>
+                <button class="col-auto me-auto" id="writableNextPage-btn">〉</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+<th:block th:include="layouts/footer"></th:block>
+<script src="/js/myPage/myReviewList.js"></script>
+
+</body>
+</html>

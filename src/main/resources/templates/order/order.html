@@ -5,6 +5,8 @@
   <title>Title</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
   <style>
     .cursor{
       cursor: pointer;
@@ -79,379 +81,382 @@
   </style>
 </head>
 <body>
-<div style="height: 160px;"></div>
+<th:block th:include="layouts/header"></th:block>
+<div style="height: 30px;"></div>
 
-<div class="content mx-auto">
-  <div class="title py-3">
-    <h2 class="text-center">주문입력</h2>
-    <div class="text-center">주문 상세 내역입니다.</div>
-  </div>
-
-  <div class="productInfo border-t-blue border-b">
-    <div class="row w-100 mx-auto bg-gainsboro py-3 text-center">
-      <div class="col-4">상품명</div>
-      <div class="col-4">옵션</div>
-      <div class="col-2">주문금액</div>
-      <div class="col-2">전체주문금액</div>
+<main>
+  <div class="content mx-auto">
+    <div class="title py-3">
+      <h2 class="text-center">주문입력</h2>
+      <div class="text-center">주문 상세 내역입니다.</div>
     </div>
-    <div class="row w-100 mx-auto py-3">
-      <input type="hidden" id="productId" th:value="${orderInfo.productId}">
-      <input type="hidden" id="departDate" th:value="${orderInfo.DepartDate}">
-      <div class="col-4">
-        <div class="row mx-auto w-100">
-          <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${orderInfo.productRepImg}" class="col-4 p-0" style="width: 157px; height: 157px; border-radius: 10px;">
-          <div class="col" th:text="${orderInfo.productTitle}">productTitle</div>
-        </div>
+
+    <div class="productInfo border-t-blue border-b">
+      <div class="row w-100 mx-auto bg-gainsboro py-3 text-center">
+        <div class="col-4">상품명</div>
+        <div class="col-4">옵션</div>
+        <div class="col-2">주문금액</div>
+        <div class="col-2">전체주문금액</div>
       </div>
-      <div class="col-6 p-0">
-        <div th:each="option : ${orderInfo.optionList}" class="row w-100 mx-auto mb-2">
-          <input type="hidden" class="optionId" th:value="${option.productOption.productOptionId}">
-          <input type="hidden" class="count" th:value="${option.count}">
-          <div class="col-8">
-            <div class="row w-100 mx-auto">
-              <div class="col-auto p-0" th:text="${option.productOption.productOptionAgeRange} + ' - '">옵션 이름</div>
-              <b class="col-auto p-0" th:text="${option.count} + '개'">수량</b>
+      <div class="row w-100 mx-auto py-3">
+        <input type="hidden" id="productId" th:value="${orderInfo.productId}">
+        <input type="hidden" id="departDate" th:value="${orderInfo.DepartDate}">
+        <div class="col-4">
+          <div class="row mx-auto w-100">
+            <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${orderInfo.productRepImg}" class="col-4 p-0" style="width: 157px; height: 157px; border-radius: 10px;">
+            <div class="col" th:text="${orderInfo.productTitle}">productTitle</div>
+          </div>
+        </div>
+        <div class="col-6 p-0">
+          <div th:each="option : ${orderInfo.optionList}" class="row w-100 mx-auto mb-2">
+            <input type="hidden" class="optionId" th:value="${option.productOption.productOptionId}">
+            <input type="hidden" class="count" th:value="${option.count}">
+            <div class="col-8">
+              <div class="row w-100 mx-auto">
+                <div class="col-auto p-0" th:text="${option.productOption.productOptionAgeRange} + ' - '">옵션 이름</div>
+                <b class="col-auto p-0" th:text="${option.count} + '개'">수량</b>
+              </div>
+              <div style="color: red;" th:text="'(' + ${orderInfo.departDate} + ')'">선택 날짜</div>
             </div>
-            <div style="color: red;" th:text="'(' + ${orderInfo.departDate} + ')'">선택 날짜</div>
+            <div class="col-4">
+              <div class="row w-100 mx-auto">
+                <div class="text-center price totalOptionRegularPrice my-2" th:if="${option.productOption.productOptionDiscountPrice == null}" th:text="${option.productOption.productOptionRegularPrice * option.count}"></div>
+                <input th:if="${option.productOption.productOptionDiscountPrice == null}" type="hidden" class="totalOptionDiscountPrice">
+                <del th:if="${option.productOption.productOptionDiscountPrice != null}"><div class="text-center price totalOptionRegularPrice" th:text="${option.productOption.productOptionRegularPrice * option.count}"></div></del>
+                <div class="text-center price color-red totalOptionDiscountPrice" th:if="${option.productOption.productOptionDiscountPrice != null}" th:text="${option.productOption.productOptionDiscountPrice * option.count}"></div>
+              </div>
+            </div>
+
           </div>
-          <div class="col-4">
-            <div class="row w-100 mx-auto">
-              <div class="text-center price totalOptionRegularPrice my-2" th:if="${option.productOption.productOptionDiscountPrice == null}" th:text="${option.productOption.productOptionRegularPrice * option.count}"></div>
-              <input th:if="${option.productOption.productOptionDiscountPrice == null}" type="hidden" class="totalOptionDiscountPrice">
-              <del th:if="${option.productOption.productOptionDiscountPrice != null}"><div class="text-center price totalOptionRegularPrice" th:text="${option.productOption.productOptionRegularPrice * option.count}"></div></del>
-              <div class="text-center price color-red totalOptionDiscountPrice" th:if="${option.productOption.productOptionDiscountPrice != null}" th:text="${option.productOption.productOptionDiscountPrice * option.count}"></div>
+        </div>
+        <div class="col-2 d-flex align-items-center justify-content-center color-blue price" th:text="${orderInfo.totalRegularPrice - orderInfo.totalDiscount}">35,000원</div>
+      </div>
+    </div>
+
+    <div class="userInfo mt-5">
+      <div class="row w-100 mx-auto">
+        <img src="/images/icon_img/usernameIcon.png" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
+        <div class="col fs-3" style="font-weight: 600;">주문자 정보</div>
+      </div>
+
+      <div class="row w-100 mx-auto my-3">
+        <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">이름</div>
+        <div class="col">
+          <div class="row w-100 mx-auto">
+            <!--          <img src="/images/icon_img/usernameIcon.png" class="col-auto p-2 border">-->
+            <input type="text" class="col" id="realName" style="padding-top: 6px; padding-bottom: 6px;" th:value="${orderInfo.user.userRealName}">
+          </div>
+        </div>
+      </div>
+      <div class="row w-100 mx-auto my-3">
+        <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">연락처</div>
+        <div class="col">
+          <div class="row w-100 mx-auto">
+
+            <select class="col" id="userPhone1" style="padding-top: 8px; padding-bottom: 7px;">
+              <option>010</option>
+              <option>011</option>
+              <option>016</option>
+              <option>017</option>
+              <option>018</option>
+              <option>019</option>
+            </select>
+            <div class="col-auto my-auto">-</div>
+            <input class="col" id="userPhone2" type="tel" maxlength="4" th:value="${orderInfo.user.userPhone.substring(4, 8)}">
+            <div class="col-auto my-auto">-</div>
+            <input class="col" id="userPhone3" type="tel" maxlength="4" th:value="${orderInfo.user.userPhone.substring(9, 13)}">
+          </div>
+        </div>
+      </div>
+      <div class="row w-100 mx-auto my-3">
+        <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">메일주소</div>
+        <div class="col">
+          <div class="row w-100 mx-auto">
+            <!--          <img src="#" class="col-auto p-2 border">-->
+            <input type="text" class="col" id="userEmail" style="padding-top: 6px; padding-bottom: 6px;" th:value="${orderInfo.user.userEmail}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="discountInfo mt-5">
+      <div class="row w-100 mx-auto">
+        <img src="/images/icon_img/coupon.png" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
+        <div class="col fs-3" style="font-weight: 600;">주문상품 할인내역</div>
+      </div>
+
+      <div class="row w-100 mx-auto text-center mt-3">
+        <div class="col-auto mx-auto ms-0 p-0 p-rel" style="width: 420px;">
+          <div class="bg-gainsboro py-3">주문금액</div>
+          <div class="border py-3 price" th:text="${orderInfo.totalRegularPrice}">30,000원</div>
+          <div class="p-abs calc bg-red" style="top: 45px; right: -25px;">-</div>
+        </div>
+
+        <div class="col-auto mx-auto p-0" style="width: 420px;">
+          <div class="bg-gainsboro py-3">할인금액</div>
+          <div style="color: red;" class="border py-3 price" th:text="${orderInfo.totalDiscount}">30,000원</div>
+        </div>
+        <div class="col-auto mx-auto me-0 p-0 p-rel" style="width: 420px;">
+          <div class="bg-gainsboro py-3">결제 예정금액</div>
+          <div class="border py-3 price" id="totalPrice" th:text="${orderInfo.totalRegularPrice - orderInfo.totalDiscount}">30,000원</div>
+          <div class="p-abs calc bg-blue" style="top: 45px; left: -25px;">=</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paymentInfo mt-5">
+      <div class="row w-100 mx-auto">
+        <img src="/images/icon_img/wallet.png" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
+        <div class="col fs-3" style="font-weight: 600;">결제방법</div>
+      </div>
+
+      <div class="row w-100 mx-auto mt-3">
+        <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">결제방법</div>
+        <div class="col">
+          <div class="row w-100 mx-auto mt-1">
+            <input type="radio" class="col-auto cursor" id="bankTransferPay" name="paymentType" style="width: 25px; height: 25px" checked>
+            <label class="col cursor" onclick="prevElementClick(this)">무통장입금</label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row w-100 mx-auto mt-1">
+            <input type="radio" class="col-auto cursor" id="cardPay" name="paymentType" style="width: 25px; height: 25px">
+            <label class="col cursor" onclick="prevElementClick(this)">카드결제</label>
+          </div>
+        </div>
+      </div>
+      <div class="row w-100 mx-auto mt-3" id="bankTransferInfo">
+        <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">결제계좌</div>
+        <select class="col mx-2" id="account">
+          <option th:each="account : ${orderInfo.accountList}" th:text="${account.accountBank + ' ' + account.accountNumber}"></option>
+        </select>
+        <input type="text" class="col-5" id="depositor" placeholder="입금자명을 입력하세요.">
+        <div style="color: red;" class="p-0 mt-3"><b style="color: black;">※</b> 무통장 입금시 입력한 입금자명으로 입금해주세요.</div>
+        <div style="color: red;" class="p-0"><b style="color: black;">※</b> 입력한 입금자명과 실제 입금자명이 다르면 입금확인이 불가합니다.</div>
+      </div>
+
+    </div>
+
+    <div class="agreement mt-5">
+      <div class="row w-100 mx-auto">
+        <img src="/images/icon_img/agreement.png" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
+        <div class="col fs-3" style="font-weight: 600;">약관 동의 안내</div>
+      </div>
+
+      <div class="row w-100 mx-auto mt-3">
+        <div class="col-2 p-0">
+          <div class="py-2 bg-gainsboro text-center border-radius-5">환불규정</div>
+        </div>
+        <div class="col border ms-2">
+          <div style="font-weight: 800;" class="mt-3">【 취소 및 환불 규정 】</div>
+          <div>▪ 입장 전 취소 : 결제금액 전액 환불</div>
+          <div>▪ 입장 후 취소 : 환불 불가</div>
+          <div style="font-weight: 800;" class="mt-4">【 취소, 환불 요청 】</div>
+          <div>▪ 환불 요청은 변경/취소 요청 게시판으로만 접수</div>
+          <div>▪ 판매사 영업시간 이후 환불요청은 다음 영업일 요청으로 간주</div>
+          <div style="font-weight: 800;" class="mt-4">【 판매사 영업시간 】</div>
+          <div>▪ 평일 : 09시 ~ 18시</div>
+          <div>▪ 토요일 : 09시 ~ 13시</div>
+          <div class="mb-3">▪ 일요일 및 공휴일 : 휴무</div>
+        </div>
+      </div>
+
+      <div class="row w-100 mx-auto">
+        <input type="checkbox" class="col-auto ms-auto cursor">
+        <label class="col-auto cursor" onclick="prevElementClick(this)">취소 수수료 및 환불 규정 약관에 동의 합니다.</label>
+      </div>
+
+      <div class="row w-100 mx-auto mt-4">
+        <div class="col-2 p-0">
+          <div class="py-2 bg-gainsboro text-center border-radius-5">개인정보취급방침</div>
+        </div>
+        <div class="col border ms-2" style="height: 320px; overflow-y: scroll;">
+          <div class="terms">
+            <div>
+              <h2 class="main_co">개인정보취급방침</h2>
+              <p>본 개인정보 보호정책은 부산여행특공대가 운영하는 홈페이지 서비스를 이용하는 인터넷 사용자들의 기본적인사생활 비밀과 자유 및 통신 비밀을 보장하고 불법적인 도청, 정보 유출로 인한 인권침해가 나타나지 않도록 하고자 명시하는 것입니다.<br>
+                당사는 고객님의 개인정보보호를 매우 중요시하며, 『정보통신망이용촉진 및 정보보호에 관한 법률』상의 개인정보보호규정 및 정보통신부가 제정한 『개인정보보호지침』을 준수하고 있습니다. 그리고 개인정보보호정책을 통하여 고객님들께서 제공하시는 개인정보가 어떠한 용도와 방식으로 이용되고 있으며 개인정보보호를 위해 어떠한 조치가 취해지고 있는지 알려드립니다.
+              </p>
+            </div>
+
+            <div>
+              <h4>제1조(개인정보의 처리 목적)</h4>
+              <p>&lt;부산여행특공대&gt;(‘http://www.busanbustour.co.kr’이하 ‘부산여행특공대’) 은(는) 다음의 목적을 위하여 개인정보를 처리하고 있으며, 다음의 목적 이외의 용도로는 이용하지 않습니다.</p>
+              <ul class="list01 hyphen">
+                <li><i></i>고객 가입의사 확인, 고객에 대한 서비스 제공에 따른 본인 식별.인증, 회원자격 유지.관리, 물품 또는 서비스 공급에 따른 금액 결제, 물품 또는 서비스의 공급.배송 등</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>제2조(개인정보 수집항목 및 목적)</h4>
+              <p>당사가 서비스 제공을 위해 제공 받는 항목과 목적은 다음과 같습니다.</p>
+              <ul class="list01 squ">
+                <li><i></i>회원 인식 및 예약 시 여행자 보험가입의 목적 : 이름, 주민등록번호, 주소</li>
+                <li><i></i>예약 내역의 확인 및 상담 목적 : 전화번호, E-mail주소, 핸드폰번호</li>
+                <li><i></i>항공권/호텔의 예약과 출국가능여부 파악 목적 : 영문명, 여권비자 소지여부, 여권번호, 여권만료일</li>
+              </ul>
+              <p>고객님이 당사에 제공하는 개인정보는 예약서비스를 받는 동안 예약기록과 함께 보유하며 예약서비스 제공 관련을 위해서만 이용하게 됩니다.</p>
+            </div>
+
+            <div>
+              <h4>제3조(개인정보의 제3자 제공에 관한 사항)</h4>
+              <p>당사가 서비스 제공을 위해 제공 받는 항목과 목적은 다음과 같습니다.</p>
+              <ul class="list02 circle">
+                <li><i></i>&lt;부산여행특공대&gt;('http://www.busanbustour.co.kr'이하 '부산여행특공대')은(는) 원칙적으로 당사는 고객님의 개인정보를 서비스와 무관한 타 기업, 기관에 공개하지 않습니다. 다만, 고객님의 개인정보를 공유하는 경우는 다음과 같습니다.
+                  <ul class="list01 squ">
+                    <li><i></i>항공기 탑승이나 선박승선, 렌터카 대여, 호텔 숙박 등을 위해 국내외 항공사나, 해운업체, 렌터카, 호텔 업체에 제공됩니다.</li>
+                    <li><i></i>여행자보험에 가입하는 경우 해당 보험사에 제공됩니다.</li>
+                  </ul>
+                </li>
+                <li><i></i>다음과 같은 경우는 예외사항으로 준합니다.
+                  <ul class="list01 squ">
+                    <li><i></i>관계법령에 이하여 수사상의 목적으로 관계기간으로 부터의 요구가 있을 경우</li>
+                    <li><i></i>통계작성학술연구나 시장조사를 위하여 특정 개인을 식별할 수 없는 형태로 광고주 협력사나 연구단체 등에 제공할 경우</li>
+                    <li><i></i>기타 관계법령에서 정한 절차에 따른 요청이 있는 경우 - 그러나 예외 사항에서도 관계법령에 의하거나 수가기관의 요청에 의해 정보를 제공한 경우에는 이를 당사자에게 고지하는 것을 원칙으로 운영하고 있습니다.<br>
+                      법률상의 근거에 의해 부득이하게 고지를 하지 못할 경우도 있으나 본래의 수집 목적 및 이용목적에 반하여 무분별하게 정보가 제공되지 않도록 최대한 노력하겠습니다.</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>제4조(개인정보 수집에 대한 동의)</h4>
+              <p>당사는 아래와 같은 경우 고객님께서 개인정보 수집에 동의한 것으로 봅니다.</p>
+              <ul class="list01 squ">
+                <li><i></i>최초 회원 가입 시 회원 가입 양식과 내용, 약관 등에 「동의」를 체크</li>
+                <li><i></i>예약 시 개인정보보호정책 및 약관 「동의」를 체크</li>
+                <li><i></i>당사 커뮤니티 관련 페이지에 게시물을 올릴 경우</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>제5조(개인정보의 열람, 정정 및 삭제)</h4>
+              <p>고객님은 언제든지 등록되어 있는 개인정보를 열람하거나 정정하실 수 있습니다.<br>개인정보 열람 및 정정을 하고자 할 경우에는 아이디를 조회하여 직접 열람 또는 정정하거나 당사 콜센터로 연락주시면 반영해 드립니다.<br><br>
+                삭제는 전화 혹은 직접 방문 후 이루어지며, 정해진 본인 확인절차를 거친 후 이루어집니다. 이후 고객님의 모든 동의는 철회되고 개인정보는 즉각 사용하지 않을 것입니다. 삭제(탈퇴) 절차를 마친 후 정상적으로 로그인이 되지 않으면 모든 정보가 파기된 것입니다.<br><br>
+                고객님께서 제공한 개인정보에 변동사항이 있을 경우 즉각 수정하시어 최신의 정보를 입력해주시기 바랍니다.<br><br>
+                이 밖에 정보관리책임자에게 전화, E-mail 등 당사로 연락을 주시면 즉각 조치하도록 하겠습니다.
+              </p>
+            </div>
+
+            <div>
+              <h4>제6조(개인정보의 처리 및 보유 기간)</h4>
+              <p>당사가 서비스 제공을 위해 제공 받는 항목과 목적은 다음과 같습니다.</p>
+              <ul class="list02 circle">
+                <li><i></i>&lt;부산여행특공대&gt;(‘http://www.busanbustour.co.kr’이하 ‘부산여행특공대’) 은(는) 정보주체로부터 개인정보를 수집할 때 동의 받은 개인정보 보유․이용기간 또는 법령에 따른 개인정보 보유.이용 기간 내에서 개인정보를 처리․보유합니다.</li>
+                <li><i></i>고객님의 개인정보는 당사가 제공하는 서비스를 받는 동안 당사가 보유하게 되며, 다음과 같이 수집목적 및 이용목적이 달성되면 파기됩니다.
+                  <ul class="list01 squ">
+                    <li><i></i>고객님께서 탈퇴의사를 밝혀 탈퇴 처리되었을 경우</li>
+                    <li><i></i>기타 이유에 의해 강제 탈퇴 처리된 경우</li>
+                  </ul>
+                  단, 다음과 같은 경우는 예외로 합니다.
+                  <ul class="list01 squ">
+                    <li><i></i>요금 정산 상의 문제로 결제가 완료되지 않은 경우</li>
+                    <li><i></i>다른 일반 고객을 보호할 필요가 있어서 당사가 보존할 필요가 있다고 판단되는 경우</li>
+                    <li><i></i>상법 등 다른 법령의 규제에 의하여 보존할 필요성이 있는 경우</li>
+                    <li><i></i>소송이나 분쟁에 있어 근거자료로 보존할 필요성이 있는 경우</li>
+                    <li><i></i>기타 개별적으로 이용자의 동의를 받은 경우</li>
+                    <li><i></i>기타 당사의 내부규정에 의해 일정기간 보존할 필요성이 있는 경우</li>
+                  </ul>
+                  그러나 이 경우에도 정당한 근거와 함께 사전에 개인정보가 보유되는 기간을 정확하게 고지하고 이후 완전 파기합니다.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>제7조(개인정보 보호를 위한 관리대책)</h4>
+              <p>당사는 고객님의 개인정보를 취급함에 있어 개인정보가 분실, 도난, 누출, 변조 또는 훼손되지 않도록 안전성 확보를 위하여 다음과 같은 대책을 강구하고 있습니다.</p>
+              <ul class="list01 squ">
+                <li><i></i>고객님의 개인정보는 입력하시는 비밀번호에 의해 보호되며, 비밀번호는 암호화하여 보호하고 있습니다.</li>
+                <li><i></i>해킹 등 외부 침입에 대비하여 각 침입차단 및 탐지시스템 등을 이용하여 보안에 만전을 기하고 있습니다.</li>
+                <li><i></i>전산실 및 자료 보관실 등을 특별 보호구역으로 설정하여 인가된 자만 출입합니다.</li>
+              </ul>
+              당사는 개인정보에 대한 접근권한을 아래와 같이 제한하고 있습니다.
+              <ul class="list01 squ">
+                <li><i></i>예약처리 업무를 수행하는 자</li>
+                <li><i></i>개인정보관리책임자 및 담당자 등 개인정보 관리업무를 수행하는 자 - 기타 업무상 개인정보의 취급이 불가피한 자</li>
+              </ul>
+              당사는 이용자 개인의 실수나 기본적인 인터넷의 위험성 때문에 일어나는 일들에 대해 책임을 지지 않으므로 개인정보를 보호하기 위해서 고객님 본인이 필요한 항목을 적절하게 관리하고 여기에 대한 책임을 져야하는 경우도 발생할 수 있습니다.
+            </div>
+
+            <div>
+              <h4>제8조(쿠키운영에 관한 사항)</h4>
+              <ul class="list02 circle">
+                <li><i></i>부산여행특공대 은 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로 불러오는 ‘쿠키(cookie)’를 사용합니다.
+                </li>
+                <li><i></i>쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저에게 보내는 소량의 정보이며 이용자들의 PC 컴퓨터내의 하드디스크에 저장되기도 합니다.
+                  <ul class="list01 squ">
+                    <li><i></i>쿠키의 사용 목적 : 이용자가 방문한 각 서비스와 웹 사이트들에 대한 방문 및 이용형태, 인기 검색어, 보안접속 여부, 등을 파악하여 이용자에게 최적화된 정보 제공을 위해 사용됩니다. </li>
+                    <li><i></i>쿠키의 설치•운영 및 거부 : 웹브라우저 상단의 도구&gt;인터넷 옵션&gt;개인정보 메뉴의 옵션 설정을 통해 쿠키 저장을 거부 할 수 있습니다.</li>
+                    <li><i></i>쿠키 저장을 거부할 경우 맞춤형 서비스 이용에 어려움이 발생할 수 있습니다.</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>제9조(이용자의 권리와 의무)</h4>
+              <p>당사의 개인정보는 기본적으로 회원의 ID에 따른 비밀번호와 예약번호에 의해 보호됩니다.<br>이는 오직 해당 ID와 비밀번호, 예약번호를 알고 있는 본인에 의해서만 접근이 가능하며, 비밀번호 등에 대한 비밀을 유지할 책임은 사용자 본인에게 있습니다.
+                사용자 본인이 본인의 ID와 비밀번호, 예약번호를 유출하셨다면, 이에 대해 당사는 책임지지 않습니다.<br><br>
+                고객님의 개인정보를 최신의 상태로 정확하게 입력하여 불의의 사고를 예방해 주시기 바랍니다.<br>이용자가 입력한 부정확한 정보로 인해 발생하는 사고의 책임은 이용자 자신에게 있으며, 타인 정보의 도용 등 허위정보를 입력할 경우 서비스 이용자격이 상실될 수 있습니다.<br><br>
+                고객님께서는 개인정보를 보호 받을 권리와 함께 스스로를 보호하고 타인의 정보를 침해하지 않을 의무도 가지고 있습니다. 비밀번호를 포함한 고객님의 개인정보가 유출되지 않도록 조심하시고 게시물을 포함한 타인의 개인정보를 훼손하지 않도록 유의해 주십시오.<br><br>
+                만약, 이 같은 책임을 다하지 못하고 타인의 정보 및 존엄성을 훼손할 시에는 『정보통신망이용촉진 및 정보보호에 관한 법률』 등에 의해 처벌 받을 수 있습니다.
+              </p>
+            </div>
+
+            <div>
+              <h4>제10조(도용된 개인정보에 대한 조치)</h4>
+              <p>당사의 고객님이 타인의 주민등록번호 기타 개인정보를 도용하여 회원가입 등을 하였음을 알게 되었을 때, 당사는 지체 없이 해당 아이디에 대한 서비스 이용정지 또는 회원탈퇴 등 필요한 조치를 취하게 됩니다.<br>
+                또, 자신의 개인정보 도용사실을 인지한 고객님이 해당 아이디에 대한 서비스 이용정지 또는 회원탈퇴를 요구하는 경우에도 당사는 즉시 조치를 취하게 됩니다.<br><br>
+                이때, 자신의 개인정보가 도용됨을 인지한 고객은 당사 고객센터에 전화, 팩스, E-mail을 통하여 본인확인을 해주셔야 하며, 본인확인의 방법은 전자정부에서 시행하는 주민등록증 진위확인 서비스를 이용하여 본인여부를 확인하게 됩니다.</p>
+            </div>
+
+            <div>
+              <h4>제11조(링크)</h4>
+              <p>당사의 홈페이지는 다양한 배너와 링크(Link)를 포함하고 있습니다.<br>
+                다양한 타 사이트의 페이지와 연결되어 있으며 이는 광고주와의 계약관계에 의하거나 제공받은 콘텐츠의 출처를 밝히기 위한 조치입니다.<br>
+                당사가 포함하고 있는 링크를 클릭하여 타 사이트의 페이지로 옮겨갈 경우, 해당 사이트의 개인정보보호정책은 당사와는 무관하므로 새로 방문한 사이트의 정책을 살펴보시기 바랍니다.</p>
+            </div>
+
+            <div>
+              <h4>제12조(개인정보 보호책임자 작성)</h4>
+              <ul class="list02 circle">
+                <li><i></i>******(‘http://www.*********.co.kr’이하 ******) 은(는) 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.<br><br>
+                  ▶ 개인정보 보호책임자 <br>
+                  성명 : ***<br>
+                  직책 : 이사<br>
+                  연락처 : 051-0000-0000<br>
+                  e-mail : travel@travel.com<br>
+                  FAX : 070-0000-0000<br><br>
+                </li>
+                <li><i></i>정보주체께서는 부산여행특공대(‘http://www.busanbustour.co.kr’이하 ‘부산여행특공대) 의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의하실 수 있으며 정보주체의 문의에 대해 지체 없이 답변 및 처리해드릴 것입니다.<br><br>
+                  하지만, 기술적인 보완조치를 했음에도 불구하고 해킹 등 기본적인 네트워크상의 위험성에 의해 발생하는 예기치 못한 사고로 인한 정보의 훼손 및 방문자가 작성한 게시물에 의한 각종 분쟁에 관해서는 책임이 없습니다.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>제13조(개인정보 처리방침 변경)</h4>
+              <ul class="list02 circle">
+                <li><i></i>이 개인정보처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</li>
+              </ul>
             </div>
           </div>
-
         </div>
       </div>
-      <div class="col-2 d-flex align-items-center justify-content-center color-blue price" th:text="${orderInfo.totalRegularPrice - orderInfo.totalDiscount}">35,000원</div>
-    </div>
-  </div>
-
-  <div class="userInfo mt-5">
-    <div class="row w-100 mx-auto">
-      <img src="#" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
-      <div class="col fs-3" style="font-weight: 600;">주문자 정보</div>
-    </div>
-
-    <div class="row w-100 mx-auto my-3">
-      <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">주문자 정보</div>
-      <div class="col">
-        <div class="row w-100 mx-auto">
-          <img src="#" class="col-auto p-2 border">
-          <input type="text" class="col" id="realName" style="padding-top: 6px; padding-bottom: 6px;" th:value="${orderInfo.user.userRealName}">
-        </div>
-      </div>
-    </div>
-    <div class="row w-100 mx-auto my-3">
-      <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">연락처</div>
-      <div class="col">
-        <div class="row w-100 mx-auto">
-
-          <select class="col" id="userPhone1" style="padding-top: 8px; padding-bottom: 7px;">
-            <option>010</option>
-            <option>011</option>
-            <option>016</option>
-            <option>017</option>
-            <option>018</option>
-            <option>019</option>
-          </select>
-          <div class="col-auto my-auto">-</div>
-          <input class="col" id="userPhone2" type="tel" maxlength="4" th:value="${orderInfo.user.userPhone.substring(4, 8)}">
-          <div class="col-auto my-auto">-</div>
-          <input class="col" id="userPhone3" type="tel" maxlength="4" th:value="${orderInfo.user.userPhone.substring(9, 13)}">
-        </div>
-      </div>
-    </div>
-    <div class="row w-100 mx-auto my-3">
-      <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">메일주소</div>
-      <div class="col">
-        <div class="row w-100 mx-auto">
-          <img src="#" class="col-auto p-2 border">
-          <input type="text" class="col" id="userEmail" style="padding-top: 6px; padding-bottom: 6px;" th:value="${orderInfo.user.userEmail}">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="discountInfo mt-5">
-    <div class="row w-100 mx-auto">
-      <img src="#" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
-      <div class="col fs-3" style="font-weight: 600;">주문상품 할인내역</div>
-    </div>
-
-    <div class="row w-100 mx-auto text-center mt-3">
-      <div class="col-auto mx-auto ms-0 p-0 p-rel" style="width: 420px;">
-        <div class="bg-gainsboro py-3">주문금액</div>
-        <div class="border py-3 price" th:text="${orderInfo.totalRegularPrice}">30,000원</div>
-        <div class="p-abs calc bg-red" style="top: 45px; right: -25px;">-</div>
-      </div>
-
-      <div class="col-auto mx-auto p-0" style="width: 420px;">
-        <div class="bg-gainsboro py-3">할인금액</div>
-        <div style="color: red;" class="border py-3 price" th:text="${orderInfo.totalDiscount}">30,000원</div>
-      </div>
-      <div class="col-auto mx-auto me-0 p-0 p-rel" style="width: 420px;">
-        <div class="bg-gainsboro py-3">결제 예정금액</div>
-        <div class="border py-3 price" id="totalPrice" th:text="${orderInfo.totalRegularPrice - orderInfo.totalDiscount}">30,000원</div>
-        <div class="p-abs calc bg-blue" style="top: 45px; left: -25px;">=</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="paymentInfo mt-5">
-    <div class="row w-100 mx-auto">
-      <img src="#" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
-      <div class="col fs-3" style="font-weight: 600;">결제방법</div>
-    </div>
-
-    <div class="row w-100 mx-auto mt-3">
-      <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">결제방법</div>
-      <div class="col">
-        <div class="row w-100 mx-auto mt-1">
-          <input type="radio" class="col-auto cursor" id="bankTransferPay" name="paymentType" style="width: 25px; height: 25px" checked>
-          <label class="col cursor" onclick="prevElementClick(this)">무통장입금</label>
-        </div>
-      </div>
-      <div class="col">
-        <div class="row w-100 mx-auto mt-1">
-          <input type="radio" class="col-auto cursor" id="cardPay" name="paymentType" style="width: 25px; height: 25px">
-          <label class="col cursor" onclick="prevElementClick(this)">카드결제</label>
-        </div>
-      </div>
-    </div>
-    <div class="row w-100 mx-auto mt-3" id="bankTransferInfo">
-      <div class="col-2 py-2 px-5 bg-gainsboro text-center border-radius-5">결제계좌</div>
-      <select class="col mx-2" id="account">
-        <option th:each="account : ${orderInfo.accountList}" th:text="${account.accountBank + ' ' + account.accountNumber}"></option>
-      </select>
-      <input type="text" class="col-5" id="depositor" placeholder="입금자명을 입력하세요.">
-      <div style="color: red;" class="p-0 mt-3"><b style="color: black;">※</b> 무통장 입금시 입력한 입금자명으로 입금해주세요.</div>
-      <div style="color: red;" class="p-0"><b style="color: black;">※</b> 입력한 입금자명과 실제 입금자명이 다르면 입금확인이 불가합니다.</div>
-    </div>
-
-  </div>
-
-  <div class="agreement mt-5">
-    <div class="row w-100 mx-auto">
-      <img src="#" class="col-auto p-0 my-auto" style="width: 25px; height: 25px;">
-      <div class="col fs-3" style="font-weight: 600;">약관 동의 안내</div>
-    </div>
-
-    <div class="row w-100 mx-auto mt-3">
-      <div class="col-2 p-0">
-        <div class="py-2 bg-gainsboro text-center border-radius-5">환불규정</div>
-      </div>
-      <div class="col border ms-2">
-        <div style="font-weight: 800;" class="mt-3">【 취소 및 환불 규정 】</div>
-        <div>▪ 입장 전 취소 : 결제금액 전액 환불</div>
-        <div>▪ 입장 후 취소 : 환불 불가</div>
-        <div style="font-weight: 800;" class="mt-4">【 취소, 환불 요청 】</div>
-        <div>▪ 환불 요청은 변경/취소 요청 게시판으로만 접수</div>
-        <div>▪ 판매사 영업시간 이후 환불요청은 다음 영업일 요청으로 간주</div>
-        <div style="font-weight: 800;" class="mt-4">【 판매사 영업시간 】</div>
-        <div>▪ 평일 : 09시 ~ 18시</div>
-        <div>▪ 토요일 : 09시 ~ 13시</div>
-        <div class="mb-3">▪ 일요일 및 공휴일 : 휴무</div>
+      <div class="row w-100 mx-auto">
+        <input type="checkbox" class="col-auto ms-auto cursor">
+        <label class="col-auto cursor" onclick="prevElementClick(this)">개인정보 취급방침 약관에 동의 합니다.</label>
       </div>
     </div>
 
     <div class="row w-100 mx-auto">
-      <input type="checkbox" class="col-auto ms-auto cursor">
-      <label class="col-auto cursor" onclick="prevElementClick(this)">취소 수수료 및 환불 규정 약관에 동의 합니다.</label>
-    </div>
-
-    <div class="row w-100 mx-auto mt-4">
-      <div class="col-2 p-0">
-        <div class="py-2 bg-gainsboro text-center border-radius-5">개인정보취급방침</div>
-      </div>
-      <div class="col border ms-2" style="height: 320px; overflow-y: scroll;">
-        <div class="terms">
-          <div>
-            <h2 class="main_co">개인정보취급방침</h2>
-            <p>본 개인정보 보호정책은 부산여행특공대가 운영하는 홈페이지 서비스를 이용하는 인터넷 사용자들의 기본적인사생활 비밀과 자유 및 통신 비밀을 보장하고 불법적인 도청, 정보 유출로 인한 인권침해가 나타나지 않도록 하고자 명시하는 것입니다.<br>
-              당사는 고객님의 개인정보보호를 매우 중요시하며, 『정보통신망이용촉진 및 정보보호에 관한 법률』상의 개인정보보호규정 및 정보통신부가 제정한 『개인정보보호지침』을 준수하고 있습니다. 그리고 개인정보보호정책을 통하여 고객님들께서 제공하시는 개인정보가 어떠한 용도와 방식으로 이용되고 있으며 개인정보보호를 위해 어떠한 조치가 취해지고 있는지 알려드립니다.
-            </p>
-          </div>
-
-          <div>
-            <h4>제1조(개인정보의 처리 목적)</h4>
-            <p>&lt;부산여행특공대&gt;(‘http://www.busanbustour.co.kr’이하 ‘부산여행특공대’) 은(는) 다음의 목적을 위하여 개인정보를 처리하고 있으며, 다음의 목적 이외의 용도로는 이용하지 않습니다.</p>
-            <ul class="list01 hyphen">
-              <li><i></i>고객 가입의사 확인, 고객에 대한 서비스 제공에 따른 본인 식별.인증, 회원자격 유지.관리, 물품 또는 서비스 공급에 따른 금액 결제, 물품 또는 서비스의 공급.배송 등</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>제2조(개인정보 수집항목 및 목적)</h4>
-            <p>당사가 서비스 제공을 위해 제공 받는 항목과 목적은 다음과 같습니다.</p>
-            <ul class="list01 squ">
-              <li><i></i>회원 인식 및 예약 시 여행자 보험가입의 목적 : 이름, 주민등록번호, 주소</li>
-              <li><i></i>예약 내역의 확인 및 상담 목적 : 전화번호, E-mail주소, 핸드폰번호</li>
-              <li><i></i>항공권/호텔의 예약과 출국가능여부 파악 목적 : 영문명, 여권비자 소지여부, 여권번호, 여권만료일</li>
-            </ul>
-            <p>고객님이 당사에 제공하는 개인정보는 예약서비스를 받는 동안 예약기록과 함께 보유하며 예약서비스 제공 관련을 위해서만 이용하게 됩니다.</p>
-          </div>
-
-          <div>
-            <h4>제3조(개인정보의 제3자 제공에 관한 사항)</h4>
-            <p>당사가 서비스 제공을 위해 제공 받는 항목과 목적은 다음과 같습니다.</p>
-            <ul class="list02 circle">
-              <li><i></i>&lt;부산여행특공대&gt;('http://www.busanbustour.co.kr'이하 '부산여행특공대')은(는) 원칙적으로 당사는 고객님의 개인정보를 서비스와 무관한 타 기업, 기관에 공개하지 않습니다. 다만, 고객님의 개인정보를 공유하는 경우는 다음과 같습니다.
-                <ul class="list01 squ">
-                  <li><i></i>항공기 탑승이나 선박승선, 렌터카 대여, 호텔 숙박 등을 위해 국내외 항공사나, 해운업체, 렌터카, 호텔 업체에 제공됩니다.</li>
-                  <li><i></i>여행자보험에 가입하는 경우 해당 보험사에 제공됩니다.</li>
-                </ul>
-              </li>
-              <li><i></i>다음과 같은 경우는 예외사항으로 준합니다.
-                <ul class="list01 squ">
-                  <li><i></i>관계법령에 이하여 수사상의 목적으로 관계기간으로 부터의 요구가 있을 경우</li>
-                  <li><i></i>통계작성학술연구나 시장조사를 위하여 특정 개인을 식별할 수 없는 형태로 광고주 협력사나 연구단체 등에 제공할 경우</li>
-                  <li><i></i>기타 관계법령에서 정한 절차에 따른 요청이 있는 경우 - 그러나 예외 사항에서도 관계법령에 의하거나 수가기관의 요청에 의해 정보를 제공한 경우에는 이를 당사자에게 고지하는 것을 원칙으로 운영하고 있습니다.<br>
-                    법률상의 근거에 의해 부득이하게 고지를 하지 못할 경우도 있으나 본래의 수집 목적 및 이용목적에 반하여 무분별하게 정보가 제공되지 않도록 최대한 노력하겠습니다.</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>제4조(개인정보 수집에 대한 동의)</h4>
-            <p>당사는 아래와 같은 경우 고객님께서 개인정보 수집에 동의한 것으로 봅니다.</p>
-            <ul class="list01 squ">
-              <li><i></i>최초 회원 가입 시 회원 가입 양식과 내용, 약관 등에 「동의」를 체크</li>
-              <li><i></i>예약 시 개인정보보호정책 및 약관 「동의」를 체크</li>
-              <li><i></i>당사 커뮤니티 관련 페이지에 게시물을 올릴 경우</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>제5조(개인정보의 열람, 정정 및 삭제)</h4>
-            <p>고객님은 언제든지 등록되어 있는 개인정보를 열람하거나 정정하실 수 있습니다.<br>개인정보 열람 및 정정을 하고자 할 경우에는 아이디를 조회하여 직접 열람 또는 정정하거나 당사 콜센터로 연락주시면 반영해 드립니다.<br><br>
-              삭제는 전화 혹은 직접 방문 후 이루어지며, 정해진 본인 확인절차를 거친 후 이루어집니다. 이후 고객님의 모든 동의는 철회되고 개인정보는 즉각 사용하지 않을 것입니다. 삭제(탈퇴) 절차를 마친 후 정상적으로 로그인이 되지 않으면 모든 정보가 파기된 것입니다.<br><br>
-              고객님께서 제공한 개인정보에 변동사항이 있을 경우 즉각 수정하시어 최신의 정보를 입력해주시기 바랍니다.<br><br>
-              이 밖에 정보관리책임자에게 전화, E-mail 등 당사로 연락을 주시면 즉각 조치하도록 하겠습니다.
-            </p>
-          </div>
-
-          <div>
-            <h4>제6조(개인정보의 처리 및 보유 기간)</h4>
-            <p>당사가 서비스 제공을 위해 제공 받는 항목과 목적은 다음과 같습니다.</p>
-            <ul class="list02 circle">
-              <li><i></i>&lt;부산여행특공대&gt;(‘http://www.busanbustour.co.kr’이하 ‘부산여행특공대’) 은(는) 정보주체로부터 개인정보를 수집할 때 동의 받은 개인정보 보유․이용기간 또는 법령에 따른 개인정보 보유.이용 기간 내에서 개인정보를 처리․보유합니다.</li>
-              <li><i></i>고객님의 개인정보는 당사가 제공하는 서비스를 받는 동안 당사가 보유하게 되며, 다음과 같이 수집목적 및 이용목적이 달성되면 파기됩니다.
-                <ul class="list01 squ">
-                  <li><i></i>고객님께서 탈퇴의사를 밝혀 탈퇴 처리되었을 경우</li>
-                  <li><i></i>기타 이유에 의해 강제 탈퇴 처리된 경우</li>
-                </ul>
-                단, 다음과 같은 경우는 예외로 합니다.
-                <ul class="list01 squ">
-                  <li><i></i>요금 정산 상의 문제로 결제가 완료되지 않은 경우</li>
-                  <li><i></i>다른 일반 고객을 보호할 필요가 있어서 당사가 보존할 필요가 있다고 판단되는 경우</li>
-                  <li><i></i>상법 등 다른 법령의 규제에 의하여 보존할 필요성이 있는 경우</li>
-                  <li><i></i>소송이나 분쟁에 있어 근거자료로 보존할 필요성이 있는 경우</li>
-                  <li><i></i>기타 개별적으로 이용자의 동의를 받은 경우</li>
-                  <li><i></i>기타 당사의 내부규정에 의해 일정기간 보존할 필요성이 있는 경우</li>
-                </ul>
-                그러나 이 경우에도 정당한 근거와 함께 사전에 개인정보가 보유되는 기간을 정확하게 고지하고 이후 완전 파기합니다.
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>제7조(개인정보 보호를 위한 관리대책)</h4>
-            <p>당사는 고객님의 개인정보를 취급함에 있어 개인정보가 분실, 도난, 누출, 변조 또는 훼손되지 않도록 안전성 확보를 위하여 다음과 같은 대책을 강구하고 있습니다.</p>
-            <ul class="list01 squ">
-              <li><i></i>고객님의 개인정보는 입력하시는 비밀번호에 의해 보호되며, 비밀번호는 암호화하여 보호하고 있습니다.</li>
-              <li><i></i>해킹 등 외부 침입에 대비하여 각 침입차단 및 탐지시스템 등을 이용하여 보안에 만전을 기하고 있습니다.</li>
-              <li><i></i>전산실 및 자료 보관실 등을 특별 보호구역으로 설정하여 인가된 자만 출입합니다.</li>
-            </ul>
-            당사는 개인정보에 대한 접근권한을 아래와 같이 제한하고 있습니다.
-            <ul class="list01 squ">
-              <li><i></i>예약처리 업무를 수행하는 자</li>
-              <li><i></i>개인정보관리책임자 및 담당자 등 개인정보 관리업무를 수행하는 자 - 기타 업무상 개인정보의 취급이 불가피한 자</li>
-            </ul>
-            당사는 이용자 개인의 실수나 기본적인 인터넷의 위험성 때문에 일어나는 일들에 대해 책임을 지지 않으므로 개인정보를 보호하기 위해서 고객님 본인이 필요한 항목을 적절하게 관리하고 여기에 대한 책임을 져야하는 경우도 발생할 수 있습니다.
-          </div>
-
-          <div>
-            <h4>제8조(쿠키운영에 관한 사항)</h4>
-            <ul class="list02 circle">
-              <li><i></i>부산여행특공대 은 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로 불러오는 ‘쿠키(cookie)’를 사용합니다.
-              </li>
-              <li><i></i>쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저에게 보내는 소량의 정보이며 이용자들의 PC 컴퓨터내의 하드디스크에 저장되기도 합니다.
-                <ul class="list01 squ">
-                  <li><i></i>쿠키의 사용 목적 : 이용자가 방문한 각 서비스와 웹 사이트들에 대한 방문 및 이용형태, 인기 검색어, 보안접속 여부, 등을 파악하여 이용자에게 최적화된 정보 제공을 위해 사용됩니다. </li>
-                  <li><i></i>쿠키의 설치•운영 및 거부 : 웹브라우저 상단의 도구&gt;인터넷 옵션&gt;개인정보 메뉴의 옵션 설정을 통해 쿠키 저장을 거부 할 수 있습니다.</li>
-                  <li><i></i>쿠키 저장을 거부할 경우 맞춤형 서비스 이용에 어려움이 발생할 수 있습니다.</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>제9조(이용자의 권리와 의무)</h4>
-            <p>당사의 개인정보는 기본적으로 회원의 ID에 따른 비밀번호와 예약번호에 의해 보호됩니다.<br>이는 오직 해당 ID와 비밀번호, 예약번호를 알고 있는 본인에 의해서만 접근이 가능하며, 비밀번호 등에 대한 비밀을 유지할 책임은 사용자 본인에게 있습니다.
-              사용자 본인이 본인의 ID와 비밀번호, 예약번호를 유출하셨다면, 이에 대해 당사는 책임지지 않습니다.<br><br>
-              고객님의 개인정보를 최신의 상태로 정확하게 입력하여 불의의 사고를 예방해 주시기 바랍니다.<br>이용자가 입력한 부정확한 정보로 인해 발생하는 사고의 책임은 이용자 자신에게 있으며, 타인 정보의 도용 등 허위정보를 입력할 경우 서비스 이용자격이 상실될 수 있습니다.<br><br>
-              고객님께서는 개인정보를 보호 받을 권리와 함께 스스로를 보호하고 타인의 정보를 침해하지 않을 의무도 가지고 있습니다. 비밀번호를 포함한 고객님의 개인정보가 유출되지 않도록 조심하시고 게시물을 포함한 타인의 개인정보를 훼손하지 않도록 유의해 주십시오.<br><br>
-              만약, 이 같은 책임을 다하지 못하고 타인의 정보 및 존엄성을 훼손할 시에는 『정보통신망이용촉진 및 정보보호에 관한 법률』 등에 의해 처벌 받을 수 있습니다.
-            </p>
-          </div>
-
-          <div>
-            <h4>제10조(도용된 개인정보에 대한 조치)</h4>
-            <p>당사의 고객님이 타인의 주민등록번호 기타 개인정보를 도용하여 회원가입 등을 하였음을 알게 되었을 때, 당사는 지체 없이 해당 아이디에 대한 서비스 이용정지 또는 회원탈퇴 등 필요한 조치를 취하게 됩니다.<br>
-              또, 자신의 개인정보 도용사실을 인지한 고객님이 해당 아이디에 대한 서비스 이용정지 또는 회원탈퇴를 요구하는 경우에도 당사는 즉시 조치를 취하게 됩니다.<br><br>
-              이때, 자신의 개인정보가 도용됨을 인지한 고객은 당사 고객센터에 전화, 팩스, E-mail을 통하여 본인확인을 해주셔야 하며, 본인확인의 방법은 전자정부에서 시행하는 주민등록증 진위확인 서비스를 이용하여 본인여부를 확인하게 됩니다.</p>
-          </div>
-
-          <div>
-            <h4>제11조(링크)</h4>
-            <p>당사의 홈페이지는 다양한 배너와 링크(Link)를 포함하고 있습니다.<br>
-              다양한 타 사이트의 페이지와 연결되어 있으며 이는 광고주와의 계약관계에 의하거나 제공받은 콘텐츠의 출처를 밝히기 위한 조치입니다.<br>
-              당사가 포함하고 있는 링크를 클릭하여 타 사이트의 페이지로 옮겨갈 경우, 해당 사이트의 개인정보보호정책은 당사와는 무관하므로 새로 방문한 사이트의 정책을 살펴보시기 바랍니다.</p>
-          </div>
-
-          <div>
-            <h4>제12조(개인정보 보호책임자 작성)</h4>
-            <ul class="list02 circle">
-              <li><i></i>******(‘http://www.*********.co.kr’이하 ******) 은(는) 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.<br><br>
-                ▶ 개인정보 보호책임자 <br>
-                성명 : ***<br>
-                직책 : 이사<br>
-                연락처 : 051-0000-0000<br>
-                e-mail : travel@travel.com<br>
-                FAX : 070-0000-0000<br><br>
-              </li>
-              <li><i></i>정보주체께서는 부산여행특공대(‘http://www.busanbustour.co.kr’이하 ‘부산여행특공대) 의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의하실 수 있으며 정보주체의 문의에 대해 지체 없이 답변 및 처리해드릴 것입니다.<br><br>
-                하지만, 기술적인 보완조치를 했음에도 불구하고 해킹 등 기본적인 네트워크상의 위험성에 의해 발생하는 예기치 못한 사고로 인한 정보의 훼손 및 방문자가 작성한 게시물에 의한 각종 분쟁에 관해서는 책임이 없습니다.
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>제13조(개인정보 처리방침 변경)</h4>
-            <ul class="list02 circle">
-              <li><i></i>이 개인정보처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row w-100 mx-auto">
-      <input type="checkbox" class="col-auto ms-auto cursor">
-      <label class="col-auto cursor" onclick="prevElementClick(this)">개인정보 취급방침 약관에 동의 합니다.</label>
+      <button type="button" id="order-btn" class="px-4 py-2 mx-auto mt-5">주문입력</button>
     </div>
   </div>
+</main>
+<div style="height: 30px;"></div>
+<th:block th:include="layouts/footer"></th:block>
 
-  <div class="row w-100 mx-auto">
-    <button type="button" id="order-btn" class="px-4 py-2 mx-auto mt-5">주문입력</button>
-  </div>
-
-</div>
-
-<div style="height: 1000px;"></div>
 <script src="/js/order/order.js"></script>
 </body>
 </html>

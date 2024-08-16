@@ -1,0 +1,86 @@
+main { /* main 크기 고정 */
+    width: 1720px;
+}
+.box {
+    width: 1116px;
+    margin: 0 auto;
+}
+#boxTitle { /* 제목 */
+    margin-top: 40px;
+    margin-bottom: 68px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    height: 491px;
+    border-radius : 10px;
+    border-style : hidden;
+    overflow: hidden;
+    box-shadow : 0 0 7px #999;
+}
+th, td {
+    border: 1px solid #ccc;
+}
+th {
+    box-sizing: border-box;
+    width: 150px;
+    text-align: left;
+    padding-left: 30px;
+    background-color: #eee;
+}
+tr:nth-of-type(1) {
+    height: 56px;
+}
+tr:nth-of-type(1) td:nth-of-type(1) { /* 제목 td */
+    width: 530px;
+}
+tr:nth-of-type(1) td:nth-of-type(2) { /* 작성자 td */
+    width: 250px;
+    padding: 1px 16px;
+}
+input, textarea { /* border, padding, outline */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+}
+input {
+    width: 495px;
+    margin-left: 5px;
+}
+textarea {
+    width: 928px;
+    height: 395px;
+    margin-left: 5px;
+}
+
+.buttonBox {
+    text-align: center;
+    margin-top: 30px;
+}
+.buttonBox button:nth-child(1) {
+    background-color: #0D569B;
+    width: 80px;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+}
+.buttonBox a:nth-child(2) {
+    box-sizing: border-box;
+    display: inline-block;
+    text-decoration: none;
+    background-color: white;
+    width: 80px;
+    padding: 10px;
+    border: 1px solid #0D569B;
+    border-radius: 5px;
+    color: #0D569B;
+    margin-left: 5px;
+    font-size: 20px;
+}

@@ -2,7 +2,7 @@ package com.example.travel.controller.api;
 
 import com.example.travel.domain.Order;
 import com.example.travel.domain.Payment;
-import com.example.travel.dto.order.OrderRequest;
+import com.example.travel.dto.order.OrderControlRequest;
 import com.example.travel.dto.order.OrderSubmitRequest;
 import com.example.travel.dto.payment.PaymentSubmitRequest;
 import com.example.travel.service.PaymentService;
@@ -32,6 +32,27 @@ public class PaymentApiController {
     public ResponseEntity<Payment> payment(@RequestBody PaymentSubmitRequest request){
         return ResponseEntity.ok()
                 .body(paymentService.payment(request));
+    }
+
+    @PostMapping("/api/orderCancel")
+    public ResponseEntity<Void> orderCancel(@RequestBody OrderControlRequest request){
+
+        System.err.println("call orderCancel");
+        paymentService.orderCancel(request);
+        return ResponseEntity.ok()
+                .build();
+    }
+
+    @PostMapping("/api/paymentCheck")
+    public ResponseEntity<Order> paymentCheck(@RequestBody OrderControlRequest request){
+        return ResponseEntity.ok()
+                .body(paymentService.updateOrderAndPaymentStatus(request, "결제완료"));
+    }
+    
+    @PostMapping("/api/paymentRefund")
+    public ResponseEntity<Order> paymentRefundComplete(@RequestBody OrderControlRequest request){
+        return ResponseEntity.ok()
+                .body(paymentService.updateOrderAndPaymentStatus(request, "환불완료"));
     }
 
 }

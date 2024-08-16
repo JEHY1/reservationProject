@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>myPage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/header.js"></script>
+
+    <style>
+        .cursor{
+            cursor: pointer;
+        }
+
+        .deliveryTitle{
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .fs-15{
+            font-size: 15px;
+        }
+
+        .fs-20-b{
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .color-gainsboro{
+            color: gainsboro;
+        }
+
+        .color-gray{
+            color: gray;
+        }
+
+        .count{
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .border-b{
+            border-bottom: 1px solid rgb(204, 204, 204) !important;
+        }
+
+        .communityMenu:hover{
+            background-color: gainsboro;
+        }
+
+
+    </style>
+</head>
+<body>
+<th:block th:include="layouts/header"></th:block>
+<div class="mx-auto" style="width: 1750px; padding-top: 30px;">
+
+    <div class="mx-auto text-center pb-5" style="font-size: 46px; font-weight: bolder;">마이페이지</div>
+    <div class="mt-2 pt-5">
+
+        <div class="row mx-auto w-100 py-2" style="background-color: #0D569B; color:white; border-top: 2px #0D569B solid; border-bottom: 2px #0D569B solid;">
+            <div class="col-auto mx-auto deliveryTitle">나의 주문 현황</div>
+        </div>
+
+        <div class="row mx-auto w-100 py-5" style="border-bottom: 2px #0D569B solid;">
+            <div class="col" style="border-right: 1px solid #C5E0B4;">
+                <div class="text-center fs-20-b">미입금</div>
+                <div class="text-center count" th:text="${orderHistory.nonDeposit}">0</div>
+            </div>
+            <div class="col" style="border-right: 1px solid #C5E0B4;">
+                <div class="text-center fs-20-b">입금미확인</div>
+                <div class="text-center count" th:text="${orderHistory.depositNonCheck}">0</div>
+            </div>
+            <div class="col" style="border-right: 1px solid #C5E0B4;">
+                <div class="text-center fs-20-b">결제완료</div>
+                <div class="text-center count" th:text="${orderHistory.paymentComplete}">0</div>
+            </div>
+            <div class="col">
+                <div class="row mx-auto w-100 mt-1">
+                    <div class="text-center col-auto ms-auto" style="font-size: 20px;">&#8226; 주문취소 : </div>
+                    <div class="text-center col-auto me-auto p-0 fs-20-b" th:text="${orderHistory.orderCancel}">0</div>
+                </div>
+                <!--                <div class="row mx-auto w-100">-->
+                <!--                    <div class="text-center col-auto ms-auto" style="font-size: 20px;">&#8226; 교환 : </div>-->
+                <!--                    <div class="text-center col-auto me-auto p-0 fs-20-b" th:text="${deliveryInfo.exchangeCount}">0</div>-->
+                <!--                </div>-->
+                <div class="row mx-auto w-100">
+                    <div class="text-center col-auto ms-auto" style="font-size: 20px;">&#8226; 환불진행 : </div>
+                    <div class="text-center col-auto me-auto p-0 fs-20-b" th:text="${orderHistory.refunding}">0</div>
+                </div>
+                <div class="row mx-auto w-100">
+                    <div class="text-center col-auto ms-auto" style="font-size: 20px;">&#8226; 환불완료 : </div>
+                    <div class="text-center col-auto me-auto p-0 fs-20-b" th:text="${orderHistory.refundComplete}">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row w-100 mx-auto mt-5">
+            <div class="col-auto border me-auto cursor" style="width: 425px;" onclick="location.href='/orderList'">
+                <div class="p-4">ORDER | 주문내역조회</div>
+                <div class="row mx-auto w-100 pb-3 ps-3">
+                    <img src="/images/icon_img/list.png" class="col-auto p-0" style="width: 90px; height: 90px;">
+                    <div class="col d-flex align-items-center color-gainsboro fs-15">고객님께서 주문하신 상품의<br>
+                        주문내역을 확인하실 수 있습니다.</div>
+                </div>
+            </div>
+            <div class="col-auto mx-auto border cursor" style="width: 425px;" onclick="location.href='/user/information/confirm/new'">
+                <div class="p-4">PROFILE | 회원 정보</div>
+                <div class="row mx-auto w-100 pb-3 ps-3">
+                    <img src="/images/icon_img/Auth.png" class="col-auto p-0"  style="width: 90px; height: 90px;">
+                    <div class="col d-flex align-items-center color-gainsboro fs-15">회원이신 고객님의 개인정보를<br>
+                        관리하는 공간입니다.
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto mx-auto border cursor" style="width: 425px;" onclick="location.href='/myPage/reviewList'">
+                <div class="p-4">REVIEW | 리뷰</div>
+                <div class="row mx-auto w-100 pb-3 ps-3">
+                    <img src="/images/icon_img/shoppingBag.png" class="col-auto p-0" style="width: 90px; height: 90px;">
+                    <div class="col d-flex align-items-center color-gainsboro fs-15">장바구니에 담아둔 상품을 보실 수<br>
+                        있습니다.
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto border ms-auto" style="width: 425px;">
+                <div class="p-4">NOTICE | 공지사항</div>
+                <div class="row mx-auto w-100 pb-3 ps-3">
+                    <img src="/images/icon_img/View.png" class="col-auto p-0" style="width: 90px; height: 90px;">
+                    <div class="col color-gainsboro">
+                        <div class="cursor communityMenu color-gray">QnA</div>
+                        <div class="cursor communityMenu color-gray">Review</div>
+                        <div class="cursor communityMenu color-gray" onclick="location.href='/product/productGroup?recentViewProduct=1'">최근 조회상품</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<th:block th:include="layouts/footer"></th:block>
+
+<script src="/js/myPage/myPage.js"></script>
+</body>
+</html>

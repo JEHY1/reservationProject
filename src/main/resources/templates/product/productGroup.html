@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/footer.css">
+<script src="/js/jquery.js"></script>
+<script src="/js/header.js"></script>
+<style>
+
+  .d-relative{
+    position: relative;
+  }
+
+  .cursor{
+    cursor: pointer;
+  }
+
+  .fs-30{
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .border-b{
+    border-bottom: 1px solid rgb(204, 204, 204) !important;
+  }
+
+  .selectedPage-btn{
+    background-color : #0D569B !important;
+    color : white !important;
+  }
+
+  .page-btn{
+    font-size: 25px;
+    width : 47px;
+    height: 47px;
+    padding : 7px;
+    border-radius: 50%;
+    border: none;
+    background-color: white;
+  }
+
+  .page-btn:hover{
+    background-color: gainsboro;
+  }
+
+  #nextPage-btn{
+    font-size: 25px;
+    background-color: white;
+    border: none;
+  }
+
+  #prevPage-btn{
+    font-size: 25px;
+    background-color: white;
+    border: none;
+  }
+
+  #nextPage-btn:hover{
+    color: gray;
+  }
+  #nextPage-btn:disabled:hover{
+    color: gainsboro;
+  }
+
+  #prevPage-btn:hover{
+    color: gray;
+  }
+  #prevPage-btn:disabled:hover{
+    color: gainsboro;
+  }
+
+  button:disabled{
+    color: gainsboro;
+  }
+
+  .salePercent{
+    width: 70px;
+    height: 58px;
+    padding: 12px 10px 12px 10px;
+    background-color: #0D569B;
+    border-radius: 50%;
+    font-size: 25px;
+    color: white;
+  }
+
+  .product:hover{
+    border: 1px solid gainsboro;
+  }
+
+  .soldOutPanel{
+    position: absolute;
+    top: 170px;
+    left: 50px;
+    width: 300px;
+    font-size: 60px;
+    font-weight: 700;
+  }
+
+  .soldOutPanel2{
+    position: absolute;
+    top: -150px;
+    left: 17px;
+    width: 300px;
+    height: 400px;
+    color: red;
+    font-size: 450px;
+    font-weight: 700;
+  }
+
+  .move-btn{
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    background-color: #0D569B;
+    color: white;
+    color-white;
+    border-radius: 25px;
+    width: 50px;
+    height: 100px;
+    font-size: 35px;
+  }
+
+  .move-btn div:hover{
+    color: black;
+  }
+
+</style>
+<body>
+<div class="main" style="width: 1903px;">
+  <th:block th:include="layouts/header"></th:block>
+
+  <div class="content mx-auto" style="width: 1750px;">
+    <div style="height : 30px;"></div>
+
+
+    <div class="text-center mb-5 fs-30" th:if="${param.mainCategory != null || param.subCategory != null}" th:text="${param.mainCategory == null ? param.subCategory : param.mainCategory}">상품카테고리</div>
+    <div class="text-center mb-5 fs-30" th:if="${param.searchText != null}" th:text="'&quot;' + ${param.searchText} + '&quot; 검색 결과'">검색어</div>
+<!--    <div class="text-center mb-5 fs-30" th:if="${param.recentViewProduct}">최근 본 상품</div>-->
+
+    <div class="row w-100 mx-auto">
+      <div th:if="${!productGroupPage.productList.isEmpty()}" th:each="product: ${productGroupPage.productList}" class="col-auto p-0 mb-3 product d-flex justify-content-center" style="width: 403px; height: 550px; margin-left: 17px; margin-right: 17px;">
+        <div>
+          <img class="cursor productImg" th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${product.productRepImgList.isEmpty() ? 'noImg.gif' : product.productRepImgList.get(0).productRepImgSrc}" style="width: 400px; height: 400px;" th:onclick="|location.href='/product/${product.productId}'|">
+<!--          <div class="soldOutPanel2 text-center" th:if="${product.productSold == 1}">✕</div>-->
+<!--          <div class="soldOutPanel text-center" th:if="${product.productSold == 1}">sold out</div>-->
+          <div class="ps-2" th:text="${product.productTitle}" style="font-size: 28px; font-weight: 700;"></div>
+          <div class="row mx-auto w-100 ps-2">
+<!--            <div class="col-auto p-0" style="color: #548235;" th:text="'#' + ${product.productType}"></div>-->
+<!--            <div class="col-auto" style="color: #548235;" th:text="'#' + ${product.productColor}"></div>-->
+          </div>
+          <div class="row w-100 mx-auto ps-2" th:if="${product.productDiscountPrice == null}">
+            <div class="col-auto p-0 price mt-2" style="font-size: 25px;" th:text="${product.productRegularPrice}">원가</div>
+          </div>
+          <div class="row w-100 mx-auto ps-2" th:if="${product.productDiscountPrice != null}">
+            <del class="col-auto d-flex align-items-center p-0 price" style="font-size: 23px; color: gray;"><div th:text="${product.productRegularPrice}">원가</div></del>
+            <div class="col-auto d-flex align-items-center price" style="font-size: 25px;" th:text="${product.productDiscountPrice}">할인가</div>
+            <div class="col-auto salePercent text-center d-flex align-items-center justify-content-center">10%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row w-100 mx-auto mt-5" style="height: 47px;" th:if="${productGroupPage.totalElements != 0}">
+    <input type="hidden" id="totalPageSize" th:value="${productGroupPage.totalPages}">
+    <button class="col-auto ms-auto" id="prevPage-btn">〈</button>
+    <div class="col-auto d-flex align-items-center justify-content-center" id="pageButtonField">
+    </div>
+    <button class="col-auto me-auto" id="nextPage-btn">〉</button>
+  </div>
+
+  <div th:if="${param.recentViewProduct == null && productGroupPage.totalElements == 0}">
+    <div class="w-100 row mx-auto"><img class="mx-auto p-0" src="/images/icon_img/exclamationMark.png" style="width: 200px; height: 200px;"></div>
+
+    <div class="text-center mt-3" style="font-size: 20px; font-weight: 700;">검색 결과가 없어요</div>
+    <div class="text-center">다른 키워드로 검색해보세요</div>
+  </div>
+  <th:block th:include="layouts/footer"></th:block>
+</div>
+
+<script src="/js/product/productGroup.js"></script>
+</body>
+</html>
+

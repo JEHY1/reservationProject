@@ -1,8 +1,8 @@
 <header xmlns:sec="http://www.w3.org/1999/xhtml">
     <div id="upper">
         <span>
-            <a href="#" sec:authorize="hasRole('ADMIN')">관리자페이지 바로가기</a>
-            <a href="/seller/product/insert" sec:authorize="hasRole('SELLER')">판매자페이지 바로가기</a>
+            <a href="/admin/product/index" sec:authorize="hasRole('ADMIN')">관리자페이지 바로가기</a>
+            <a href="/seller/product/index" sec:authorize="hasRole('SELLER')">판매자페이지 바로가기</a>
         </span>
         <ul>
             <li sec:authorize="isAnonymous()"><a href="/login">로그인</a><span>l</span></li>

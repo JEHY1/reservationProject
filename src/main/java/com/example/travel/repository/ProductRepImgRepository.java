@@ -10,4 +10,5 @@ public interface ProductRepImgRepository extends JpaRepository<ProductRepImg, Lo
 
     // productId로 List<ProductRepImg> 가져오기
     Optional<List<ProductRepImg>> findByProductProductId(long productId);
+
 }
