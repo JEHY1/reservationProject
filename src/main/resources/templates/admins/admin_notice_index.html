@@ -37,8 +37,8 @@
                         <col width="35px">
                         <col width="30px">
                         <col width="895px">
-                        <col width="230px">
-                        <col width="100px">
+                        <col width="130px">
+                        <col width="200px">
                         <col width="250px">
                         <col width="110px">
                     </colgroup>
@@ -47,8 +47,8 @@
                             <th><input type="checkbox" id="all"></th>
                             <th>No</th>
                             <th>제목</th>
-                            <th>작성자</th>
                             <th>조회수</th>
+                            <th>작성자</th>
                             <th>등록일</th>
                             <th>관리</th>
                         </tr>
@@ -64,8 +64,8 @@
                             <td><input type="checkbox" th:value="${notice.noticeId}" class="check"></td>
                             <td th:text="${noticeStat.count + (nowPage-1)*10}"></td>
                             <td><a th:href="'/admin/notice/' + ${notice.noticeId} + '/show'" th:text="${notice.noticeTitle}"></a></td>
-                            <td th:text="${notice.user.username} + ' (' + ${notice.user.userRealName} +')'"></td>
                             <td th:text="${notice.noticeViews}"></td>
+                            <td th:text="${notice.user.username} + ' (' + ${notice.user.userRealName} +')'"></td>
                             <td th:text="${#temporals.format(notice.noticeSubmitDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td>
                                 <a th:href="'/admin/notice/' + ${notice.noticeId} + '/show'">보기</a>

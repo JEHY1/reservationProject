@@ -40,6 +40,10 @@ public class AdminProductController {
             model.addAttribute("product", productEntity);
             List<ProductOption> productOptionList = productService.findProductOptionByProductId(productId);
             model.addAttribute("productOptions", productOptionList);
+            List<ProductRepImg> productRepImgList = productService.findProductRepImgByProductId(productId);
+            model.addAttribute("productRepImgs", productRepImgList);
+            List<ProductInfoImg> productInfoImgList = productService.findProductInfoImgByProductId(productId);
+            model.addAttribute("productInfoImgs", productInfoImgList);
         }
         // 유저 권한 가져옴
         model.addAttribute("auth", userService.getUserByPrincipal(principal).getUserRole().toLowerCase());
@@ -120,7 +124,7 @@ public class AdminProductController {
 
     // 상품 숨김
     @GetMapping(value = {"/admin/product/{productId}/delete", "/seller/product/{productId}/delete"})
-    public String deleteAdminNotice(@PathVariable Long productId, RedirectAttributes rttr, Integer page, String status, String mainCategory, String subCategory, String searchKeyword, Principal principal) throws UnsupportedEncodingException {
+    public String deleteAdminProduct(@PathVariable Long productId, RedirectAttributes rttr, Integer page, String status, String mainCategory, String subCategory, String searchKeyword, Principal principal) throws UnsupportedEncodingException {
         if(productService.findProductByProductId(productId).getProductStatus().equals("숨김")) {
             rttr.addFlashAttribute("msg", "이미 숨김처리된 상품입니다.");
         }
@@ -142,7 +146,7 @@ public class AdminProductController {
     // 상품 선택 숨김 - admin_product_index.js 연결
     @PostMapping(value = {"/admin/product/delete", "/seller/product/delete"})
     @ResponseBody
-    public String deleteAdminNoticeSelect(@RequestParam(required = false) List<Long> productIds) {
+    public String deleteAdminProductSelect(@RequestParam(required = false) List<Long> productIds) {
         if(productIds != null) {
             productService.updateHideByIds(productIds);
             return "delete";

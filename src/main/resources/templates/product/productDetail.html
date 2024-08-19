@@ -51,7 +51,7 @@
     }
 
     .calendar{
-      width: 550px;
+      width: 620px;
       min-height: 320px;
       background-color: #F9F9F9;
     }
@@ -124,7 +124,7 @@
       border-right: 1px solid gray;
       border-left: 1px solid gray;
       margin-top: 7px;
-      width: 552px;
+      width: 622px;
       left: -1px;
     }
 
@@ -155,6 +155,23 @@
       border-bottom: 3px solid #0081CA;
     }
 
+    .qnaContent{
+      border-top: 3px solid #0081CA;
+      border-bottom: 3px solid #0081CA;
+    }
+
+    #QnAWrite-btn{
+      background-color: #0D569B;
+      color: white;
+      width: 76px;
+      height:36px;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      margin-right: 30px;
+    }
+
+
 
   </style>
 </head>
@@ -175,15 +192,15 @@
 
     <div class="productInfo row w-100 mx-auto">
       <div class="col-auto">
-        <img class="p-0" id="repImg" style="width: 650px; height: 650px; background-color: #ccc;" th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${productInfo.product.productRepImgList[0].productRepImgSrc}">
+        <img class="p-0" id="repImg" style="width: 620px; height: 620px; background-color: #ccc;" th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${productInfo.product.productRepImgList.isEmpty() ? 'noImg.gif' : productInfo.product.productRepImgList[0].productRepImgSrc}">
         <div class="row w-100 mx-auto mt-2">
           <img th:each="productRepImg : ${productInfo.product.productRepImgList}" class="col-auto p-0 mx-auto subImgList cursor" th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${productRepImg.productRepImgSrc}" style="width: 120px; height: 120px; background-color: #ccc;">
         </div>
       </div>
 
-      <div class="col-auto">
+      <div class="col-auto" style="width: 650px;">
         <h1 th:text="${productInfo.product.productTitle}">상품 이름</h1>
-        <div class="fs-6">상품 코맨트<br>상품 코맨트</div>
+        <div class="fs-6" th:text="${productInfo.product.productInfo}">상품 코맨트<br>상품 코맨트</div>
         <div th:if="${productInfo.product.productDiscountPrice == null}" th:text="${productInfo.product.productRegularPrice}" class="price d-hidden">00,000원</div>
         <div th:if="${productInfo.product.productDiscountPrice != null}" class="row w-100 mx-auto" >
           <del class="col-auto ps-0 d-flex align-items-center"><div class="price" th:text="${productInfo.product.productRegularPrice}">00,000원</div></del>
@@ -258,12 +275,12 @@
       <div class="tapContent">
         <div class="productInfoTab row w-100 mx-auto viewTab">
           <div class="mt-5"></div>
-          <img class="mx-auto" th:each="productInfoImg : ${productInfo.product.productInfoImgList}" th:src="'http://localhost/travelFileServer/images/productInfo/' + ${productInfoImg.productInfoImgSrc}">
+          <img class="mx-auto" th:each="productInfoImg : ${productInfo.product.productInfoImgList}" th:src="'http://192.168.106.12/travelFileServer/images/productInfo/' + ${productInfoImg.productInfoImgSrc}">
         </div>
 
         <div class="productReviewTap d-hidden">
           <div class="reviewContent my-5 mx-5">
-            <div class="d-hidden">작성된 리뷰가 없습니다.</div>
+            <div class="text-center p-4" th:if="${productInfo.product.reviewList.isEmpty()}">작성된 리뷰가 없습니다.</div>
             <div th:each="review : ${productInfo.product.reviewList}" class="review">
               <div class="row w-100 mx-auto border-y cursor py-3">
                 <div class="col-6" th:text="${review.reviewTitle}">리뷰 제목</div>
@@ -290,15 +307,40 @@
         </div>
 
         <div class="qnaTab d-hidden">
-          <div class="reviewContent my-5 mx-5">
-            <div class="d-hidden">작성된 Q&A가 없습니다.</div>
+          <div class="row mb-3 mt-5 w-100 mx-auto">
+            <button type="button" id="QnAWrite-btn" class="ms-auto" data-bs-toggle="modal" data-bs-target="#qnaWriteModal" onclick="checkLogin()">WRITE</button>
+          </div>
+          <div class="qnaContent m-5 mt-2">
+            <!-- Modal -->
+            <div class="modal fade" id="qnaWriteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
+                <div class="modal-content" style="width: 800px; height: 800px;">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">QnA 작성하기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn" onclick="resetQnAForm()"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row w-100 mx-auto">
+                      <input type="text" id="qnaQuestion" class="mt-4" placeholder="내용" style="height: 500px;" autocomplete="off">
+                    </div>
+                    <input type="checkbox" id="qnaSecret">
+                    <label>비밀글 설정하기</label>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="qnaSubmit-btn" class="btn btn-primary">등록</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center p-4" th:if="${productInfo.product.qnaList.isEmpty()}">작성된 Q&A가 없습니다.</div>
             <div class="qna" th:each="qna : ${productInfo.product.qnaList}">
               <div class="row w-100 mx-auto border-y cursor py-3">
-                <div class="col-8" th:text="${qna.qnaQuestion}">Q&A 제목</div>
+                <div class="col-8" th:text="${qna.qnaSecret && (userId == null || qna.user.userId != userId) ? '비밀글 입니다.' : qna.qnaQuestion}">Q&A 제목</div>
                 <div class="col-2" th:text="${qna.user.username}">이름</div>
                 <div class="col-2" th:text="${#temporals.format(qna.qnaSubmitDate, 'yyyy-MM-dd')}">2024-05-05</div>
               </div>
-              <div class="p-3 d-hidden">
+              <div class="p-3 d-hidden" th:if="${!qna.qnaSecret || qna.user.userId == userId}">
                 <div class="pb-3" th:text="${qna.qnaQuestion}"></div>
                 <div class="p-3 border-y bg-gainsboro" th:if="${qna.qnaAnswer != null}">
                   <div th:text="'↳ ' + ${productInfo.product.user.username} + ${'   ' + #temporals.format(qna.qnaSubmitDate, 'yyyy-MM-dd')}">↳ 이름*   2024-05-06</div>

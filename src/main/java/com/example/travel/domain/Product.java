@@ -116,6 +116,7 @@ public class Product {
         this.productEndDate = LocalDateTime.parse(dto.getProductEndDate() + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.productRegularPrice = dto.getProductRegularPrice();
         this.productDiscountPrice = dto. getProductDiscountPrice();
+        this.productTravelDays = dto.getProductTravelDays();
         this.productMaxCount = dto.getProductMaxCount();
         this.productInfo = dto.getProductInfo();
         return this;

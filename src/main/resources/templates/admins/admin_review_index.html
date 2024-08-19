@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_review_index.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <script src="/js/admin/admin_review_index.js"></script>
+    <title>관리자 - 리뷰 목록</title>
+</head>
+<body>
+    <th:block th:include="layouts/admin_header"></th:block>
+    <main>
+        <div class="box">
+            <p id="boxTitle">리뷰 목록</p>
+            <div id="selectBox">
+                <select>
+                    <option value="1" th:selected="${category} == '1'">상품명</option>
+                    <option value="2" th:selected="${category} == '2'">제목</option>
+                    <option value="3" th:selected="${category} == '3'">작성자 (아이디)</option>
+                    <option value="4" th:selected="${category} == '4'">작성자 (이름)</option>
+                </select>
+                <input type="search" th:value="${param.searchKeyword}">
+                <button type="button">검색</button>
+            </div>
+
+            <div id="upperLine">
+                <p>총<span th:text="${reviews.getTotalElements()}"></span>건</p>
+                <p>
+                    <input type="hidden" id="auth" th:value="${auth}">
+                    <a href="#">선택 삭제</a>
+                </p>
+            </div>
+            <div id="indexBox">
+                <table>
+                    <colgroup>
+                        <col width="35px">
+                        <col width="30px">
+                        <col width="385px">
+                        <col width="460px">
+                        <col width="180px">
+                        <col width="200px">
+                        <col width="250px">
+                        <col width="110px">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="all"></th>
+                            <th>No</th>
+                            <th>상품명</th>
+                            <th>제목</th>
+                            <th>별점</th>
+                            <th>작성자</th>
+                            <th>등록일</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${reviews.isEmpty()}" id="blank">
+                            <td colspan="8">
+                                <img src="/images/icon_img/exclamationMark.png">
+                                <p>검색결과가 없습니다.</p>
+                            </td>
+                        </tr>
+                        <tr th:each="review : ${reviews}"> <!-- 리스트 하나 -->
+                            <td><input type="checkbox" th:value="${review.reviewId}" class="check"></td>
+                            <td th:text="${reviewStat.count + (nowPage-1)*10}"></td>
+                            <td><a th:href="'/' + ${auth} + '/product/' + ${review.product.productId} + '/show'" th:text="${review.product.productTitle}"></a></td>
+                            <td><a th:href="${review.reviewComment == null ? '/' + auth + '/review/' + review.reviewId + '/insert' : '/' + auth + '/review/' + review.reviewId + '/show'}" th:text="${review.reviewTitle}"></a></td>
+                            <td>
+                                <span th:each="star : ${#numbers.sequence(1, 5)}" th:text="${star <= review.reviewScore ? '★' : '☆'}"></span>
+                            </td>
+                            <td>
+                                <span th:if="${auth == 'seller'}" th:text="${review.order.user.username} + ' (' + ${review.order.user.userRealName} +')'"></span>
+                                <a th:if="${auth == 'admin'}" th:href="'/admin/user/' + ${review.order.user.userId} + '/show'" th:text="${review.order.user.username} + ' (' + ${review.order.user.userRealName} +')'"></a>
+                            </td>
+                            <td th:text="${#temporals.format(review.reviewSubmitDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <a th:href="${review.reviewComment == null ? '/' + auth + '/review/' + review.reviewId + '/insert' : '/' + auth + '/review/' + review.reviewId + '/show'}">보기</a>
+                                <a th:href="'/' + ${auth} + '/review/' + ${review.reviewId} + '/delete?page=' + ${reviews.getNumberOfElements() != 1 ? nowPage-1 : nowPage-2} + '&category=' + ${category} + '&searchKeyword=' + ${searchKeyword}">삭제</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="pageBox">
+                <a th:href="${reviews.hasPrevious() ? '/admin/review/index?page=' + (nowPage-2) + '&category=' + category + '&searchKeyword=' + searchKeyword : 'javascript:void(0)'}" th:style="${reviews.hasPrevious() ? '' : 'color:#ccc'}">〈</a>
+                <a th:each="page : ${#numbers.sequence(startPage, endPage)}" th:text="${page}" th:href="${page == nowPage ? 'javascript:void(0)' : '/admin/review/index?page=' + (page - 1) + '&category=' + category +'&searchKeyword=' + searchKeyword}" th:style="${page == nowPage ? 'background-color: #0D569B; color: white;' : '' }"></a>
+                <a th:href="${reviews.hasNext() ? '/admin/review/index?page=' + nowPage + '&category=' + category + '&searchKeyword=' + searchKeyword : 'javascript:void(0)'}" th:style="${reviews.hasNext() ? '' : 'color:#ccc'}">〉</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

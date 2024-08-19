@@ -1,18 +1,14 @@
 package com.example.travel.service;
 
-import com.example.travel.domain.Order;
-import com.example.travel.domain.Product;
-import com.example.travel.domain.Review;
-import com.example.travel.domain.ReviewImg;
+import com.example.travel.domain.*;
+import com.example.travel.dto.admin.ReviewCommentRequest;
 import com.example.travel.dto.review.ReviewSubmitRequest;
-import com.example.travel.repository.ProductRepository;
 import com.example.travel.repository.ReviewImgRepository;
 import com.example.travel.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,10 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +42,8 @@ public class ReviewService {
     public void saveReview(ReviewSubmitRequest request) {
         Review review = null;
         if(request.getReviewId() != null) {
-            review = findByReviewId(request.getReviewId()).updateReview(request); // 리뷰 수정
+            // 리뷰 수정
+            review = findByReviewId(request.getReviewId()).updateReview(request);
         }
         else {
             Order order = paymentService.findOrderByOrderId(request.getOrderId());
@@ -65,7 +60,7 @@ public class ReviewService {
 
         // files 등록할 경우 저장
         if(!request.getFiles().get(0).isEmpty()) {
-            // 상품정보 수정 시 새로 업로드 하는 파일이 있으면 DB 에서 기존 productImg 삭제
+            // 리뷰 수정 시 새로 업로드 하는 파일이 있으면 DB 에서 기존 reviewImg 삭제
             if(request.getReviewId() != null) {
 
                 review.getReviewImgList().forEach(reviewImg -> reviewImgRepository.deleteById(reviewImg.getReviewImgId()));
@@ -111,8 +106,67 @@ public class ReviewService {
         }
     }
 
-    @Transactional
+    // 관리자페이지에서 리뷰 조회
+    public Page<Review> reviewList(Integer category, String searchKeyword, Pageable pageable) {
+        Page<Review> reviewList = null;
+        // 검색 안했을 때
+        if(searchKeyword == null || searchKeyword.equals("")) {
+            reviewList = reviewRepository.findAll(pageable);
+        }
+        // searchKeyword 로 검색 했을 때
+        else {
+            // category 가 '상품명'일 때
+            if(category == 1) {
+                // productTitle 으로 검색해서 productTitle 오름차순, reviewId 내림차순으로 페이징 처리한 Page<Review>
+                reviewList = reviewRepository.findByProductProductTitleContainingOrderByProductProductTitleAscReviewIdDesc(searchKeyword, pageable)
+                        .orElseThrow(() -> new IllegalArgumentException("not found review"));
+            }
+            // category 가 '제목'일 때
+            else if(category == 2) {
+                // reviewTitle 으로 검색해서 reviewId 내림차순으로 페이징 처리한 Page<Review>
+                reviewList = reviewRepository.findByReviewTitleContainingOrderByReviewIdDesc(searchKeyword, pageable)
+                        .orElseThrow(() -> new IllegalArgumentException("not found review"));
+            }
+            // category 가 '작성자 (아이디)'일 때
+            else if(category == 3) {
+                reviewList = reviewRepository.findByOrderUserUsernameContainingOrderByOrderUserUsernameAscReviewIdDesc(searchKeyword, pageable)
+                        .orElseThrow(() -> new IllegalArgumentException("not found review"));
+            }
+            // category 가 '작성자 (이름)'일 때
+            else if(category == 4) {
+                reviewList = reviewRepository.findByOrderUserUserRealNameContainingOrderByOrderUserUserRealNameAscReviewIdDesc(searchKeyword, pageable)
+                        .orElseThrow(() -> new IllegalArgumentException("not found review"));
+            }
+        }
+        return reviewList;
+    }
+
     public void deleteReviewByReviewId(long reviewId){
         reviewRepository.deleteById(reviewId);
+    }
+
+    // reviewIds 리스트로 Review 삭제
+    public void deleteReviewsByReviewIds(List<Long> reviewIds) {
+        for (Long reviewId : reviewIds) {
+            reviewRepository.deleteById(reviewId);
+        }
+    }
+
+    // reviewId로 List<ReviewImg> 가져오기
+    public List<ReviewImg> FindReviewImgsByReviewId(long reviewId) {
+        return reviewImgRepository.findByReviewReviewId(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("not found reviewimgs"));
+    }
+
+    // 리뷰 답글 등록&수정
+    @Transactional
+    public Review saveComment(ReviewCommentRequest dto) {
+        return findByReviewId(dto.getReviewId()).saveComment(dto);
+    }
+
+    // 리뷰 답글 삭제
+    @Transactional
+    public Review deleteComment(long reviewId) {
+        return findByReviewId(reviewId).deleteComment();
     }
 }

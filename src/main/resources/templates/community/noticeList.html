@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVEL 공지사항 페이지</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <script src="/js/jquery.js"></script>
+    <link rel="stylesheet" href="/css/community/noticeList.css">
+
+<style>
+    .row{--bs-gutter-x:1.5rem;--bs-gutter-y:0;display:flex;flex-wrap:wrap;margin-top:calc(var(--bs-gutter-y) * -1);margin-right:calc(var(--bs-gutter-x) * -.5);margin-left:calc(var(--bs-gutter-x) * -.5)}.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x) * .5);padding-left:calc(var(--bs-gutter-x) * .5);margin-top:var(--bs-gutter-y)}
+    .col-auto{flex:0 0 auto;width:auto}
+    .ms-auto{margin-left:auto!important}
+    .w-100{width:100%!important}
+    .mx-auto{margin-right:auto!important;margin-left:auto!important}
+    .mt-5{margin-top:3rem!important}
+    .d-flex{display:flex!important}
+    .align-items-center{align-items:center!important}
+    .justify-content-center{justify-content:center!important}
+    .p-0{padding:0!important}
+    .mx-1{margin-right:.25rem!important;margin-left:.25rem!important}
+    .me-auto{margin-right:auto!important}
+    .mt-3{margin-top:1rem!important}
+    #prevPage-btn{
+      font-size: 25px;
+      background-color: white;
+      border: none;
+    }
+    #prevPage-btn:hover{
+      color: gray;
+    }
+    #prevPage-btn:disabled:hover{
+      color: gainsboro;
+    }
+    .page-btn{
+      font-size: 25px;
+      width : 47px;
+      height: 47px;
+      padding : 7px;
+      border-radius: 50%;
+      border: none;
+      background-color: white;
+    }
+    .page-btn:hover{
+      background-color: gainsboro;
+    }
+    .selectedPage-btn{
+      background-color : #0D569B !important;
+      color : white !important;
+    }
+    #nextPage-btn{
+      font-size: 25px;
+      background-color: white;
+      border: none;
+    }
+    #nextPage-btn:hover{
+      color: gray;
+    }
+    #nextPage-btn:disabled:hover{
+      color: gainsboro;
+    }
+
+    #search-btn{
+      width: 220px;
+      border: 3px solid #2E2F42;
+      background-color: white;
+      color: #2E2F42;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+    #search-btn:hover{
+      border: none;
+      background-color: #2E2F42;
+      color: white;
+    }
+
+</style>
+
+</head>
+<body>
+
+<th:block th:include="layouts/header"></th:block>
+
+<div class="container">
+    <div class="content">
+        <div class="titleArea">
+            <h2>공지사항</h2>
+        </div>
+        <form>
+            <table>
+                <tr th:each="notice : ${noticePage.content}">
+                    <td class="num"></td>
+                    <td class="txtEm">
+                        <a th:href="@{/community/notice/{id}(id=${notice.noticeId})}" th:text="${notice.noticeTitle}"></a>
+                    </td>
+                    <td th:text="${notice.user.username}"></td>
+                    <td th:text="${#temporals.format(notice.noticeSubmitDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${notice.noticeViews}"></td>
+                </tr>
+            </table>
+
+<!--            <a th:href="@{/notices(page=0)}">&lt;&lt;</a>-->
+
+<!--            <th:block th:each="page : ${#numbers.sequence(startPage, lastPage)}">-->
+<!--                <a th:if="${page != currentPage}" th:href="@{/notices(page=${page - 1})}" th:text="${page}"></a>-->
+<!--                <strong th:if="${page == currentPage}" th:text="${page}" style="color : red "></strong>-->
+<!--            </th:block>-->
+
+<!--            <a th:href="@{/notices(page=${totalPages - 1})}">&gt;&gt;</a>-->
+
+        </form>
+
+        <div class="row w-100 mx-auto buttonSpace mt-3" style="height: 47px;" th:if="${noticePage.totalElements != 0}">
+            <input type="hidden" id="totalPageSize" th:value="${noticePage.totalPages}">
+            <button class="col-auto ms-auto" id="prevPage-btn">〈</button>
+            <div class="col-auto d-flex align-items-center justify-content-center" id="pageButtonField"></div>
+            <button class="col-auto me-auto" id="nextPage-btn">〉</button>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="layouts/footer"></th:block>
+<script src="/js/community/noticeList.js"></script>
+</body>
+</html>

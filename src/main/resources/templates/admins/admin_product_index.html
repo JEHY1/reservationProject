@@ -30,13 +30,35 @@
                 <option value="미국여행" th:selected="${mainCategory} == '미국여행'">미국여행</option>
                 <option value="유럽여행" th:selected="${mainCategory} == '유럽여행'">유럽여행</option>
             </select>
-            <select>
+            <select id="subCategory">
                 <option value="" th:selected="${subCategory} == ''">--중분류--</option>
-                <option value="오사카" th:selected="${subCategory} == '오사카'">오사카</option>
-                <option value="베이징" th:selected="${subCategory} == '베이징'">베이징</option>
-                <option value="오스트레일리아" th:selected="${subCategory} == '오스트레일리아'">오스트레일리아</option>
-                <option value="체코" th:selected="${subCategory} == '체코'">체코</option>
-                <option value="캐나다" th:selected="${subCategory} == '캐나다'">캐나다</option>
+                <option class="korea" value="서울" th:selected="${subCategory} == '서울'">서울</option>
+                <option class="korea" value="부산" th:selected="${subCategory} == '부산'">부산</option>
+                <option class="korea" value="제주도" th:selected="${subCategory} == '제주도'">서울</option>
+                <option class="korea" value="울릉도" th:selected="${subCategory} == '울릉도'">울릉도</option>
+                <option class="japan" value="오사카" th:selected="${subCategory} == '오사카'">오사카</option>
+                <option class="japan" value="도쿄" th:selected="${subCategory} == '도쿄'">도쿄</option>
+                <option class="japan" value="후쿠오카" th:selected="${subCategory} == '후쿠오카'">후쿠오카</option>
+                <option class="japan" value="오키나와" th:selected="${subCategory} == '오키나와'">오키나와</option>
+                <option class="japan" value="삿포로" th:selected="${subCategory} == '삿포로'">삿포로</option>
+                <option class="china" value="베이징" th:selected="${subCategory} == '베이징'">베이징</option>
+                <option class="china" value="상하이" th:selected="${subCategory} == '상하이'">상하이</option>
+                <option class="china" value="칭다오" th:selected="${subCategory} == '칭다오'">칭다오</option>
+                <option class="china" value="광저우" th:selected="${subCategory} == '광저우'">광저우</option>
+                <option class="china" value="하얼빈" th:selected="${subCategory} == '하얼빈'">하얼빈</option>
+                <option class="usa" value="하와이" th:selected="${subCategory} == '하와이'">하와이</option>
+                <option class="usa" value="뉴욕" th:selected="${subCategory} == '뉴욕'">뉴욕</option>
+                <option class="usa" value="로스앤젤레스" th:selected="${subCategory} == '로스앤젤레스'">로스앤젤레스</option>
+                <option class="usa" value="샌프란시스코" th:selected="${subCategory} == '샌프란시스코'">샌프란시스코</option>
+                <option class="usa" value="라스베이거스" th:selected="${subCategory} == '라스베이거스'">라스베이거스</option>
+                <option class="usa" value="시카고" th:selected="${subCategory} == '시카고'">시카고</option>
+                <option class="europe" value="파리" th:selected="${subCategory} == '파리'">파리</option>
+                <option class="europe" value="스페인" th:selected="${subCategory} == '스페인'">스페인</option>
+                <option class="europe" value="이탈리아" th:selected="${subCategory} == '이탈리아'">이탈리아</option>
+                <option class="europe" value="런던" th:selected="${subCategory} == '런던'">런던</option>
+                <option class="europe" value="영국" th:selected="${subCategory} == '영국'">영국</option>
+                <option class="europe" value="프랑스" th:selected="${subCategory} == '프랑스'">프랑스</option>
+                <option class="europe" value="독일" th:selected="${subCategory} == '독일'">독일</option>
             </select>
             <input type="search" placeholder="상품명을 입력해주세요." th:value="${param.searchKeyword}">
             <button type="button">검색</button>

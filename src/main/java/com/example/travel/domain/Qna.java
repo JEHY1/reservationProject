@@ -1,15 +1,17 @@
 package com.example.travel.domain;
 
-import com.example.travel.dto.login.QnaAnswerRequest;
+import com.example.travel.dto.admin.QnaAnswerRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "qna_tb")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @ToString
 public class Qna {

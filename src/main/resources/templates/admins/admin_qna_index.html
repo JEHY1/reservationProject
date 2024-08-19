@@ -44,8 +44,8 @@
                         <col width="30px">
                         <col width="385px">
                         <col width="60px">
-                        <col width="550px">
-                        <col width="230px">
+                        <col width="580px">
+                        <col width="200px">
                         <col width="250px">
                         <col width="110px">
                     </colgroup>
@@ -70,7 +70,7 @@
                         <tr th:each="qna : ${qnas}"> <!-- 리스트 하나 -->
                             <td><input type="checkbox" th:value="${qna.qnaId}" class="check"></td>
                             <td th:text="${qnaStat.count + (nowPage-1)*10}"></td>
-                            <td><a th:href="'/' + ${auth} + '/product/' + ${qna.product.productId} + '/show'" th:text="${qna.product.productTitle}"></a></td> <!-- 링크 고치기 -->
+                            <td><a th:href="'/' + ${auth} + '/product/' + ${qna.product.productId} + '/show'" th:text="${qna.product.productTitle}"></a></td>
                             <td><span th:text="${qna.qnaAnswer == null ? '미완료' : '답변완료'}" th:style="${qna.qnaAnswer == null ? 'border: 1px solid red; background-color:red; color:white;' : ''}"></span></td>
                             <td>
                                 <a th:href="${qna.qnaAnswer == null ? '/' + auth + '/qna/' + qna.qnaId + '/insert' : '/' + auth + '/qna/' + qna.qnaId + '/show'}" th:text="${qna.qnaQuestion}"></a>

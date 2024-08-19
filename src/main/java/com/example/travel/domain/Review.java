@@ -1,5 +1,7 @@
 package com.example.travel.domain;
 
+import com.example.travel.dto.admin.QnaAnswerRequest;
+import com.example.travel.dto.admin.ReviewCommentRequest;
 import com.example.travel.dto.review.ReviewSubmitRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -68,6 +70,20 @@ public class Review {
         this.reviewTitle = request.getReviewTitle();
         this.reviewContent = request.getReviewContent();
         this.reviewScore = request.getReviewScore();
+        return this;
+    }
+
+    // 리뷰 답글 등록&수정
+    public Review saveComment(ReviewCommentRequest dto) {
+        this.reviewComment = dto.getReviewComment();
+        this.reviewCommentSubmitDate = this.reviewCommentSubmitDate == null ? LocalDateTime.now() : this.reviewCommentSubmitDate;
+        return this;
+    }
+
+    // 리뷰 답글 삭제
+    public Review deleteComment() {
+        this.reviewComment = null;
+        this.reviewCommentSubmitDate = null;
         return this;
     }
 }

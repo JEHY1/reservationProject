@@ -6,10 +6,7 @@ import com.example.travel.dto.admin.ProductRequest;
 import com.example.travel.dto.order.OptionCountForm;
 import com.example.travel.dto.order.OrderRequest;
 import com.example.travel.dto.order.OrderResponse;
-import com.example.travel.dto.product.ProductDetailInfoResponse;
-import com.example.travel.dto.product.SearchProductResponse;
-import com.example.travel.dto.product.StockRequest;
-import com.example.travel.dto.product.StockResponse;
+import com.example.travel.dto.product.*;
 import com.example.travel.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,7 +27,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -170,10 +168,10 @@ public class ProductService {
                     .productEndDate(LocalDateTime.parse(request.getProductEndDate() + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .productRegularPrice(request.getProductRegularPrice())
                     .productDiscountPrice(request.getProductDiscountPrice() != null ? request.getProductDiscountPrice() : null)
+                    .productTravelDays(request.getProductTravelDays())
                     .productMaxCount(request.getProductMaxCount())
                     .productInfo(request.getProductInfo())
                     .user(userService.getUserByPrincipal(principal))
-                    .productTravelDays(request.getProductTravelDays())
                     .build());
 
             // 상품옵션 등록
@@ -484,4 +482,35 @@ public class ProductService {
         return productRepository.newProduct()
                 .orElseThrow(() -> new IllegalArgumentException("not found product"));
     }
+
+    public List<Product> bestProduct() {
+        return productRepository.bestProduct()
+                .orElseThrow(() -> new IllegalArgumentException("not found product"));
+    }
+
+    public List<ProductNameForm> searchProductNameContaining(SearchRequest request){
+        String searchText = request.getSearchText();
+        List<Product> list = findProductByProductNameContaining(searchText);
+
+        Set<ProductNameForm> nameList = new HashSet<>(); //같은 결과 제거용
+        list.forEach(product -> {
+
+            //결과를 검색단어를 기준으로 검색단어 앞 문자열, 검색단어, 검색단어 뒤 문자열 3개로 나눔
+            if(product.getProductTitle().contains(searchText)){
+                int index = product.getProductTitle().indexOf(searchText);
+                nameList.add(ProductNameForm.builder()
+                        .frontText(product.getProductTitle().substring(0, index))
+                        .searchText(searchText)
+                        .endText(product.getProductTitle().substring(index + 1, product.getProductTitle().length()))
+                        .build());
+            }
+        });
+
+        return nameList.stream().toList();
+    }
+
+    public List<Product> findAllProduct(){
+        return productRepository.findAll();
+    }
+
 }

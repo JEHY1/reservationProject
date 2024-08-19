@@ -88,5 +88,12 @@ public class NoticeService {
         }
     }
 
+    public Page<Notice> findNoticeWithPage(Pageable pageable){
+        return noticeRepository.findAll(pageable);
+    }
 
+    @Transactional
+    public Notice addNoticeViewsAndGet(long noticeId){
+        return findById(noticeId).updateViewCount();
+    }
 }

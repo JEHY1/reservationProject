@@ -13,6 +13,11 @@ function getUrlParameter(name) {
     return urlParams.get(name);
 }
 
+function getPath(index){
+    console.log(window.location.pathname.split('/'));
+    return window.location.pathname.split('/')[index];
+}
+
 function toWon(price){
     let PriceText = '';
     price += '';
@@ -64,7 +69,7 @@ if(searchButton){
         params += paymentPrice1 === '' ? '' : '&paymentPrice1=' + paymentPrice1;
         params += paymentPrice2 === '' ? '' : '&paymentPrice2=' + paymentPrice2;
 
-        location.href = '/seller/orderList?' + params;
+        location.href = '/' + getPath(1) + '/orderList?' + params;
     });
 }
 
@@ -84,6 +89,14 @@ if(document.getElementsByClassName('radio-btn')){
     });
 }
 
+//detailPage 이동
+document.querySelectorAll('.order').forEach(function(orderDiv) {
+    orderDiv.addEventListener('click', function() {
+        let path = orderDiv.getAttribute('data-path');
+        let orderId = orderDiv.getAttribute('data-order-id');
+        location.href = `/${path}/orderDetail/${orderId}`;
+    });
+});
 
 //페이징
 const pageButtonField = document.getElementById('pageButtonField');
@@ -137,7 +150,7 @@ if(pageButtonField){
             pageButton.classList.add('selectedPage-btn');
         }
         else{
-            pageButton.setAttribute('onclick', "location.href='/seller/orderList?" + params + "&page=" + (currentPageGroupNum * 5 + i) + "'");
+            pageButton.setAttribute('onclick', "location.href='/" + getPath(1) + "/orderList?" + params + "&page=" + (currentPageGroupNum * 5 + i) + "'");
         }
 
         pageButtonField.appendChild(divWrap);
@@ -179,7 +192,7 @@ if(prevPageButton){
     params += paymentPrice1 === null ? '' : '&paymentPrice1=' + paymentPrice1;
     params += paymentPrice2 === null ? '' : '&paymentPrice2=' + paymentPrice2;
 
-    prevPageButton.setAttribute('onclick', "location.href='/seller/orderList?" + params + "&page=" + (parseInt(getUrlParameter('page')) - 1) + "'");
+    prevPageButton.setAttribute('onclick', "location.href='/" + getPath(1) + "/orderList?" + params + "&page=" + (parseInt(getUrlParameter('page')) - 1) + "'");
 }
 
 const nextPageButton = document.getElementById('nextPage-btn');
@@ -208,7 +221,7 @@ if(nextPageButton){
     params += paymentPrice1 === null ? '' : '&paymentPrice1=' + paymentPrice1;
     params += paymentPrice2 === null ? '' : '&paymentPrice2=' + paymentPrice2;
 
-    nextPageButton.setAttribute('onclick', "location.href='/seller/orderList?" + params + "&page=" + (parseInt(getUrlParameter('page') === null ? 0 : parseInt(getUrlParameter('page'))) + 1) + "'");
+    nextPageButton.setAttribute('onclick', "location.href='/" + getPath(1) + "/orderList?" + params + "&page=" + (parseInt(getUrlParameter('page') === null ? 0 : parseInt(getUrlParameter('page'))) + 1) + "'");
 }
 
 //넘버링

@@ -1,0 +1,103 @@
+.container {
+    width: 1300px;
+    min-width: 500px;
+    text-align: center;
+    margin: 0 auto;
+}
+.content {
+    margin-top: 40px;
+    text-align: center;
+}
+.titleArea {
+    margin-top: 20px;
+    margin-bottom: 60px;
+    min-height: 30px;
+    text-align: center;
+}
+.titleArea > h2 {
+    color: #2e2e2e;
+    font-size: 26px;
+}
+table{
+    margin-left: 20px;
+}
+td {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+}
+.txtEm {
+    color: black;
+    text-decoration: none;
+    padding: 20px;
+
+}
+.txtEm > a {
+    color: black;
+    text-decoration: none;
+
+}
+.txtEm > a:hover {
+    transition: 0.8s;
+    color: #ccc;
+    text-decoration: none;
+    font-weight: bold;
+}
+.txtLight {
+    color: gray
+}
+.txtLight > a {
+    color: gray;
+    text-decoration: none;
+}
+.txtLight > a:hover {
+    color: black;
+    text-decoration: none;
+}
+tr > td:nth-child(1) {
+    width: 50px;
+}
+tr > td:nth-child(2) {
+    width: 1100px;
+    text-align: left;
+    font-size: 13px;
+}
+tr > td:nth-child(3) {
+    width: 200px;
+}
+tr > td:nth-child(4), td:nth-child(5){
+    width: 150px;
+    color: #999;
+}
+.txtBody {
+    text-align: left;
+    color: black;
+    padding-left: 100px;
+    border-top: none;
+}
+.back-btn {
+    width: 100px;
+    border: solid #eee 1px;
+    font-size: 13px;
+    text-align: center;
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px 30px;
+    margin: 5px;
+}
+.btnDiv {
+    margin:20px;
+    text-align: left;
+    color: #ccc;
+    text-decoration: none;
+    padding: 20px;
+}
+.btnDiv > a:hover {
+    transition: 0.9s;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    border: 1px solid black;
+}

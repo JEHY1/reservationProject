@@ -29,7 +29,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 
         return httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login/**", "/", "/join/**", "/test", "/find/**", "/user/delete/finish").permitAll()
+                .requestMatchers("/login/**", "/", "/join/**", "/test", "/find/**", "/user/delete/finish", "/product/**", "etc/**", "/community/**", "/api/getStock", "/api/searchProduct", "/api/checkLogin").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/seller/**").hasRole("SELLER")
                 .anyRequest().authenticated()

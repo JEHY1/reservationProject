@@ -75,22 +75,22 @@
     width: 1300px;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 525px);
-    grid-gap: 24px;
+    grid-gap: 12px;
 }
 #grid2 > div {
     border: 1px solid #ccc;
     border-radius: 20px;
 }
 #grid2 > div > img {
-    width: 303px;
-    height: 303px;
+    width: 314px;
+    height: 314px;
     object-fit: cover;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
 #grid2 > div > p:nth-of-type(1) { /* 상품이름 */
-    font-size: 24px;
-    height: 63px;
+    font-size: 23px;
+    height: 62px;
     padding: 10px;
     font-weight: bold;
 }
@@ -101,25 +101,25 @@
     color: #999;
 }
 #grid2 > div > p:nth-of-type(3) { /* 가격 */
-    font-size: 25px;
-    padding-top: 10px;
+    font-size: 22px;
+    padding-top: 5px;
     padding-left: 10px;
     line-height: 58px;
 }
 #grid2 > div > p:nth-of-type(3) > span:nth-child(1) {
-    font-size: 23px;
+    font-size: 21px;
     color: #999;
     text-decoration: line-through;
 }
 #grid2 > div > p:nth-of-type(3) > span:nth-child(2) {
-    font-size: 25px;
-    margin-left: 12px;
+    font-size: 23px;
+    margin-left: 6px;
     font-weight: bold;
 }
 #grid2 > div > p:nth-of-type(3) > span:nth-child(3) {
     display: inline-block;
-    font-size: 25px;
-    margin-left: 20px;
+    font-size: 23px;
+    margin-left: 7px;
     border-radius: 50%;
     background-color: #0D569B;
     font-weight: bold;

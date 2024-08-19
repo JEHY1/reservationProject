@@ -25,34 +25,10 @@
     </div>
     <div id="bestBox">
         <div id="grid1">
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
+            <div th:each="product : ${bestProducts}" th:onclick="|location.href='/product/${product.productId}'|"> <!-- 아이템 하나 -->
+                <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${product.productRepImgList.isEmpty() ? 'noImg.gif' : product.productRepImgList[0].productRepImgSrc}">
                 <div>
-                    <p>상품이름</p>
-                </div>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <div>
-                    <p>상품이름</p>
-                </div>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <div>
-                    <p>상품이름</p>
-                </div>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <div>
-                    <p>상품이름</p>
-                </div>
-            </div>
-            <div> <!-- 아이템 하나 -->
-                <img src="../images/slide_img/autoslide_1.jpg">
-                <div>
-                    <p>상품이름</p>
+                    <p th:text="${product.productTitle}"></p>
                 </div>
             </div>
         </div>
@@ -63,7 +39,7 @@
                 <img th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${product.productRepImgList.isEmpty() ? 'noImg.gif' : product.productRepImgList[0].productRepImgSrc}">
                 <p th:text="${product.productTitle}"></p>
                 <p th:utext="${product.productInfo}"></p>
-                <p><span th:text="${product.productRegularPrice}" th:style="${product.productDiscountPrice != null ? '' : 'font-size: 25px; text-decoration: none; color: black;'}"></span><span th:text="${product.productDiscountPrice != null ? product.productDiscountPrice : ''}" th:style="${product.productDiscountPrice != null ? '' : 'margin-left: 0;'}"></span>원<span th:if="${product.productDiscountPrice != null}"></span></p>
+                <p><span th:text="${product.productRegularPrice}" th:style="${product.productDiscountPrice != null ? '' : 'font-size: 23px; text-decoration: none; color: black; font-weight: bold;'}"></span><span th:text="${product.productDiscountPrice != null ? product.productDiscountPrice : ''}" th:style="${product.productDiscountPrice != null ? '' : 'margin-left: 0;'}"></span>원<span th:if="${product.productDiscountPrice != null}"></span></p>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ main { /* main 크기 고정 */
 }
 .box {
     width: 573px;
+    margin: 0 auto;
 }
 #boxTitle { /* 제목 */
     margin-top: 40px;

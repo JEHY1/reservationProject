@@ -52,4 +52,9 @@ public class Notice {
         this.noticeContent = dto.getNoticeContent();
         return this;
     }
+
+    public Notice updateViewCount(){
+        this.noticeViews++;
+        return this;
+    }
 }

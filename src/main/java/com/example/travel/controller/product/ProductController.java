@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
@@ -20,8 +22,10 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/product/{productId}")
-    public String productDetailPage(@PathVariable(required = false)Long productId, Model model){
+    public String productDetailPage(@PathVariable(required = false)Long productId, Model model, Principal principal){
 
+
+        model.addAttribute("userId", principal != null ? userService.getUserId(principal) : null);
         model.addAttribute("productInfo", productService.getProductDetailPageInfo(productId));
         System.err.println(productService.getProductDetailPageInfo(productId));
         return "/product/productDetail";

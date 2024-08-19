@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin_header.css">
+    <link rel="stylesheet" href="/css/adminsCss/admin_review_show.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/admin_header.js"></script>
+    <title>관리자 - 리뷰/답글 보기</title>
+</head>
+<body>
+    <th:block th:include="layouts/admin_header"></th:block>
+    <main>
+        <div class="box">
+            <p class="boxTitle">리뷰 보기</p>
+            <div class="registerInfo">
+                <p>등록일 :<span th:text="${#temporals.format(review.reviewSubmitDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            </div>
+            <div id="showBox">
+                <table>
+                    <tr>
+                        <th>상품명</th>
+                        <td><a th:href="'/' + ${auth} + '/product/' + ${review.product.productId} + '/show'" th:text="${review.product.productTitle}"></a></td>
+                        <th>작성자</th>
+                        <td th:text="${review.order.user.username + ' (' + review.order.user.userRealName + ')'}"></td>
+                    </tr>
+                    <tr>
+                        <th>제목</th>
+                        <td th:text="${review.reviewTitle}"></td>
+                        <th>별점</th>
+                        <td>
+                            <span th:each="star : ${#numbers.sequence(1, 5)}" th:text="${star <= review.reviewScore ? '★' : '☆'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">내용</th>
+                        <td colspan="3" th:text="${review.reviewContent}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <img th:each="reviewImg : ${reviewImgs}" th:src="'http://192.168.106.12/travelFileServer/images/reviewImg/' + ${reviewImg.reviewImgSrc}">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonBox">
+                <a th:href="'/' + ${auth} + '/review/' + ${review.reviewId} + '/delete?page=0&category=1&searchKeyword='">삭제</a>
+                <a th:href="'/' + ${auth} + '/review/index'">목록</a>
+            </div>
+            <p class="boxTitle">리뷰답글 보기</p>
+            <div class="registerInfo">
+                <p th:utext="${review.reviewComment != null ? '등록일 :<span>' + #temporals.format(review.reviewCommentSubmitDate, 'yyyy-MM-dd HH:mm:ss') + '</span>' : ''}"></p>
+            </div>
+            <div id="commentBox">
+                <table>
+                    <tr>
+                        <th>답글</th>
+                        <td th:text="${review.reviewComment}"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="buttonBox">
+                <a th:href="'/' + ${auth} + '/review/' + ${review.reviewId} + '/insert'">수정</a>
+                <a th:href="'/' + ${auth} + '/review/' + ${review.reviewId} + '/comment/delete'">삭제</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

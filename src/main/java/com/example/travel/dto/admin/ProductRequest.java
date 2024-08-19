@@ -19,8 +19,8 @@ public class ProductRequest {
     private String productEndDate;
     private int productRegularPrice;
     private Integer productDiscountPrice;
-    private int productMaxCount;
     private int productTravelDays;
+    private int productMaxCount;
     private String productInfo;
     private List<MultipartFile> productRepImg;
     private List<MultipartFile> productInfoImg;

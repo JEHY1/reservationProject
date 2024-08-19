@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVEL 문의 내용 페이지</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/js/jquery.js"></script>
+</head>
+
+<style>
+    .content{
+        width: 1300px;
+    }
+
+    .border-y{
+        border-top: 1px solid gainsboro;
+        border-bottom: 1px solid gainsboro;
+    }
+
+    #list-btn{
+        border: 1px solid gray;
+        background-color: white;
+        color: gray;
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
+
+    .answerArea{
+        border-radius: 10px;
+        background-color: gainsboro;
+    }
+</style>
+
+<body>
+<th:block th:include="layouts/header"></th:block>
+
+<div class="content mx-auto">
+
+    <h2 class="text-center" style="margin-top: 30px;">문의내용</h2>
+    <div class="qnaInfo row w-100 mx-auto border-y mt-4 py-3">
+        <div class="col" th:text="${qna.qnaQuestion}"></div>
+        <div class="col-3 text-center" style="color: gray;" th:text="${#temporals.format(qna.qnaSubmitDate, 'yyyy-MM-dd')}"></div>
+    </div>
+
+    <div class="questionArea p-3" th:text="${qna.qnaQuestion}"></div>
+
+    <div class="answerArea py-3" th:if="${qna.qnaAnswer != null}">
+        <div class="row mx-auto" style="border-bottom: 1px solid gray; width: 95%;">
+            <div class="col-auto" th:text="${qna.product.user.username}"></div>
+            <div class="col" th:text="${#temporals.format(qna.qnaAnswerDate, 'yyyy-MM-dd')}"></div>
+        </div>
+
+        <div class="p-3 px-5" th:text="${qna.qnaAnswer}"></div>
+    </div>
+
+    <div class="row w-100 mx-auto">
+        <button class="col-auto mx-auto mt-5" type="button" id="list-btn" onclick="location.href='/myPage/qnaList'" style="width: 90px; height: 60px;">목록</button>
+    </div>
+
+</div>
+
+<th:block th:include="layouts/footer"></th:block>
+</body>
+</html>

@@ -9,7 +9,10 @@
             <li>
                 <a href="javascript:void(0)"><span>주문관리</span><span>﹀</span></a>
                 <ul>
-                    <li><a href="/admin/orderManager">전체조회</a></li>
+                    <li>
+                        <a sec:authorize="hasRole('ADMIN')" href="/admin/orderList">전체조회</a>
+                        <a sec:authorize="hasRole('SELLER')" href="/seller/orderList">전체조회</a>
+                    </li>
                 </ul>
             </li>
             <li>

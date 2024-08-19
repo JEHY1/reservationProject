@@ -1,0 +1,13 @@
+main > p {
+    text-align: center;
+    margin: 50px 0;
+    font-size: 30px;
+    font-weight: bold;
+}
+main > div {
+    margin: 0 auto;
+    width: 1300px;
+}
+main > div > img {
+    width: 1300px;
+}

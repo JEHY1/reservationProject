@@ -20,9 +20,9 @@ public class MainController {
     public String showMain(Model model) {
         List<Product> newProductList = productService.newProduct();
         model.addAttribute("newProducts", newProductList);
-//
-//        List<Product> bestProductList = productService.bestProduct();
-//        model.addAttribute("bestProducts", bestProductList);
+
+        List<Product> bestProductList = productService.bestProduct();
+        model.addAttribute("bestProducts", bestProductList);
 
         return "mains/main";
     }

@@ -1,13 +1,12 @@
 package com.example.travel.controller.admin;
 
 import com.example.travel.domain.Qna;
-import com.example.travel.dto.login.QnaAnswerRequest;
+import com.example.travel.dto.admin.QnaAnswerRequest;
 import com.example.travel.service.QnaService;
 import com.example.travel.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,13 +65,10 @@ public class AdminQnaController {
         return "admins/admin_qna_show";
     }
 
-
-
-
     // admin_qna_index 상품문의 목록 페이지
     @GetMapping(value = {"/admin/qna/index", "/seller/qna/index"})
     public String indexAdminQna(Model model, @PageableDefault(page = 0, size = 10) Pageable pageable, @RequestParam(required = false) Integer isDel, @RequestParam(defaultValue = "1") Integer group, @RequestParam(defaultValue = "1") Integer category, @RequestParam(defaultValue = "") String searchKeyword, Principal principal) {
-        // default 페이지, 한 페이지 게시글 수, 정렬기준 컬럼, 정렬순서
+        // default 페이지, 한 페이지 게시글 수, 정렬기준 컬럼
         model.addAttribute("group", group);
         model.addAttribute("category", category);
         model.addAttribute("searchKeyword", searchKeyword);

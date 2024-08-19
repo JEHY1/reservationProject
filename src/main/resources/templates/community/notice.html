@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRAVEL 공지사항 페이지</title>
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/community/noticeList.css">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/header.js"></script>
+</head>
+<body>
+<th:block th:include="layouts/header"></th:block>
+<div class="container">
+  <div class="content">
+    <div class="titleArea">
+      <h2>공지사항</h2>
+    </div>
+    <form>
+      <table>
+        <tr>
+          <td th:text="${notice.noticeId}">1</td>
+          <td class="txtEm">
+            <a th:href="@{/notice/{id}(id=${notice.noticeId})}" th:text="${notice.noticeTitle}">Title</a>
+          </td>
+          <td th:text="${notice.user.username}">작성자</td>
+          <td th:text="${#temporals.format(notice.noticeSubmitDate, 'yyyy-MM-dd')}">2024-06-12</td>
+          <td th:text="${notice.noticeViews}">조회수</td>
+        </tr>
+        <tr>
+          <td class="txtBody" colspan="6">
+            <div th:href="@{/notice/{id}(id=${notice.noticeId})}" th:text="${notice.noticeContent}">Title</div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <div class="btnDiv">
+    <a href="/community/noticeList" class="back-btn">목록</a>
+  </div>
+</div>
+<th:block th:include="layouts/footer"></th:block>
+</body>
+</html>

@@ -1,16 +1,16 @@
 package com.example.travel.service;
 
 import com.example.travel.domain.Qna;
-import com.example.travel.dto.login.QnaAnswerRequest;
+import com.example.travel.dto.admin.QnaAnswerRequest;
+import com.example.travel.dto.qna.QnaSubmitRequest;
 import com.example.travel.repository.QnaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -18,6 +18,8 @@ import java.util.List;
 public class QnaService {
 
     private final QnaRepository qnaRepository;
+    private final UserService userService;
+    private final ProductService productService;
 
     // QnaId로 Qna 가져오기
     public Qna findById(Long qnaId) {
@@ -142,9 +144,9 @@ public class QnaService {
     }
 
     // qnaIds 리스트로 Qna 삭제
-    public void deleteByIds(List<Long> qnAIds) {
-        for (Long qnAId : qnAIds) {
-            qnaRepository.deleteById(qnAId);
+    public void deleteByIds(List<Long> qnaIds) {
+        for (Long qnaId : qnaIds) {
+            qnaRepository.deleteById(qnaId);
         }
     }
 
@@ -158,5 +160,19 @@ public class QnaService {
     @Transactional
     public Qna deleteAnswer(Long qnaId) {
         return findById(qnaId).deleteAnswer();
+    }
+
+    public Page<Qna> findQnaByPrincipalWithPage(Principal principal, Pageable pageable){
+        return qnaRepository.findByUserUserId(userService.getUserId(principal), pageable)
+                .orElseThrow(() -> new IllegalArgumentException("not found qna"));
+    }
+
+    public Qna saveQna(QnaSubmitRequest request, Principal principal){
+        return qnaRepository.save(Qna.builder()
+                .product(productService.findProductByProductId(request.getProductId()))
+                .user(userService.getUserByPrincipal(principal))
+                .qnaQuestion(request.getQnaQuestion())
+                .qnaSecret(request.isQnaSecret())
+                .build());
     }
 }

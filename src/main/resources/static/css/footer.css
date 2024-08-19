@@ -1,78 +1,113 @@
-/* footer css */
 footer {
-    margin-top: 80px;
-    margin-bottom: 10px;
-    padding: 0 100px;
-    border-top: 1px solid black;
+    margin-top: 80px !important;
+    margin-bottom: 20px !important;
+    padding: 0 100px !important;
+    border-top: 1px solid black !important;
+    box-sizing: border-box !important;
 }
-footer > ul { /* 회사소개, 이용약관, 여행자보험, 개인정보취급방침 ul */
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-    text-align: center;
+
+footer > ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 20px 0 !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
 }
+
 footer > ul li {
-    display: inline-block;
+    display: inline-block !important;
+    box-sizing: border-box !important;
 }
+
 footer > ul li a {
-    text-decoration: none;
-    color: black;
+    text-decoration: none !important;
+    color: black !important;
+    box-sizing: border-box !important;
 }
+
 footer > ul li span {
-    margin: 0 10px 0 20px;
+    margin: 0 10px 0 20px !important;
+    box-sizing: border-box !important;
 }
+
 footer > div {
-    width: 1300px;
-    margin: 0 auto;
+    width: 1300px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
 }
-footer > div > a { /* 하단 로고 */
-    margin-top: 50px;
-    display: inline-block;
-    background-image: url('/images/logo_img/logo.png');
-    background-repeat: no-repeat;
-    width: 200px;
-    height: 94px;
-    background-size: 200px;
+
+footer > div > a {
+    margin-top: 30px !important;
+    display: inline-block !important;
+    background-image: url('/images/logo_img/logo.png') !important;
+    background-repeat: no-repeat !important;
+    width: 200px !important;
+    height: 94px !important;
+    background-size: 200px !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div {
-    display: inline-block;
-    vertical-align: top;
+    display: inline-block !important;
+    vertical-align: top !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(2) {
-    margin-left: 75px;
-    margin-right: 90px;
+    margin-left: 75px !important;
+    margin-right: 90px !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div > p {
-    padding: 7px 0;
+    padding: 1px 0 !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(2) > p:last-child {
-    padding: 20px 15px;
+    padding: 10px 15px !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(3) {
-    width: 300px;
-    border: 1px solid #ccc;
-    text-align: center;
-    margin-top: 15px;
+    width: 300px !important;
+    border: 1px solid #ccc !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(3) > p {
-    font-size: 16px;
-    padding: 5px 0;
-    color: #777;
-    font-weight: bold;
+    font-size: 15px !important;
+    padding: 1px 0 !important;
+    color: #777 !important;
+    font-weight: bold !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(3) > p:first-child {
-    background-color: #0081CA;
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 7px 0;
+    background-color: #0D569B !important;
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    padding: 5px 0 !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(3) > p:nth-child(2) {
-    font-size: 28px;
-    font-weight: bold;
-    padding-top: 10px;
-    color: black;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    padding: 3px 0 !important;
+    color: black !important;
+    box-sizing: border-box !important;
 }
+
 footer > div > div:nth-child(3) > p:last-child {
-    padding-bottom: 15px;
+    padding-bottom: 15px !important;
+    box-sizing: border-box !important;
 }
+
+footer > div > div > p {
+    margin: 0px;
+    height: 24px;
+}
+

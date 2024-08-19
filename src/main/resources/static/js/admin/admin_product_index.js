@@ -18,8 +18,6 @@ $(function() {
         }
     });
 
-    // 현재 페이지의 파라메타 변수를 가져옴
-    let url = new URLSearchParams(window.location.search);
     // 유저의 권한 가져옴
     let auth = $("#auth").val();
 
@@ -30,6 +28,9 @@ $(function() {
         $(".check:checked").each(function() {
            checkArr.push($(this).val());
         });
+
+        // 현재 페이지의 파라메타 변수를 가져옴
+        let url = new URLSearchParams(window.location.search);
 
         $.ajax({
             url: '/' + auth + '/product/delete',
@@ -56,6 +57,9 @@ $(function() {
         });
     });
 
+    // 현재 페이지의 파라메타 변수를 가져옴
+    let url = new URLSearchParams(window.location.search);
+
     // 숨김창 떴을 때 페이지 갱신없이 주소 URL 변경
     if(url.get("isDel") == 1 || url.get("isDel") == 0) {
         history.pushState(null, null, "/" + auth + "/product/index?page=" + url.get("page") + "&status=" + url.get("status") + "&mainCategory=" + url.get("mainCategory") + "&subCategory=" + url.get("subCategory") + "&searchKeyword=" + url.get("searchKeyword"));
@@ -74,9 +78,13 @@ $(function() {
             $("#selectBox > button").trigger('click');
         }
     });
-    // status, mainCategory, subCategory 선택 시 -> URL 로 보내기
-    $("#selectBox > select").on("change", function() {
+    // status, subCategory 선택 시 -> URL 로 보내기
+    $("#selectBox > select:nth-of-type(1), #selectBox > select:nth-of-type(3)").on("change", function() {
         location.href = "/" + auth + "/product/index?page=0&status=" + $("#selectBox > select:nth-of-type(1)").val() + "&mainCategory=" + $("#selectBox > select:nth-of-type(2)").val() + "&subCategory=" + $("#selectBox > select:nth-of-type(3)").val() + "&searchKeyword=" + $("#selectBox > input").val();
+    });
+    // mainCategory 선택 시 -> URL 로 보내기
+    $("#selectBox > select:nth-of-type(2)").on("change", function() {
+        location.href = "/" + auth + "/product/index?page=0&status=" + $("#selectBox > select:nth-of-type(1)").val() + "&mainCategory=" + $("#selectBox > select:nth-of-type(2)").val() + "&subCategory=&searchKeyword=" + $("#selectBox > input").val();
     });
 
     // 천단위 콤마
@@ -92,6 +100,25 @@ $(function() {
         $("tr:nth-child(" + i + ") > td:nth-of-type(11)").text(count.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     }
 
+    // 대분류 선택 시 중분류 display: none
+    var mainCategory = $("#selectBox > select:nth-of-type(2)").val();
+    if (mainCategory == '') {
+        $("#subCategory option").not("#subCategory [value='']").css("display","none");
+    }
+    else if (mainCategory == '국내여행') {
+        $("#subCategory option").not("#subCategory .korea, #subCategory [value='']").css("display","none");
+    }
+    else if (mainCategory == '일본여행') {
+        $("#subCategory option").not("#subCategory .japan, #subCategory [value='']").css("display","none");
+    }
+    else if (mainCategory == '중국여행') {
+        $("#subCategory option").not("#subCategory .china, #subCategory [value='']").css("display","none");
+    }
+    else if (mainCategory == '미국여행') {
+        $("#subCategory option").not("#subCategory .usa, #subCategory [value='']").css("display","none");
+    }
+    else if (mainCategory == '유럽여행') {
+        $("#subCategory option").not("#subCategory .europe, #subCategory [value='']").css("display","none");
+    }
+
 });
-
-

@@ -46,9 +46,6 @@
                                 </select>
                                 <select name="productRegionSubCategory" required>
                                     <option value="" hidden>--중분류--</option>
-                                    <option value="부산">부산</option>
-                                    <option value="오사카">오사카</option>
-                                    <option value="스웨덴">스웨덴</option>
                                     <option th:value="${product != null ? product.productRegionSubCategory : ''}" th:selected="${product != null}" hidden th:text="${product != null ? product.productRegionSubCategory : ''}"></option>
                                 </select>
                             </td>
@@ -82,7 +79,7 @@
                         <tr>
                             <th>여행일수</th>
                             <td>
-                                <input type="number" min="0" name="productTravelDays" th:value="${product != null ? product.productTravelDays : ''}" required>일
+                                <input type="number" min="0" required name="productTravelDays" th:value="${product != null ? product.productTravelDays : ''}">일
                             </td>
                             <th>수량</th>
                             <td>
@@ -146,14 +143,14 @@
                     <div>
                         <input type="file" multiple id="mainImg" name="productRepImg">
                         <div id="mainImgShowBox">
-                            <img th:each="productRepImg : ${productRepImgs}" class="mainImgShow" th:src="'http://192.168.106.12/travelFileServer' + ${productRepImg.productRepImgSrc}">
+                            <img th:each="productRepImg : ${productRepImgs}" class="mainImgShow" th:src="'http://192.168.106.12/travelFileServer/images/productRep/' + ${productRepImg.productRepImgSrc}">
                         </div>
                     </div>
                     <p>▶ 상세 이미지</p>
                     <div>
                         <input type="file" multiple id="detailImg" name="productInfoImg">
                         <div id="detailImgShowBox">
-                            <img th:each="productInfoImg : ${productInfoImgs}" class="detailImgShow" th:src="'http://192.168.106.12/travelFileServer' + ${productInfoImg.productInfoImgSrc}">
+                            <img th:each="productInfoImg : ${productInfoImgs}" class="detailImgShow" th:src="'http://192.168.106.12/travelFileServer/images/productInfo/' + ${productInfoImg.productInfoImgSrc}">
                         </div>
                     </div>
                 </div>

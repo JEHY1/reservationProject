@@ -203,7 +203,7 @@
     </div>
 
     <div class="row w-100 mx-auto mt-5">
-      <button th:class="${(order.orderStatus.equals('미입금') || order.orderStatus.equals('입금미확인')) || (order.payment != null && (order.payment.paymentStatus.equals('입금미확인') || order.payment.paymentStatus.equals('환불진행'))) ? 'col-auto px-5 py-3 ms-auto' : 'col-auto px-5 py-3 mx-auto'}" id="list-btn" type="button" onclick="location.href='/seller/orderList'">목록</button>
+      <button th:class="${(order.orderStatus.equals('미입금') || order.orderStatus.equals('입금미확인')) || (order.payment != null && (order.payment.paymentStatus.equals('입금미확인') || order.payment.paymentStatus.equals('환불진행'))) ? 'col-auto px-5 py-3 ms-auto' : 'col-auto px-5 py-3 mx-auto'}" id="list-btn" type="button" th:data-path="${path}">목록</button>
       <button th:if="${isOrderUpdatable && order.payment != null && order.payment.paymentStatus.equals('입금미확인')}" class="col-auto px-5 py-3 me-auto" id="paymentCheck-btn" type="button" style="margin-left: 20px;">입금을 확인하였습니다.</button>
       <button th:if="${isOrderUpdatable && order.payment != null && order.payment.paymentStatus.equals('환불진행')}" class="col-auto px py-3 me-auto" id="refund-btn" type="button" style="margin-left: 20px;">환불을 완료하였습니다.</button>
       <button th:if="${!isOrderUpdatable && (order.orderStatus.equals('미입금') || order.orderStatus.equals('입금미확인'))}" class="col-auto py-3 me-auto" id="orderCancel-btn" type="button" style="margin-left: 20px;">주문기간 만료(주문취소)</button>

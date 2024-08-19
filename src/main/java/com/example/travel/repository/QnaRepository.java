@@ -40,7 +40,7 @@ public interface QnaRepository extends JpaRepository<Qna, Long> {
     // 답변완료에서 userRealName 으로 검색해서 userRealName 오름차순, qnaId 내림차순으로 페이징 처리한 Page<QnA>
     Optional<Page<Qna>> findByQnaAnswerNotNullAndUserUserRealNameContainingOrderByUserUserRealNameAscQnaIdDesc(String userRealName, Pageable pageable);
 
-
+    Optional<Page<Qna>> findByUserUserId(long userId, Pageable pageable);
 
 
 }

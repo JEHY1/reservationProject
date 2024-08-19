@@ -487,6 +487,55 @@ if(orderButton){
     });
 }
 
+function checkLogin(){
+    let returnVal = false;
+
+    httpRequest(`/api/checkLogin`, 'GET', null)
+    .then(response => {
+        console.log(response);
+        if(response.ok){
+            return response.json();
+        }
+    })
+    .then(data => {
+        console.log(data);
+        console.log(data.value);
+        if(data.value === false){
+            location.href = "/login";
+        }
+        else{
+            returnVal = true;
+        }
+    });
+    return returnVal;
+}
+
+//qna등록
+const qnaSubmitButton = document.getElementById('qnaSubmit-btn');
+
+if(qnaSubmitButton){
+    qnaSubmitButton.addEventListener('click', () => {
+        let body = JSON.stringify({
+            productId : document.getElementById('productId').value,
+            qnaQuestion : document.getElementById('qnaQuestion').value,
+            qnaSecret : document.getElementById('qnaSecret').checked
+        });
+
+        console.log(body);
+
+        httpRequest(`/api/qnaSubmit`, 'POST', body)
+        .then(response => {
+            if(response.ok){
+                alert('문의 등록을 완료하였습니다.');
+                location.reload();
+            }
+            else{
+                alert('error1');
+            }
+        });
+    });
+}
+
 //초기값 설정
 if(document.getElementById('discountPercentage')){
     let percentage = document.getElementById('discountPercentage');

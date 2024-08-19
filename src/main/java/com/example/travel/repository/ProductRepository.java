@@ -61,6 +61,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT * FROM product_tb WHERE product_status = '정상' ORDER BY product_registration_date DESC LIMIT 12", nativeQuery = true)
     Optional<List<Product>> newProduct();
+    @Query(value = "SELECT p.* FROM order_detail_tb od JOIN order_tb o ON od.order_id = o.order_id JOIN product_tb p ON o.product_id = p.product_id " +
+            "GROUP BY p.product_id ORDER BY SUM(od.order_detail_traveler_count) DESC LIMIT 5;", nativeQuery = true)
+    Optional<List<Product>> bestProduct();
     Optional<List<Product>> findAllByProductTitleContaining(String searchText);
     Optional<List<Product>> findAllByProductRegionMainCategory(String mainCategory);
     Optional<List<Product>> findAllByProductRegionSubCategory(String subCategory);

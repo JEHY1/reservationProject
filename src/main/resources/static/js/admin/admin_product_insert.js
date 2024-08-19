@@ -50,4 +50,40 @@ $(function() {
         }
 
     });
+
+    // 대분류 선택 시 중분류 생성
+    $("select:nth-of-type(1)").on("change", function() {
+
+        var Korea = ['서울','부산','제주도','울릉도'];
+        var Japan = ['오사카','도쿄','후쿠오카','오키나와','삿포로'];
+        var China = ['베이징','상하이','칭다오','광저우','하얼빈'];
+        var USA = ['하와이','뉴욕','로스앤젤레스','샌프란시스코','라스베이거스','시카고'];
+        var Europe = ['파리','스페인','이탈리아','런던','영국','프랑스','독일'];
+        var mainCategory = $("select:nth-of-type(1)").val();
+        var option;
+
+        if (mainCategory == '국내여행') {
+            option = Korea;
+        }
+        else if (mainCategory == '일본여행') {
+            option = Japan;
+        }
+        else if (mainCategory == '중국여행') {
+            option = China;
+        }
+        else if (mainCategory == '미국여행') {
+            option = USA;
+        }
+        else if (mainCategory == '유럽여행') {
+            option = Europe;
+        }
+
+        $("select:nth-of-type(2)").empty();
+        $("select:nth-of-type(2)").append("<option val='' hidden>--중분류--</option>");
+        for (var i = 0; i < option.length; i++) {
+            $("select:nth-of-type(2)").append("<option val='" + option[i] + "'>" + option[i] + "</option>");
+        }
+
+    });
+
 });

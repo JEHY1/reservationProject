@@ -229,3 +229,25 @@ header {
     text-decoration: none;
     font-size: 14px;
 }
+
+#searchedField{
+    left: 400px !important;
+}
+
+.cursor{
+    cursor: pointer;
+}
+
+.productNameField:hover{
+  background-color: gainsboro;
+}
+
+.d-hidden{
+    display: none;
+}
+
+#upper > ul{
+    margin: 0px !important;
+    height 34px !important;
+}
+

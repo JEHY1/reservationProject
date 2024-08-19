@@ -18,8 +18,6 @@ $(function() {
         }
     });
 
-    // 현재 페이지의 파라메타 변수를 가져옴
-    let url = new URLSearchParams(window.location.search);
     // 유저의 권한 가져옴
     let auth = $("#auth").val();
 
@@ -30,6 +28,9 @@ $(function() {
         $(".check:checked").each(function() {
            checkArr.push($(this).val());
         });
+
+        // 현재 페이지의 파라메타 변수를 가져옴
+        let url = new URLSearchParams(window.location.search);
 
         $.ajax({
             url: '/' + auth + '/qna/delete',
@@ -56,6 +57,9 @@ $(function() {
         });
     });
 
+    // 현재 페이지의 파라메타 변수를 가져옴
+    let url = new URLSearchParams(window.location.search);
+
     // 삭제창 떴을 때 페이지 갱신없이 주소 URL 변경
     if(url.get("isDel") == 1 || url.get("isDel") == 0) {
         history.pushState(null, null, "/" + auth + "/qna/index?page=" + url.get("page") + "&group=" + url.get("group") + "&category=" + url.get("category") + "&searchKeyword=" + url.get("searchKeyword"));
@@ -81,5 +85,3 @@ $(function() {
 
 
 });
-
-

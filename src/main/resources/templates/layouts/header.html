@@ -6,21 +6,19 @@
         </span>
         <ul>
             <li sec:authorize="isAnonymous()"><a href="/login">로그인</a><span>l</span></li>
-            <li sec:authorize="isAnonymous()"><a href="/join/new">회원가입</a><span>l</span></li>
-            <li sec:authorize="isAnonymous()"><a href="#">예약조회</a><span>l</span></li>
-            <li sec:authorize="isAuthenticated()"><a href="/user/information/confirm/new"><span sec:authentication="name"></span>님</a><span>l</span></li>
-            <li sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a><span>l</span></li>
-            <li sec:authorize="isAuthenticated()"><a href="#">주문내역</a><span>l</span></li>
-            <li><a href="#">공지사항</a></li>
+            <li sec:authorize="isAnonymous()"><a href="/join/new">회원가입</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/myPage"><span sec:authentication="name"></span>님</a><span>l</span></li>
+            <li sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></li>
         </ul>
     </div>
     <div id="search">
-        <div id="logoBox">
+        <div id="logoBox" style="height: 140px; position: relative;">
             <a href="/" id="logo"></a>
             <div class="searchBox">
-                <input type="search" placeholder="검색어를 입력하세요.">
+                <input type="search" id="searchBar" placeholder="검색어를 입력하세요.">
                 <button type="button"></button>
             </div>
+            <div class="d-hidden" id="searchedField" style="background-color: white; width: 880px; border: 1px solid gray; position: absolute; z-index: 1; top: 90px; left: 340px !important;"></div>
         </div>
     </div>
     <ul class="maintab">
@@ -29,58 +27,94 @@
             <ul>
                 <li></li>
                 <li>
-                    <a href="#">여행1</a>
-                    <a href="#">여행1</a>
-                    <a href="#">여행1</a>
-                    <a href="#">여행1</a>
+                    <a href="/product?subCategory=서울">서울</a>
+                    <a href="/product?subCategory=부산">부산</a>
+                    <a href="/product?subCategory=제주도">제주도</a>
+                    <a href="/product?subCategory=울릉도">울릉도</a>
                 </li>
                 <li>
-                    <a href="#">여행1</a>
-                    <a href="#">여행1</a>
+                    <a href="/product?subCategory=오사카">오사카</a>
+                    <a href="/product?subCategory=도쿄">도쿄</a>
+                    <a href="/product?subCategory=후쿠오카">후쿠오카</a>
+                    <a href="/product?subCategory=오키나와">오키나와</a>
+                    <a href="/product?subCategory=삿포로">삿포로</a>
                 </li>
                 <li>
-                    <a href="#">여행1</a>
+                    <a href="/product?subCategory=베이징">베이징</a>
+                    <a href="/product?subCategory=상하이">상하이</a>
+                    <a href="/product?subCategory=칭다오">칭다오</a>
+                    <a href="/product?subCategory=광저우">광저우</a>
+                    <a href="/product?subCategory=하얼빈">하얼빈</a>
                 </li>
                 <li>
-                    <a href="#">여행3</a>
+                    <a href="/product?subCategory=하와이">하와이</a>
+                    <a href="/product?subCategory=뉴욕">뉴욕</a>
+                    <a href="/product?subCategory=로스앤젤레스">로스앤젤레스</a>
+                    <a href="/product?subCategory=샌프란시스코">샌프란시스코</a>
+                    <a href="/product?subCategory=라스베이거스">라스베이거스</a>
+                    <a href="/product?subCategory=시카고">시카고</a>
                 </li>
                 <li>
-                    <a href="#">여행4</a>
+                    <a href="/product?subCategory=파리">파리</a>
+                    <a href="/product?subCategory=스페인">스페인</a>
+                    <a href="/product?subCategory=이탈리아">이탈리아</a>
+                    <a href="/product?subCategory=런던">런던</a>
+                    <a href="/product?subCategory=영국">영국</a>
+                    <a href="/product?subCategory=프랑스">프랑스</a>
+                    <a href="/product?subCategory=독일">독일</a>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="#"><span>국내여행</span></a>
+            <a href="/product?mainCategory=국내여행"><span>국내여행</span></a>
             <ul>
-                <li><a href="#">여행1</a></li>
-                <li><a href="#">여행1</a></li>
-                <li><a href="#">여행1</a></li>
-                <li><a href="#">여행1</a></li>
+                <li><a href="/product?subCategory=서울">서울</a></li>
+                <li><a href="/product?subCategory=부산">부산</a></li>
+                <li><a href="/product?subCategory=제주도">제주도</a></li>
+                <li><a href="/product?subCategory=울릉도">울릉도</a></li>
             </ul>
         </li>
         <li>
-            <a href="#"><span>일본여행</span></a>
+            <a href="/product?mainCategory=일본여행"><span>일본여행</span></a>
             <ul>
-                <li><a href="#">여행1</a></li>
-                <li><a href="#">여행1</a></li>
+                <li><a href="/product?subCategory=오사카">오사카</a></li>
+                <li><a href="/product?subCategory=도쿄">도쿄</a></li>
+                <li><a href="/product?subCategory=후쿠오카">후쿠오카</a></li>
+                <li><a href="/product?subCategory=오키나와">오키나와</a></li>
+                <li><a href="/product?subCategory=삿포로">삿포로</a></li>
             </ul>
         </li>
         <li>
-            <a href="#"><span>중국여행</span></a>
+            <a href="/product?mainCategory=중국여행"><span>중국여행</span></a>
             <ul>
-                <li><a href="#">여행1</a></li>
+                <li><a href="/product?subCategory=베이징">베이징</a></li>
+                <li><a href="/product?subCategory=상하이">상하이</a></li>
+                <li><a href="/product?subCategory=칭다오">칭다오</a></li>
+                <li><a href="/product?subCategory=광저우">광저우</a></li>
+                <li><a href="/product?subCategory=하얼빈">하얼빈</a></li>
             </ul>
         </li>
         <li>
-            <a href="#"><span>미국여행</span></a>
+            <a href="/product?mainCategory=미국여행"><span>미국여행</span></a>
             <ul>
-                <li><a href="#">여행3</a></li>
+                <li><a href="/product?subCategory=하와이">하와이</a></li>
+                <li><a href="/product?subCategory=뉴욕">뉴욕</a></li>
+                <li><a href="/product?subCategory=로스앤젤레스">로스앤젤레스</a></li>
+                <li><a href="/product?subCategory=샌프란시스코">샌프란시스코</a></li>
+                <li><a href="/product?subCategory=라스베이거스">라스베이거스</a></li>
+                <li><a href="/product?subCategory=시카고">시카고</a></li>
             </ul>
         </li>
         <li>
-            <a href="#"><span>유럽여행</span></a>
+            <a href="/product?mainCategory=유럽여행"><span>유럽여행</span></a>
             <ul>
-                <li><a href="#">여행4</a></li>
+                <li><a href="/product?subCategory=파리">파리</a></li>
+                <li><a href="/product?subCategory=스페인">스페인</a></li>
+                <li><a href="/product?subCategory=이탈리아">이탈리아</a></li>
+                <li><a href="/product?subCategory=런던">런던</a></li>
+                <li><a href="/product?subCategory=영국">영국</a></li>
+                <li><a href="/product?subCategory=프랑스">프랑스</a></li>
+                <li><a href="/product?subCategory=독일">독일</a></li>
             </ul>
         </li>
     </ul>
@@ -91,3 +125,4 @@
         <a href="javascript:void(0)">확인</a>
     </div>
 </div>
+<script src="/js/search.js"></script>

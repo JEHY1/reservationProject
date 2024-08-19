@@ -40,7 +40,7 @@ public class PaymentService {
         System.err.println("orderDepartDate : " + request.getOrderDepartDate());
         String[] date = request.getOrderDepartDate().split("-");
         LocalDateTime departDate = LocalDateTime.of(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), 0, 0, 0);
-        LocalDateTime endDate = departDate.plusDays(4).minusSeconds(1);
+        LocalDateTime endDate = departDate.plusDays(productService.findProductByProductId(request.getProductId()).getProductTravelDays()).minusSeconds(1);
 
         Order order = orderRepository.save(Order.builder()
                 .product(productService.findProductByProductId(request.getProductId()))
@@ -133,8 +133,14 @@ public class PaymentService {
 
     public SearchOrderResponse searchOrder(SearchOrderRequest request, Principal principal, Pageable pageable){
 
-        List<Product> productList = productService.findProductByPrincipal(principal);
-        List<Order> orderList = findOrderByProductIdInSortByOrderDate(productList.stream().mapToLong(Product::getProductId).boxed().collect(Collectors.toList()));
+        List<Order> orderList;
+        if(userService.getUserByPrincipal(principal).getUserRole().equals("ADMIN")){
+            orderList = findAllOrder();
+        }
+        else{
+            List<Product> productList = productService.findProductByPrincipal(principal);
+            orderList = findOrderByProductIdInSortByOrderDate(productList.stream().mapToLong(Product::getProductId).boxed().collect(Collectors.toList()));
+        }
 
         //상품 id로 필터
         if(request.getProductId() != null){
@@ -359,5 +365,10 @@ public class PaymentService {
     public List<Order> findOrderByPrincipal(Principal principal){
         return orderRepository.findAllByUserUserId(userService.getUserId(principal))
                 .orElseThrow(() -> new IllegalArgumentException("not found Order"));
+    }
+
+    public List<Order> findAllOrder(){
+        return orderRepository.findAll();
+
     }
 }

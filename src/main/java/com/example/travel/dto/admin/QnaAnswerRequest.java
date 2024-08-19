@@ -1,4 +1,4 @@
-package com.example.travel.dto.login;
+package com.example.travel.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

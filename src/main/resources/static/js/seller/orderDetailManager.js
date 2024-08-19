@@ -85,6 +85,17 @@ if(orderCancelButton){
     })
 }
 
+//목록
+const listButton = document.getElementById('list-btn');
+
+if(listButton){
+    let path = listButton.getAttribute('data-path');
+    listButton.addEventListener('click', () => {
+        location.href = '/' + path + '/orderList';
+    });
+}
+
+
 
 //원화
 if(document.getElementsByClassName('price')){

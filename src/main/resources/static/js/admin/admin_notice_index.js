@@ -18,9 +18,6 @@ $(function() {
         }
     });
 
-    // 현재 페이지의 파라메타 변수를 가져옴
-    let url = new URLSearchParams(window.location.search);
-
     // 체크박스 체크 후 삭제 버튼 눌렀을 때
     $("#upperLine p:nth-child(2) a:last-child").on("click", function() {
 
@@ -28,6 +25,9 @@ $(function() {
         $(".check:checked").each(function() {
            checkArr.push($(this).val());
         });
+
+        // 현재 페이지의 파라메타 변수를 가져옴
+        let url = new URLSearchParams(window.location.search);
 
         $.ajax({
             url:'/admin/notice/delete',
@@ -53,6 +53,9 @@ $(function() {
         });
     });
 
+    // 현재 페이지의 파라메타 변수를 가져옴
+    let url = new URLSearchParams(window.location.search);
+
     // 삭제창 떴을 때 페이지 갱신없이 주소 URL 변경
     if(url.get("isDel") == 1 || url.get("isDel") == 0) {
         history.pushState(null, null, "/admin/notice/index?page=" + url.get("page") + "&category=" + url.get("category") + "&searchKeyword=" + url.get("searchKeyword"));
@@ -75,5 +78,3 @@ $(function() {
 
 
 });
-
-
