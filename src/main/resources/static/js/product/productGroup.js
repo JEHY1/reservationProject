@@ -3,18 +3,17 @@ function getUrlParameter(name) {
     return urlParams.get(name);
 }
 
-function toWon(price){
+function toWon(price) {
     let PriceText = '';
-    price += '';
+    price = price.toString(); // 숫자를 문자열로 변환
 
-    while(price.length > 3){
-        console.log(price.substring(price.length - 3, price.length));
-        PriceText += ',' + price.substring(price.length - 3, price.length);
+    while (price.length > 3) {
+        // 뒤에서 세 자리씩 끊어서 콤마와 함께 추가
+        PriceText = ',' + price.substring(price.length - 3) + PriceText;
         price = price.substring(0, price.length - 3);
-        console.log(price);
-        console.log(PriceText);
     }
-    console.log(price + PriceText + '원');
+
+    // 남아있는 숫자 부분과 함께 "원"을 붙여 반환
     return price + PriceText + '원';
 }
 
@@ -104,11 +103,6 @@ if(document.getElementsByClassName('salePercent')){
 //원화 표시
 if(document.getElementsByClassName('price')){
     Array.from(document.getElementsByClassName('price')).forEach(comp => comp.textContent = toWon(comp.textContent));
-}
-
-//헤더 border-bottom 적용
-if(document.getElementsByTagName('header')){
-    document.getElementsByTagName('header')[0].classList.add('border-b');
 }
 
 //이미지 없을 시 특정 이미지 표시

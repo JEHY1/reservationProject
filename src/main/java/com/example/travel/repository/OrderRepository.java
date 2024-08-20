@@ -14,7 +14,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Page<Order>> findAllByUserUserId(long userId, Pageable pageable);
     Optional<List<Order>> findAllByUserUserId(long userId);
     Optional<List<Order>> findAllByProductProductIdInOrderByOrderDateDesc(List<Long> productId);
-    Optional<List<Order>> findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatus(long userId, LocalDateTime now, String orderStatus);
-    Optional<List<Order>> findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderEndDateIsAfterAndOrderStatus(long userId, LocalDateTime now, LocalDateTime deadLine, String orderStatus);
+    Optional<List<Order>> findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatusOrderByOrderDepartureDateDesc(long userId, LocalDateTime now, String orderStatus);
+    Optional<List<Order>> findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderEndDateIsAfterAndOrderStatusOrderByOrderDepartureDate(long userId, LocalDateTime now, LocalDateTime deadLine, String orderStatus);
 
 }

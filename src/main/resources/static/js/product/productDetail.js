@@ -141,19 +141,20 @@ function selectDate(comp){
     });
 }
 
-function toWon(price){
+function toWon(price) {
     let PriceText = '';
-    price += '';
+    price = price.toString(); // 숫자를 문자열로 변환
 
-    while(price.length > 3){
-        console.log(price.substring(price.length - 3, price.length));
-        PriceText += ',' + price.substring(price.length - 3, price.length);
+    while (price.length > 3) {
+        // 뒤에서 세 자리씩 끊어서 콤마와 함께 추가
+        PriceText = ',' + price.substring(price.length - 3) + PriceText;
         price = price.substring(0, price.length - 3);
-        console.log(price);
-        console.log(PriceText);
     }
+
+    // 남아있는 숫자 부분과 함께 "원"을 붙여 반환
     return price + PriceText + '원';
 }
+
 
 function toEssence(price){
     return parseInt(price.replaceAll(',', '').replace('원', ''));
@@ -335,7 +336,11 @@ if(options){
 
                     comp5.textContent = parseInt(comp5.textContent) + 1;
                     comp9.textContent = toWon(toEssence(comp9.textContent) + parseInt(option.children[1].value));
+                    console.log('price: ' + (toEssence(document.getElementById('totalPrice').textContent) + parseInt(option.children[1].value)));
+                    console.log('totalPrice : ' + toEssence(document.getElementById('totalPrice').textContent));
+                    console.log('optionPrice : ' + parseInt(option.children[1].value));
                     document.getElementById('totalPrice').textContent = toWon(toEssence(document.getElementById('totalPrice').textContent) + parseInt(option.children[1].value)); //최종금액 변경
+
 
                     let selectedOptionCountComp = document.getElementById('selectedOptionCount' + option.children[0].value);
                     selectedOptionCountComp.value = parseInt(selectedOptionCountComp.value) + 1;

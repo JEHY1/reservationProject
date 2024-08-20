@@ -19,11 +19,12 @@
     font-size: 26px;
 }
 table{
+    border-collapse: collapse;
     margin-left: 20px;
 }
 td {
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
     padding: 20px;
     text-align: center;
     font-size: 13px;
@@ -79,10 +80,10 @@ tr > td:nth-child(4), td:nth-child(5){
 }
 .back-btn {
     width: 100px;
-    border: solid #eee 1px;
+    border: solid #CCC 1px;
     font-size: 13px;
     text-align: center;
-    color: #ccc;
+    color: #999;
     text-decoration: none;
     padding: 10px 30px;
     margin: 5px;

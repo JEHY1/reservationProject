@@ -77,4 +77,8 @@ public class Payment {
     public void updatePaymentStatus(String paymentStatus){
         this.paymentStatus = paymentStatus;
     }
+
+    public void updateAccountInfo(String paymentRefundAccount){
+        this.paymentRefundAccount = paymentRefundAccount;
+    }
 }

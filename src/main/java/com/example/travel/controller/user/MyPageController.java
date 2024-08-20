@@ -64,7 +64,7 @@ public class MyPageController {
     }
 
     @GetMapping("/myPage/qnaList")
-    public String qnaList(Principal principal, Model model, @PageableDefault(page = 0, size = 10) Pageable pageable){
+    public String qnaList(Principal principal, Model model, @PageableDefault(page = 0, size = 10, sort = "qnaSubmitDate", direction = Sort.Direction.DESC) Pageable pageable){
 
         model.addAttribute("qnaPage", qnaService.findQnaByPrincipalWithPage(principal, pageable));
 

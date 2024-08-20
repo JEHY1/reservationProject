@@ -12,7 +12,12 @@ function httpRequest(url, method, body){
 const searchBar = document.getElementById('searchBar');
 
 if(searchBar){
-    searchBar.addEventListener('focus', () => document.getElementById('searchedField').classList.remove('d-hidden'));
+    searchBar.addEventListener('focus', () => {
+        if(document.getElementById('searchedField').children[0] != null){
+            document.getElementById('searchedField').classList.remove('d-hidden');
+        }
+
+    });
     searchBar.addEventListener('blur', () => {
         wait(100)
         .then(() => document.getElementById('searchedField').classList.add('d-hidden'));
@@ -23,7 +28,7 @@ if(searchBar){
             // Enter 키가 눌렸을 때 수행할 동작
             event.preventDefault(); // 기본 Enter 동작을 막습니다 (필요 시)
             console.log(event.key);
-            document.getElementById('productSearch-btn').click();
+            document.getElementById('search-btn').click();
         }
     });
 
@@ -49,7 +54,7 @@ if(searchBar){
                 console.log(data);
                 data.forEach(result => {
                     let fullText = document.createElement('div');
-                    fullText.setAttribute('class', 'row mx-auto ps-2 productNameField');
+                    fullText.setAttribute('class', 'row mx-auto ps-2 productNameField cursor');
                     fullText.setAttribute('onclick', 'getProductName(this)');
 
                     let frontText = document.createElement('div');
@@ -70,10 +75,19 @@ if(searchBar){
                     fullText.appendChild(endText);
 
                 });
+            })
+            .then(() => {
+                if(document.getElementById('searchedField').children[0] != null){
+                    document.getElementById('searchedField').classList.remove('d-hidden');
+                }
+                else{
+                    document.getElementById('searchedField').classList.add('d-hidden');
+                }
             });
         }
         else{
             removeAllChildNodes(document.getElementById('searchedField'));
+            document.getElementById('searchedField').classList.add('d-hidden');
         }
     });
 }
@@ -101,4 +115,12 @@ function removeAllChildNodes(parent) {
 function getProductName(Comp){
     document.getElementById('searchBar').value = Comp.children[0].textContent + Comp.children[1].textContent + Comp.children[2].textContent;
     document.getElementById('searchedField').classList.add('d-hidden');
+}
+
+const searchButton = document.getElementById('search-btn');
+
+if(searchButton){
+    searchButton.addEventListener('click', () => {
+        location.href = '/product?searchText=' + searchButton.previousElementSibling.value;
+    });
 }

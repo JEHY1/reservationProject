@@ -12,17 +12,17 @@ function toEssence(price){
     return parseInt(price.replaceAll(',', '').replace('원', ''));
 }
 
-function toWon(price){
+function toWon(price) {
     let PriceText = '';
-    price += '';
+    price = price.toString(); // 숫자를 문자열로 변환
 
-    while(price.length > 3){
-        console.log(price.substring(price.length - 3, price.length));
-        PriceText += ',' + price.substring(price.length - 3, price.length);
+    while (price.length > 3) {
+        // 뒤에서 세 자리씩 끊어서 콤마와 함께 추가
+        PriceText = ',' + price.substring(price.length - 3) + PriceText;
         price = price.substring(0, price.length - 3);
-        console.log(price);
-        console.log(PriceText);
     }
+
+    // 남아있는 숫자 부분과 함께 "원"을 붙여 반환
     return price + PriceText + '원';
 }
 
@@ -30,6 +30,24 @@ const orderCheckButton = document.getElementById('orderCheck-btn');
 
 if(orderCheckButton){
     orderCheckButton.addEventListener('click', () => {
+        if(document.getElementById('paymentRefundAccountBank').value === '0'){
+            alert('환불 계좌 은행은 선택해주세요.');
+            setTimeout(() => {document.getElementById('paymentRefundAccountBank').scrollIntoView({ behavior: 'smooth', block: 'center' })}, 0);
+            return ;
+        }
+
+        if(document.getElementById('paymentRefundAccountName').value === ''){
+            alert('환불 계좌 예금주명을 입력해주세요.');
+            setTimeout(() => {document.getElementById('paymentRefundAccountName').scrollIntoView({ behavior: 'smooth', block: 'center' })}, 0);
+            return ;
+        }
+
+        if(document.getElementById('paymentRefundAccountNumber'). value === ''){
+            alert('환불 계좌번호를 입력해주세요.');
+            setTimeout(() => {document.getElementById('paymentRefundAccountNumber').scrollIntoView({ behavior: 'smooth', block: 'center' })}, 0);
+            return ;
+        }
+
         let body = JSON.stringify({
             orderId: document.getElementById('orderId').value,
             paymentRefundAccount: document.getElementById('paymentRefundAccountBank').value + ' ' + document.getElementById('paymentRefundAccountNumber').value,
@@ -82,6 +100,18 @@ if(orderCancelButton){
             }
         });
 
+    });
+}
+
+const paymentRefundAccountNumberComp = document.getElementById('paymentRefundAccountNumber');
+
+if(paymentRefundAccountNumberComp){
+    paymentRefundAccountNumberComp.addEventListener('input', () => {
+       let regex = /^[0-9]{0,16}$/;
+
+       if(!regex.test(paymentRefundAccountNumberComp.value)){
+            paymentRefundAccountNumberComp.value = paymentRefundAccountNumberComp.value.substring(0, paymentRefundAccountNumberComp.value.length - 1);
+       }
     });
 }
 

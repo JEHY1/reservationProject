@@ -28,17 +28,17 @@ function toEssence(price){
     return parseInt(price.replaceAll(',', '').replace('원', ''));
 }
 
-function toWon(price){
+function toWon(price) {
     let PriceText = '';
-    price += '';
+    price = price.toString(); // 숫자를 문자열로 변환
 
-    while(price.length > 3){
-        console.log(price.substring(price.length - 3, price.length));
-        PriceText += ',' + price.substring(price.length - 3, price.length);
+    while (price.length > 3) {
+        // 뒤에서 세 자리씩 끊어서 콤마와 함께 추가
+        PriceText = ',' + price.substring(price.length - 3) + PriceText;
         price = price.substring(0, price.length - 3);
-        console.log(price);
-        console.log(PriceText);
     }
+
+    // 남아있는 숫자 부분과 함께 "원"을 붙여 반환
     return price + PriceText + '원';
 }
 
@@ -64,6 +64,34 @@ const orderButton = document.getElementById('order-btn');
 if(orderButton){
     orderButton.addEventListener('click', () => {
         console.log('click');
+
+        if(document.getElementById('bankTransferPay').checked){
+            if(document.getElementById('depositor').value === ''){
+                alert('입금자명을 입력해주세요.');
+                // alert 창이 닫힌 후에 실행되도록 setTimeout으로 지연
+                setTimeout(() => {
+                    let depositorInput = document.getElementById('depositor');
+                    // 스크롤을 해당 요소로 이동
+                    depositorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // 포커스를 입력 필드로 이동
+                    depositorInput.focus();
+                }, 0);
+                return ;
+            }
+        }
+
+        if(!document.getElementById('refundAgreement').checked){
+            alert('환불 정책 약관에 동의해주세요.');
+            setTimeout(() => {
+                document.getElementById('refundAgreement').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 0);
+            return ;
+        }
+        if(!document.getElementById('personalInfoAgreement').checked){
+            alert('개인정보 이용약관에 동의해주세요.');
+            return ;
+        }
+
         let body = JSON.stringify({
             productId : document.getElementById('productId').value,
             orderDepartDate : document.getElementById('departDate').value,
@@ -95,6 +123,25 @@ if(orderButton){
             location.replace('/orderDetail/' + json.orderId);
         })
 
+    });
+}
+
+//유효성 검사
+if(document.getElementsByClassName('userInfo')){
+    let phone2Comp = document.getElementById('userPhone2');
+    let phone3Comp = document.getElementById('userPhone3');
+    phone2Comp.addEventListener('input', () => {
+        let regex = /^[0-9]{0,4}$/;
+        if(!regex.test(phone2Comp.value)){
+            phone2Comp.value = phone2Comp.value.substring(0, phone2Comp.value.length - 1);
+        }
+    });
+
+    phone3Comp.addEventListener('input', () => {
+        let regex = /^[0-9]{0,4}$/;
+        if(!regex.test(phone3Comp.value)){
+            phone3Comp.value = phone3Comp.value.substring(0, phone3Comp.value.length - 1);
+        }
     });
 }
 

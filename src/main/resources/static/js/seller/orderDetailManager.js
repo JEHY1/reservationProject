@@ -1,14 +1,14 @@
-function toWon(price){
+function toWon(price) {
     let PriceText = '';
-    price += '';
+    price = price.toString(); // 숫자를 문자열로 변환
 
-    while(price.length > 3){
-        console.log(price.substring(price.length - 3, price.length));
-        PriceText += ',' + price.substring(price.length - 3, price.length);
+    while (price.length > 3) {
+        // 뒤에서 세 자리씩 끊어서 콤마와 함께 추가
+        PriceText = ',' + price.substring(price.length - 3) + PriceText;
         price = price.substring(0, price.length - 3);
-        console.log(price);
-        console.log(PriceText);
     }
+
+    // 남아있는 숫자 부분과 함께 "원"을 붙여 반환
     return price + PriceText + '원';
 }
 

@@ -62,10 +62,11 @@ $(function() {
         // 연락처 중복 체크
         else {
             $.ajax({
-                url:'/phone/check',
+                url:'/admin/phone/check',
                 type : "post",
                 data : {
-                    "userPhone" : userPhone
+                    "userPhone" : userPhone,
+                    "userId" : $("input[type=hidden]").val()
                 },
                 dataType : 'text',
                 success : function(data) {
@@ -105,10 +106,11 @@ $(function() {
         // 이메일 중복 체크
         else {
             $.ajax({
-                url:'/email/check',
+                url:'/admin/email/check',
                 type : "post",
                 data : {
-                    "userEmail" : userEmail
+                    "userEmail" : userEmail,
+                    "userId" : $("input[type=hidden]").val()
                 },
                 dataType : 'text',
                 success : function(data) {

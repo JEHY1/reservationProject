@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -111,5 +112,25 @@ public class AdminUserController {
         else {
             return "null";
         }
+    }
+
+    // 회원정보 수정 시 기존 연락처 및 중복 체크 - user_information_modify.js에 ajax 연결
+    @PostMapping("/admin/phone/check")
+    @ResponseBody
+    public String adminPhoneReCheck(String userPhone, Long userId) {
+
+        System.out.println("휴대폰번호 확인: " + userPhone);
+
+        return userService.phoneReCheck(userPhone, userId);
+    }
+
+    // 회원정보 수정 시 기존 이메일 및 중복 체크 - user_information_modify.js에 ajax 연결
+    @PostMapping("/admin/email/check")
+    @ResponseBody
+    public String adminEmailReCheck(String userEmail, Long userId) {
+
+        System.out.println("이메일 확인: " + userEmail);
+
+        return userService.emailReCheck(userEmail, userId);
     }
 }

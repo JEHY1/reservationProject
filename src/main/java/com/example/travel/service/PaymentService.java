@@ -61,7 +61,7 @@ public class PaymentService {
                     .productOption(productService.findProductOptionByProductOptionId(optionId))
                     .orderDetailTravelerCount(request.getCountList().get(index))
                     .orderDetailTotalSoldProductOptionRegularPrice(request.getTotalOptionRegularPriceList().get(index))
-                    .orderDetailTotalSoldProductOptionDiscountPrice(request.getTotalOptionDiscountPriceList().get(index++))
+                    .orderDetailTotalSoldProductOptionDiscountPrice(request.getTotalOptionDiscountPriceList().get(index) != null ? request.getTotalOptionDiscountPriceList().get(index++) : request.getTotalOptionRegularPriceList().get(index++))
                     .build());
         }
         return order;
@@ -120,6 +120,7 @@ public class PaymentService {
             System.err.println(payment);
             if(payment.getPaymentCheck() == null){
                 payment.updatePaymentCheck("확인재요청");
+                payment.updateAccountInfo(request.getPaymentRefundAccount());
                 return Payment.builder()
                         .paymentCheck("재요청 성공")
                         .build();
@@ -259,7 +260,7 @@ public class PaymentService {
     }
 
     public MyWritableReviewResponse myWritableReviewList(Principal principal, Pageable pageable){
-        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderEndDateIsAfterAndOrderStatus(userService.getUserId(principal), LocalDateTime.now(), LocalDate.now().atStartOfDay().minusDays(31), "결제완료").orElse(null);
+        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderEndDateIsAfterAndOrderStatusOrderByOrderDepartureDate(userService.getUserId(principal), LocalDateTime.now(), LocalDate.now().atStartOfDay().minusDays(31), "결제완료").orElse(null);
 
         System.err.println("deadLine : " + LocalDate.now().atStartOfDay().minusDays(31));
 
@@ -295,7 +296,7 @@ public class PaymentService {
     }
 
     public MyWrittenReviewResponse myWrittenReviewList(Principal principal, Pageable pageable){
-        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatus(userService.getUserId(principal), LocalDateTime.now(), "결제완료").orElse(null);
+        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatusOrderByOrderDepartureDateDesc(userService.getUserId(principal), LocalDateTime.now(), "결제완료").orElse(null);
 
         if(writableReviewAndWrittenReviewList != null){
             writableReviewAndWrittenReviewList = writableReviewAndWrittenReviewList.stream().filter(order -> order.getReview() != null).collect(Collectors.toList());

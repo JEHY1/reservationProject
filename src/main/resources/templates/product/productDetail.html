@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/css/header.css">
   <link rel="stylesheet" href="/css/footer.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
   <style>
     .color-red{
       color: red;
@@ -163,7 +165,7 @@
     #QnAWrite-btn{
       background-color: #0D569B;
       color: white;
-      width: 76px;
+      width: 80px;
       height:36px;
       border: none;
       border-radius: 5px;
@@ -171,6 +173,34 @@
       margin-right: 30px;
     }
 
+    .star-rating .red {
+      color: red;
+    }
+
+    .star-rating label {
+      color: #ccc;
+      cursor: pointer;
+      font-size: inherit; /* 부모의 폰트 크기를 상속받도록 설정 */
+      padding: 0;
+      position: relative;
+      width: 1em;
+    }
+
+    .star-rating label:before {
+        content: '\2605';
+    }
+
+    .star-rating {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+    justify-content: center;
+    font-size: 1.2em; /* 별 크기를 0.7em으로 조정 */
+    padding: 0;
+    position: relative;
+    text-align: center;
+    width: auto;
+    height: 100%; /* 부모의 높이를 상속받아 중앙에 위치하도록 설정 */
+}
 
 
   </style>
@@ -181,7 +211,7 @@
 <main>
   <div class="content mx-auto">
     <div class="path ms-3 mb-2 row w-100 mx-auto">
-      <img class="col-auto p-0" src="/#" style="width: 30px; height: 30px;">
+      <img class="col-auto p-0 my-auto" src="/images/icon_img/house.png" style="width: 20px; height: 20px;">
       <div class="col-auto w-auto pe-0">></div>
       <div class="col-auto w-auto" th:text="${productInfo.product.productRegionMainCategory}">대분류</div>
       <div class="col-auto w-auto p-0">></div>
@@ -284,9 +314,12 @@
             <div th:each="review : ${productInfo.product.reviewList}" class="review">
               <div class="row w-100 mx-auto border-y cursor py-3">
                 <div class="col-6" th:text="${review.reviewTitle}">리뷰 제목</div>
-                <div class="col-2">별점</div>
-                <div class="col-2" th:text="${review.order.user.username}">이름</div>
-                <div class="col-2" th:text="${#temporals.format(review.reviewSubmitDate, 'yyyy-MM-dd')}">2024-05-05</div>
+                <div class="ms-auto col-2 star-rating">
+                    <label th:each="star : ${#numbers.sequence(1, 5)}"
+                           th:classappend="${star <= review.reviewScore} ? 'red' : ''"></label>
+                </div>
+                <div class="col-2 text-center" th:text="${review.order.user.username}">이름</div>
+                <div class="col-auto" th:text="${#temporals.format(review.reviewSubmitDate, 'yyyy-MM-dd')}" style="width: 150px;">2024-05-05</div>
               </div>
               <div class="p-3 d-hidden">
                 <div class="pb-3" th:text="${review.reviewContent}">
@@ -308,7 +341,7 @@
 
         <div class="qnaTab d-hidden">
           <div class="row mb-3 mt-5 w-100 mx-auto">
-            <button type="button" id="QnAWrite-btn" class="ms-auto" data-bs-toggle="modal" data-bs-target="#qnaWriteModal" onclick="checkLogin()">WRITE</button>
+            <button type="button" id="QnAWrite-btn" class="ms-auto" data-bs-toggle="modal" data-bs-target="#qnaWriteModal" onclick="checkLogin()">문의하기</button>
           </div>
           <div class="qnaContent m-5 mt-2">
             <!-- Modal -->
@@ -336,8 +369,14 @@
             <div class="text-center p-4" th:if="${productInfo.product.qnaList.isEmpty()}">작성된 Q&A가 없습니다.</div>
             <div class="qna" th:each="qna : ${productInfo.product.qnaList}">
               <div class="row w-100 mx-auto border-y cursor py-3">
-                <div class="col-8" th:text="${qna.qnaSecret && (userId == null || qna.user.userId != userId) ? '비밀글 입니다.' : qna.qnaQuestion}">Q&A 제목</div>
-                <div class="col-2" th:text="${qna.user.username}">이름</div>
+                <div class="col-8">
+                  <div class="row w-100 mx-auto">
+                    <div class="col-auto pe-1" th:text="${qna.qnaSecret && (userId == null || qna.user.userId != userId) ? '비밀글 입니다.' : (qna.qnaQuestion.length > 30 ? qna.qnaQuestion.substring(0, 30) + '...' : qna.qnaQuestion)}"></div>
+                    <img th:if="${qna.qnaSecret}" class="col-auto p-0 my-auto" style="width: 18px; height: 18px;" src="/images/icon_img/lock.png">
+                  </div>
+
+                </div>
+                <div class="col-2" th:text="${qna.user.username.substring(0, 3) + '*'.repeat(qna.user.username.length - 3)}">이름</div>
                 <div class="col-2" th:text="${#temporals.format(qna.qnaSubmitDate, 'yyyy-MM-dd')}">2024-05-05</div>
               </div>
               <div class="p-3 d-hidden" th:if="${!qna.qnaSecret || qna.user.userId == userId}">

@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/css/header.css">
   <link rel="stylesheet" href="/css/footer.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
   <style>
     .cursor{
       cursor: pointer;
@@ -173,7 +174,7 @@
         <div class="col">
           <div class="row w-100 mx-auto">
             <!--          <img src="#" class="col-auto p-2 border">-->
-            <input type="text" class="col" id="userEmail" style="padding-top: 6px; padding-bottom: 6px;" th:value="${orderInfo.user.userEmail}">
+            <input type="email" class="col" id="userEmail" style="padding-top: 6px; padding-bottom: 6px;" th:value="${orderInfo.user.userEmail}">
           </div>
         </div>
       </div>
@@ -262,7 +263,7 @@
       </div>
 
       <div class="row w-100 mx-auto">
-        <input type="checkbox" class="col-auto ms-auto cursor">
+        <input type="checkbox" class="col-auto ms-auto cursor" id="refundAgreement">
         <label class="col-auto cursor" onclick="prevElementClick(this)">취소 수수료 및 환불 규정 약관에 동의 합니다.</label>
       </div>
 
@@ -444,7 +445,7 @@
         </div>
       </div>
       <div class="row w-100 mx-auto">
-        <input type="checkbox" class="col-auto ms-auto cursor">
+        <input type="checkbox" class="col-auto ms-auto cursor" id="personalInfoAgreement">
         <label class="col-auto cursor" onclick="prevElementClick(this)">개인정보 취급방침 약관에 동의 합니다.</label>
       </div>
     </div>

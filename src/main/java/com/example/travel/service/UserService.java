@@ -178,6 +178,25 @@ public class UserService {
         }
     }
 
+    // 관리자 페이지에서 회원정보 수정 시 기존 연락처 및 중복 체크 - admin_user_edit.js에 ajax 연결
+    public String phoneReCheck(String userPhone, Long userId) {
+        User user = userRepository.findByUserPhone(userPhone).orElse(null);
+        if(user == null) {
+            // 연락처 사용가능
+            return "available";
+        }
+        else {
+            if(userPhone.equals(findById(userId).getUserPhone())) {
+                // 기존 연락처와 동일
+                return "equal";
+            }
+            else {
+                // 연락처 중복
+                return "duplicated";
+            }
+        }
+    }
+
     // 회원정보 수정 시 기존 이메일 및 중복 체크 - user_information_modify.js에 ajax 연결
     public String emailReCheck(String userEmail, Principal principal) {
         User user = userRepository.findByUserEmail(userEmail).orElse(null);
@@ -187,6 +206,25 @@ public class UserService {
         }
         else {
             if(userEmail.equals(getUserByPrincipal(principal).getUserEmail())) {
+                // 기존 이메일과 동일
+                return "equal";
+            }
+            else {
+                // 이메일 중복
+                return "duplicated";
+            }
+        }
+    }
+
+    // 관리자 페이지에서 회원정보 수정 시 기존 이메일 및 중복 체크 - admin_user_edit.js에 ajax 연결
+    public String emailReCheck(String userEmail, Long userId) {
+        User user = userRepository.findByUserEmail(userEmail).orElse(null);
+        if(user == null) {
+            // 이메일 사용가능
+            return "available";
+        }
+        else {
+            if(userEmail.equals(findById(userId).getUserEmail())) {
                 // 기존 이메일과 동일
                 return "equal";
             }
