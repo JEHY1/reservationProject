@@ -51,7 +51,7 @@ $(function() {
         }
     });
 
-    document.getElementById('loginBox').submit();
+//    document.getElementById('loginBox').submit();
 });
 
 

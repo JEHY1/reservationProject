@@ -262,6 +262,7 @@ if(document.getElementsByClassName('writtenReviewNum')){
 }
 
 
+
 $(function() {
     // 전체 체크 눌렀을 때, 다 체크
     $("#all").on("click", function() {

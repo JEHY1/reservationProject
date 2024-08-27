@@ -17,3 +17,14 @@ $(function() {
         }
     });
 });
+
+function getUrlParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+const cancelButton = document.getElementById('cancel-btn');
+
+if(cancelButton){
+    cancelButton.addEventListener('click', () => location.href = '/myPage/reviewList' + (getUrlParameter('reviewId') === null ? '' : '?tab=1'))
+}
