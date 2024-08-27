@@ -1,10 +1,8 @@
 package com.example.travel.service;
 
 import com.example.travel.domain.*;
-import com.example.travel.dto.order.OrderControlRequest;
-import com.example.travel.dto.order.OrderSubmitRequest;
-import com.example.travel.dto.order.SearchOrderRequest;
-import com.example.travel.dto.order.SearchOrderResponse;
+import com.example.travel.dto.admin.ScheduleDateDto;
+import com.example.travel.dto.order.*;
 import com.example.travel.dto.payment.PaymentSubmitRequest;
 import com.example.travel.dto.review.MyWritableReview;
 import com.example.travel.dto.review.MyWritableReviewResponse;
@@ -19,10 +17,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.expression.Temporals;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,6 @@ public class PaymentService {
     private final UserService userService;
 
     public Order order(OrderSubmitRequest request, Principal principal){
-        System.err.println("orderDepartDate : " + request.getOrderDepartDate());
         String[] date = request.getOrderDepartDate().split("-");
         LocalDateTime departDate = LocalDateTime.of(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), 0, 0, 0);
         LocalDateTime endDate = departDate.plusDays(productService.findProductByProductId(request.getProductId()).getProductTravelDays()).minusSeconds(1);
@@ -75,11 +76,9 @@ public class PaymentService {
             if(!order.getOrderDetailList().isEmpty()){
                 order.getOrderDetailList().forEach(orderDetail -> {
                     order.setTotalCount(order.getTotalCount() + orderDetail.getOrderDetailTravelerCount());
-                    System.err.println("totalCount : " + order.getTotalCount());
                 });
             }
         });
-        System.err.println("complete");
 
         return orderList;
     }
@@ -117,7 +116,6 @@ public class PaymentService {
                     .build();
         }
         else{
-            System.err.println(payment);
             if(payment.getPaymentCheck() == null){
                 payment.updatePaymentCheck("확인재요청");
                 payment.updateAccountInfo(request.getPaymentRefundAccount());
@@ -262,13 +260,12 @@ public class PaymentService {
     public MyWritableReviewResponse myWritableReviewList(Principal principal, Pageable pageable){
         List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderEndDateIsAfterAndOrderStatusOrderByOrderDepartureDate(userService.getUserId(principal), LocalDateTime.now(), LocalDate.now().atStartOfDay().minusDays(31), "결제완료").orElse(null);
 
-        System.err.println("deadLine : " + LocalDate.now().atStartOfDay().minusDays(31));
 
         if(writableReviewAndWrittenReviewList != null){
             writableReviewAndWrittenReviewList = writableReviewAndWrittenReviewList.stream().filter(order -> order.getReview() == null).collect(Collectors.toList());
 
             if(!writableReviewAndWrittenReviewList.isEmpty()){
-                System.err.println("start : " + pageable.getPageNumber() * 10 + "end : " +  Math.min(writableReviewAndWrittenReviewList.size(), (pageable.getPageNumber() + 1) * 10));
+
                 return MyWritableReviewResponse.builder()
                         .myWritableReviewList(writableReviewAndWrittenReviewList.stream().map(this::toMyWritableReview).collect(Collectors.toList()).subList(pageable.getPageNumber() * 10, Math.min(writableReviewAndWrittenReviewList.size(), (pageable.getPageNumber() + 1) * 10)))
                         .totalElements(writableReviewAndWrittenReviewList.size())
@@ -370,6 +367,136 @@ public class PaymentService {
 
     public List<Order> findAllOrder(){
         return orderRepository.findAll();
+
+    }
+
+    //특정 기간 매출 합계(상품 전체, 혹은 단일 상품)
+    public List<Long> paymentHistory(Principal principal, Long productId){
+        LocalDate now = LocalDate.now();
+        List<String> orderStatusList = new ArrayList<>();
+        orderStatusList.add("결제완료");
+        orderStatusList.add("입금미확인");
+        orderStatusList.add("미입금");
+        LocalDateTime startPoint = LocalDate.of(now.getYear(), now.getMonth(), 1).minusMonths(5).atStartOfDay();
+        List<Long> productIdList = productService.findProductByPrincipal(principal).stream().mapToLong(Product::getProductId).boxed().collect(Collectors.toList());
+
+        if(productId != null){
+            productIdList.clear();
+            productIdList.add(productId);
+        }
+        List<Order> orderList = findOrderByProductIdInAndOrderDateAfterAndOrderStatusIn(productIdList, startPoint, orderStatusList);
+
+        List<Long> totalPaymentHistory = new ArrayList<>();
+        long totalPaymentMonth1 = 0;
+        long totalPaymentMonth2 = 0;
+        long totalPaymentMonth3 = 0;
+
+        for(Order order : orderList){
+            if(order.getOrderDate().isAfter(startPoint.plusMonths(5))){
+                if((order.getOrderStatus().equals("미입금") || order.getOrderStatus().equals("입금미확인")) && LocalDateTime.now().isAfter(order.getOrderDepartureDate())){
+                    continue;
+                }
+                totalPaymentMonth1 += order.getOrderTotalPrice();
+            }
+            else if(order.getOrderDate().isAfter(startPoint.plusMonths(4))){
+                if((order.getOrderStatus().equals("미입금") || order.getOrderStatus().equals("입금미확인")) && LocalDateTime.now().isAfter(order.getOrderDepartureDate())){
+                    continue;
+                }
+                totalPaymentMonth2 += order.getOrderTotalPrice();
+            }
+            else if(order.getOrderDate().isAfter(startPoint.plusMonths(3))){
+                if((order.getOrderStatus().equals("미입금") || order.getOrderStatus().equals("입금미확인")) && LocalDateTime.now().isAfter(order.getOrderDepartureDate())){
+                    continue;
+                }
+                totalPaymentMonth3 += order.getOrderTotalPrice();
+            }
+        }
+
+        return Arrays.stream(new Long[]{totalPaymentMonth1, totalPaymentMonth2, totalPaymentMonth3}).collect(Collectors.toList());
+    }
+
+    public List<Order> findOrderByProductIdInAndOrderDateAfterAndOrderStatusIn(List<Long> productIdList, LocalDateTime orderDate, List<String> orderStatusList){
+        return orderRepository.findAllByProductProductIdInAndOrderDateIsAfterAndOrderStatusIn(productIdList, orderDate, orderStatusList)
+                .orElseThrow(() -> new IllegalArgumentException("not found order"));
+    }
+
+    public List<OptionSellDto> getOptionSellCount(long productId){
+        LocalDate now = LocalDate.now();
+        LocalDateTime startDate = LocalDate.of(now.getYear(), now.getMonth(), 1).atStartOfDay(); //검색 기간 시작일
+        LocalDateTime endDate = startDate.plusMonths(1).minusSeconds(1); //검색기간 종료일
+        List<OptionSellDto>OptionSellStoList = orderRepository.getOptionSellCount(productId, startDate, endDate, LocalDateTime.now());
+
+        return OptionSellStoList;
+    }
+
+    public long getTotalOptionCount(List<OptionSellDto> list){
+        int sum = 0;
+        for(OptionSellDto dto : list){
+            sum += dto.totalSellCount;
+        }
+        return sum;
+    }
+
+    public List<Long> getOrderStatusStatistics(long productId){
+        LocalDate now = LocalDate.now();
+        LocalDateTime startDate = LocalDate.of(now.getYear(), now.getMonth(), 1).atStartOfDay(); //검색 기간 시작일
+        LocalDateTime endDate = startDate.plusMonths(1).minusSeconds(1); //검색기간 종료일
+        List<OrderStatusAndCountDto> orderStatusAndCountDtoList = orderRepository.getOrderStatusStatistics(productId, startDate, endDate);
+        System.err.println(orderStatusAndCountDtoList);
+        List<Long> returnList = new ArrayList<>();
+        Long[] longArray = new Long[]{0L, 0L, 0L, 0L, 0L, 0L, 0L};
+
+        orderStatusAndCountDtoList.forEach(value -> {
+            if(value.getOrderStatus().equals("결제완료")){
+                longArray[0] = value.getOrderStatusCount();
+            }
+            else if (value.getOrderStatus().equals("입금미확인")) {
+                longArray[1] = value.getOrderStatusCount();
+            }
+            else if (value.getOrderStatus().equals("미입금")) {
+                longArray[2] = value.getOrderStatusCount();
+            }
+            else if (value.getOrderStatus().equals("주문취소")) {
+                longArray[3] = value.getOrderStatusCount();
+            }
+            else if (value.getOrderStatus().equals("환불완료")) {
+                longArray[4] = value.getOrderStatusCount();
+            }
+            else if (value.getOrderStatus().equals("환불진행")) {
+                longArray[5] = value.getOrderStatusCount();
+            }
+            longArray[6] += value.getOrderStatusCount();
+        });
+
+        return Arrays.stream(longArray).collect(Collectors.toList());
+    }
+
+    public OrderDateStatisticsResponse getOrderDateStatistics(long productId, int year, int month){
+
+        LocalDateTime startDate = LocalDate.of(year, month, 1).atStartOfDay(); //검색 기간 시작일
+        LocalDateTime endDate = startDate.plusMonths(1).minusSeconds(1); //검색기간 종료일
+        List<OrderDateStatistics> orderDateStatisticsList = orderRepository.getOrderDateStatistics(productId, startDate, endDate, LocalDateTime.now());
+
+        System.err.println(orderDateStatisticsList);
+        List<String> dateList = orderDateStatisticsList.stream().map(dto -> dto.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"))).collect(Collectors.toList());
+        List<Long> departureCountList = orderDateStatisticsList.stream().mapToLong(OrderDateStatistics::getDepartureCount).boxed().toList();
+
+        return OrderDateStatisticsResponse.builder()
+                .orderDateList(dateList)
+                .orderDepartureCountList(departureCountList)
+                .build();
+    }
+
+    public ScheduleDateDto getScheduleDate(int year, int month, long productId){
+        Product product = productService.findProductByProductId(productId);
+
+        return ScheduleDateDto.builder()
+                .year(year)
+                .month(month)
+                .productStartDate(product.getProductStartDate())
+                .productEndDate(product.getProductEndDate())
+                .maxDepartureCount(product.getProductMaxCount())
+                .build();
 
     }
 }

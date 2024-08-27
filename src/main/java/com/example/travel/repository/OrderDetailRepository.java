@@ -11,7 +11,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     @Query("SELECT SUM(od.orderDetailTravelerCount) " +
             "FROM OrderDetail od " +
-            "JOIN od.Order o " +
+            "JOIN od.order o " +
             "WHERE o.orderDepartureDate BETWEEN :startDate AND :endDate " +
             "AND o.product.productId = :productId")
     Long findSumOfTravelerCount(@Param("startDate") LocalDateTime startDate,

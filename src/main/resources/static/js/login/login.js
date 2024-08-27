@@ -50,6 +50,8 @@ $(function() {
             return returnVal;
         }
     });
+
+    document.getElementById('loginBox').submit();
 });
 
 

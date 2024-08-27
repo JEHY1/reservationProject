@@ -90,6 +90,11 @@ public class Product {
     @JoinColumn(name = "product_id")
     private List<Review> reviewList;
 
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<Order> orderList;
+
+
     @Builder
     public Product(User user, String productTitle, int productRegularPrice, Integer productDiscountPrice, LocalDateTime productStartDate, LocalDateTime productEndDate, String productInfo, String productStatus, String productRegionMainCategory, String productRegionSubCategory, int productMaxCount, int productTravelDays) {
         this.user = user;

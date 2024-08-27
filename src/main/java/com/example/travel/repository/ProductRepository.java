@@ -2,11 +2,14 @@ package com.example.travel.repository;
 
 import com.example.travel.domain.Product;
 import com.example.travel.domain.User;
+import com.example.travel.dto.product.RankDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,9 +65,24 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT * FROM product_tb WHERE product_status = '정상' ORDER BY product_registration_date DESC LIMIT 12", nativeQuery = true)
     Optional<List<Product>> newProduct();
     @Query(value = "SELECT p.* FROM order_detail_tb od JOIN order_tb o ON od.order_id = o.order_id JOIN product_tb p ON o.product_id = p.product_id " +
-            "GROUP BY p.product_id ORDER BY SUM(od.order_detail_traveler_count) DESC LIMIT 5;", nativeQuery = true)
+            "WHERE p.product_status = '정상' GROUP BY p.product_id ORDER BY SUM(od.order_detail_traveler_count) DESC LIMIT 5;", nativeQuery = true)
     Optional<List<Product>> bestProduct();
     Optional<List<Product>> findAllByProductTitleContaining(String searchText);
     Optional<List<Product>> findAllByProductRegionMainCategory(String mainCategory);
     Optional<List<Product>> findAllByProductRegionSubCategory(String subCategory);
+
+    @Query(value = "SELECT new com.example.travel.dto.product.RankDto(" +
+            "p.productId, " +
+            "p.productTitle, " +
+            "SUM(od.orderDetailTotalSoldProductOptionDiscountPrice), " +
+            "COUNT(DISTINCT o.orderId)) " +
+            "FROM Product p " +
+            "JOIN p.orderList o " +
+            "JOIN o.orderDetailList od " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND (o.orderStatus = '결제완료' OR (o.orderStatus IN ('입금미확인', '미입금') AND o.orderDepartureDate > :today)) " +
+            "GROUP BY p.productId, p.productTitle " +
+            "ORDER BY SUM(od.orderDetailTotalSoldProductOptionDiscountPrice) DESC"
+    )
+    List<RankDto> getProductRank(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("today") LocalDateTime today);
 }

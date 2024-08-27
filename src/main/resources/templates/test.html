@@ -1,60 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Select Option Event Example</title>
+  <title>상품 리스트</title>
   <style>
-    #mySelect {
-        width: 200px;
+    .product-item {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .product-item.fade-in {
+        opacity: 1;
+        transform: translateY(0);
     }
   </style>
 </head>
 <body>
-
-<select id="mySelect">
-  <option value="1">Option 1</option>
-  <option value="2">Option 2</option>
-  <option value="3">Option 3</option>
-</select>
-
-<p id="result"></p>
+<h1>상품 리스트</h1>
+<ul id="productList">
+  <li class="product-item">상품 1</li>
+  <li class="product-item">상품 2</li>
+  <li class="product-item">상품 3</li>
+  <li class="product-item">상품 4</li>
+</ul>
 
 <script>
-  const selectElement = document.getElementById('mySelect');
-  const resultElement = document.getElementById('result');
-
-  let lastSelectedIndex = selectElement.selectedIndex;
-  let isOptionClicked = false;
-
-  // Handle the selection change
-  function handleSelectChange() {
-      if (isOptionClicked) {
-          const selectedOption = selectElement.options[selectElement.selectedIndex];
-          resultElement.textContent = 'You selected: ' + selectedOption.text;
-          lastSelectedIndex = selectElement.selectedIndex;
-          isOptionClicked = false;  // Reset after handling change
-          console.log('click');
-      }
-  }
-
-  // Mark as option clicked when a mousedown event occurs
-  selectElement.addEventListener('mousedown', function(event) {
-      if (event.target.tagName === 'OPTION') {
-          isOptionClicked = true;
-      } else {
-          isOptionClicked = false;
-      }
+  document.addEventListener("DOMContentLoaded", function () {
+      const items = document.querySelectorAll(".product-item");
+      items.forEach((item, index) => {
+          setTimeout(() => {
+              item.classList.add("fade-in");
+          }, index * 300);
+      });
   });
-
-  // Reset the flag when the select loses focus
-  selectElement.addEventListener('focus', function() {
-      isOptionClicked = false;
-  });
-
-  // Handle the change event
-  selectElement.addEventListener('change', handleSelectChange);
 </script>
-
 </body>
 </html>

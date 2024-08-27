@@ -56,8 +56,7 @@ public class Order {
     private String orderDepositor;
 
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<OrderDetail> orderDetailList;
 
     @ToString.Exclude

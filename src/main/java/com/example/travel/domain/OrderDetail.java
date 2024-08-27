@@ -17,7 +17,7 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    private Order Order;
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_option_id")
@@ -34,7 +34,7 @@ public class OrderDetail {
 
     @Builder
     public OrderDetail(com.example.travel.domain.Order order, ProductOption productOption, int orderDetailTravelerCount, int orderDetailTotalSoldProductOptionRegularPrice, int orderDetailTotalSoldProductOptionDiscountPrice) {
-        this.Order = order;
+        this.order = order;
         this.productOption = productOption;
         this.orderDetailTravelerCount = orderDetailTravelerCount;
         this.orderDetailTotalSoldProductOptionRegularPrice = orderDetailTotalSoldProductOptionRegularPrice;

@@ -94,21 +94,11 @@
           <td>평점</td>
           <td>
             <div class="star-rating" id="scoreField">
-              <label>
-                <input type="radio" name="reviewScore" value="1" th:checked="${review !=null && review.reviewScore == 1}"> 1
-              </label>
-              <label>
-                <input type="radio" name="reviewScore" value="2" th:checked="${review !=null && review.reviewScore == 2}"> 2
-              </label>
-              <label>
-                <input type="radio" name="reviewScore" value="3" th:checked="${review !=null && review.reviewScore == 3}"> 3
-              </label>
-              <label>
-                <input type="radio" name="reviewScore" value="4" th:checked="${review !=null && review.reviewScore == 4}"> 4
-              </label>
-              <label>
-                <input type="radio" name="reviewScore" value="5" th:checked="${review !=null && review.reviewScore == 5}"> 5
-              </label>
+              <input type="radio" class="star" name="reviewScore" value="1" th:checked="${review !=null && review.reviewScore == 1}">
+              <input type="radio" class="star" name="reviewScore" value="2" th:checked="${review !=null && review.reviewScore == 2}">
+              <input type="radio" class="star" name="reviewScore" value="3" th:checked="${review !=null && review.reviewScore == 3}">
+              <input type="radio" class="star" name="reviewScore" value="4" th:checked="${review !=null && review.reviewScore == 4}">
+              <input type="radio" class="star" name="reviewScore" value="5" th:checked="${review !=null && review.reviewScore == 5}">
             </div>
           </td>
         </tr>

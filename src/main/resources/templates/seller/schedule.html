@@ -1,70 +1,277 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="/css/admin_header_boot.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <style>
-      .content{
-        width: 1920px;
-        height: 1080px;
-      }
+  <script src="/js/jquery.js"></script>
+  <script src="/js/admin_header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-      .calendarSpace{
-        height: 1080px;
-      }
+  <style>
+    .cursor{
+      cursor: pointer;
+    }
 
-      .bg-navy{
-        background-color: #2E2F42;
-      }
+    .content{
+      width: 1703px;
+      height: 953px;
+    }
 
-      .calendar{
-        width : 1300px;
-        height: 900px;
-        margin-top: 100px;
-      }
+    .calendarSpace{
+      height: 903px;
+      width: 1660px;
+    }
 
-      .c-w{
-        color: white;
-      }
+    .bg-navy{
+      background-color: #2E2F42;
+    }
 
-      .c-r{
-        color: red;
-      }
+    #calendar{
+      width : 1612px;
 
-      .c-b{
-        color: blue;
-      }
+    }
 
-      .border-red{
-        border-top: 1px solid red;
-        border-bottom: 1px solid red;
-      }
+    .c-w{
+      color: white;
+    }
 
-      .border-yellow{
-        border-top: 1px solid yellow;
-        border-bottom: 1px solid yellow;
-      }
+    .c-r{
+      color: red;
+    }
 
-      .border-blue{
-        border-top: 1px solid blue;
-        border-bottom: 1px solid blue;
-      }
+    .c-b{
+      color: blue;
+    }
 
-      .c-y{
-        color: yellow;
-      }
-    </style>
+    .border-red{
+      border-top: 1px solid red;
+      border-bottom: 1px solid red;
+    }
+
+    .border-yellow{
+      border-top: 1px solid yellow;
+      border-bottom: 1px solid yellow;
+    }
+
+    .border-blue{
+      border-top: 1px solid blue;
+      border-bottom: 1px solid blue;
+    }
+
+    .c-y{
+      color: yellow;
+    }
+
+    .d-hidden{
+      display: none;
+    }
+
+    .graphContent{
+      width: 1300px;
+      height: 480px;
+    }
+
+    .board{
+      box-shadow: 5px 5px 5px gainsboro;
+      border-radius: 10px;
+      border: 1px solid gainsboro;
+    }
+
+    .border-b{
+      border-bottom: 1px solid gray;
+    }
+
+    .bg-gainsboro{
+      background-color: gainsboro;
+    }
+
+    .color-red{
+      color: red;
+    }
+
+    .color-blue{
+      color: blue;
+    }
+
+    .rankList > :nth-child(2n+4){
+      background-color: gainsboro;
+    }
+
+    .productSel{
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .productSel:hover{
+      background-color: gainsboro;
+    }
+    .productSel.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 보이는 상태로 만들 때의 스타일 */
+    .d-visible {
+      opacity: 1;
+      transition: max-height 0.5s ease-in, opacity 0.5s ease-in;
+    }
+
+    .rankProduct:hover{
+      font-weight: 900;
+    }
+
+  </style>
 </head>
-<body>
-<div class="content mx-auto">
+<body style="width: 1903px;">
+<th:block th:include="layouts/admin_header"></th:block>
+<div class="content mx-auto" style="position: relative;">
+  <h1 class="text-center my-5 cursor" id="statisticsTitle" th:text="${product != null ? product.productTitle + ' 상품 통계' : '전체 상품 통계'}">~~~상품 통계</h1>
+  <div style="width: 600px; position: absolute; left: 540px; top: 100px;" class="border bg-white h-auto d-hidden">
+    <div class="productSel cursor text-center" onclick="location.href='/seller/totalManager'">전체</div>
+    <div th:each="productSelection : ${productList}" class="productSel cursor text-center" th:text="${productSelection.productTitle}" th:onclick="|location.href='/seller/totalManager?productId=${productSelection.productId}'|"></div>
+  </div>
+
   <div class="row w-100 mx-auto">
-    <div class="col-auto" style="width: 300px; background-color: #2E2F42;" ></div>
-    <div class="calendarSpace col">
-      <div class="calendar border mx-auto">
-        <div class="text-center bg-navy c-w py-3">0월</div>
-        <div class="row w-100 mx-auto">
+    <div class="paymentStatisticsField board col-auto mx-auto" style="width: 800px; height: 750px;">
+      <h4 class="text-center my-3">최근 3개월 판매금액 통계</h4>
+      <input type="hidden" id="paymentHistoryList" th:data-payment-history-list="${paymentHistoryList}">
+      <input type="hidden" id="year" th:value="${date.year}">
+      <input type="hidden" id="month" th:value="${date.monthValue}">
+      <canvas class="row mx-auto graphContent" id="paymentStatistics" style="width: 750px; height: 650px;"></canvas>
+    </div>
+
+    <div th:if="${productRankList != null}" class="col-auto board mx-auto rankList" style="width: 800px; height: 750px;">
+      <h4 class="text-center my-3">판매이익 순위</h4>
+      <div class="row w-100 mx-auto border-b">
+        <div class="col-auto mx-auto p-0 ps-2" style="width: 50px;">순위</div>
+        <div class="col mx-auto text-center">상품이름</div>
+        <div class="col-auto mx-auto text-center" style="width: 180px;">이번달 판매금액</div>
+        <div class="col-auto mx-auto p-0 pe-2 text-center" style="width: 90px;">순위변동</div>
+      </div>
+
+      <div th:each="product : ${productRankList}" class="row w-100 mx-auto d-flex align-items-center" style="height: 60px;">
+        <div class="col-auto mx-auto p-0 ps-2 text-center" style="width: 50px;" th:text="${product.rank + '.'}">1.</div>
+        <div class="col mx-auto text-center cursor rankProduct" th:text="${product.productTitle}" th:onclick="|location.href='/seller/totalManager?productId=${product.productId}'|">프랑스/스위스 10일 TW #파리 자유관광(반일)</div>
+        <div class="col-auto mx-auto text-center price" style="width: 180px;" th:text="${product.totalRevenue}">10,100,110원</div>
+        <div class="col-auto mx-auto p-0 pe-2 text-center" style="width: 90px;">
+          <div class="row w-100 mx-auto">
+            <div class="col-auto p-0" th:classappend="${product.changedRankCount == null || product.changedRankCount == 0 ? 'mx-auto' : 'ms-auto'}" th:text="${product.changedRankCount == null ? 'new!' : product.changedRankCount == 0 ? '-' : product.changedRankCount}"></div>
+            <div class="col-auto me-auto p-0" th:if="${product.changedRankCount != null && product.changedRankCount != 0}" th:classappend="${product.changedRankCount != null && product.changedRankCount > 0 ? 'color-red' : 'color-blue'}" th:text="${product.changedRankCount > 0 ? '▴' : '▾'}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div th:if="${orderStatusStatisticsList !=null && calendarInfo != null}" class="col-auto mx-auto p-0" style="width: 800px; height: 750px;">
+      <div class="board" style="height: 365px; width: 800px;">
+        <h4 class="text-center my-2">주문 상태 비율</h4>
+        <img class=" text-center mb-3 p-0" th:if="${orderStatusStatisticsList.get(6) == 0}" src="/images/icon_img/noStatistics.png" style="width: 160px; height: 160px; margin-left: 319px; margin-top: 65px;">
+        <div class=" text-center" th:if="${orderStatusStatisticsList.get(6) == 0}" style="font-size: 24px; font-weight: 600;">이번달 주문내역이 없습니다.</div>
+
+        <div class="row w-100 mx-auto" th:if="${orderStatusStatisticsList.get(6) != 0}">
+          <div class="col-auto ms-4" style="width: 335px;">
+            <input type="hidden" id="orderStatusStatisticsList" th:data-order-status-statistics-list="${orderStatusStatisticsList.subList(0, 6)}">
+            <canvas id="orderStatusStatistics" style="width: 335px; height: 335px;"></canvas>
+          </div>
+
+          <div class="col-auto my-auto ms-5" id="orderStatusStatisticsButtonField" style="width: 170px;"></div>
+          <div class="col my-auto p-0" id="orderStatusStatisticsTextField" style="height: 228px;">
+
+            <input type="hidden" id="totalOrderCount" th:value="${orderStatusStatisticsList.get(6)}">
+            <div class="row w-100 mx-auto py-1" style="height: 39px;">
+              <div class="col-auto p-0 percent">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0" th:text="${orderStatusStatisticsList.get(0)}"></div>
+              <div class="col-auto p-0">건)</div>
+
+            </div>
+            <div class="row w-100 mx-auto py-1" style="height: 39px;">
+              <div class="col-auto p-0 percent">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0" th:text="${orderStatusStatisticsList.get(1)}"></div>
+              <div class="col-auto p-0">건)</div>
+            </div>
+            <div class="row w-100 mx-auto py-1" style="height: 39px;">
+              <div class="col-auto p-0 percent">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0" th:text="${orderStatusStatisticsList.get(2)}"></div>
+              <div class="col-auto p-0">건)</div>
+            </div>
+            <div class="row w-100 mx-auto py-1" style="height: 39px;">
+              <div class="col-auto p-0 percent">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0" th:text="${orderStatusStatisticsList.get(3)}"></div>
+              <div class="col-auto p-0">건)</div>
+            </div>
+            <div class="row w-100 mx-auto py-1" style="height: 39px;">
+              <div class="col-auto p-0 percent">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0" th:text="${orderStatusStatisticsList.get(4)}"></div>
+              <div class="col-auto p-0">건)</div>
+            </div>
+            <div class="row w-100 mx-auto py-1" style="height: 39px;">
+              <div class="col-auto p-0 percent">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0" th:text="${orderStatusStatisticsList.get(5)}"></div>
+              <div class="col-auto p-0">건)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="board mt-3" style="height: 365px; width: 800px;">
+        <h4 class="text-center my-2">옵션 선택 비율</h4>
+
+
+        <img class=" text-center mb-3 p-0" th:if="${totalOptionCount == 0}" src="/images/icon_img/noStatistics.png" style="width: 160px; height: 160px; margin-left: 319px; margin-top: 65px;">
+        <div class=" text-center" th:if="${totalOptionCount == 0}" style="font-size: 24px; font-weight: 600;">통계 가능한 주문이 없습니다.</div>
+        <div class="row w-100 mx-auto" th:if="${totalOptionCount != 0}">
+          <div class="col-auto ms-4" style="width: 335px;">
+            <input type="hidden" id="optionStatisticsList" th:data-option-statistics-list="${optionStatisticsList.subList(0, optionStatisticsList.size() - 1 > 0 ? optionStatisticsList.size() - 1 : 0)}">
+            <canvas id="optionStatistics" style="width: 335px; height: 335px;"></canvas>
+          </div>
+
+          <div class="col-auto my-auto ms-5" id="optionStatisticsButtonField" style="width: 170px;"></div>
+          <div class="col my-auto p-0 h-auto" id="optionStatisticsTextField" style="height: 270px;">
+
+            <input type="hidden" id="totalOptionCount">
+            <div class="row w-100 mx-auto h-auto py-1" style="height: 44px;" th:each="option : ${optionStatisticsList}">
+              <div class="col-auto p-0 percent2">9</div>
+              <div class="col-auto p-0">% (</div>
+              <div class="col-auto p-0 optionCount" th:text="${option.totalSellCount}"></div>
+              <div class="col-auto p-0">명)</div>
+              <input type="hidden" class="optionName" th:value="${option.productOptionName}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:if="${calendarInfo != null}" class="row w-100 mx-auto">
+    <div class="calendarSpace mx-auto col-auto board mt-5 mb-3">
+      <input type="hidden" id="scheduleDate" th:data-schedule-date="${scheduleDate}">
+      <input type="hidden" id="scheduleYear" th:value="${scheduleDate.year}">
+      <input type="hidden" id="scheduleMonth" th:value="${scheduleDate.month}">
+      <input type="hidden" id="scheduleStartDayOfWeek" th:value="${scheduleDate.startDayOfWeek}">
+      <input type="hidden" id="scheduleLastDay" th:value="${scheduleDate.lastDay}">
+      <input type="hidden" id="productStartDate" th:value="${#temporals.format(scheduleDate.productStartDate, 'yyyyMMdd')}">
+      <input type="hidden" id="productEndDate" th:value="${#temporals.format(scheduleDate.productEndDate, 'yyyyMMdd')}">
+      <input type="hidden" id="orderDateList" th:data-order-date-list="${calendarInfo.orderDateList}">
+      <input type="hidden" id="orderDepartureCountList" th:data-order-departure-count-list="${calendarInfo.orderDepartureCountList}">
+      <input type="hidden" id="maxDepartureCount" th:value="${scheduleDate.maxDepartureCount}">
+      <h4 class="text-center py-4">날짜별 예약 수량</h4>
+      <div class="border mx-auto" id="calendar">
+        <div class="bg-navy c-w py-3 row w-100 mx-auto">
+          <div class="col-auto me-auto cursor px-2" id="prevMonth-btn"><</div>
+          <div class="mx-auto col-auto" th:text="${scheduleDate.year + '년 ' + scheduleDate.month + '월'}"></div>
+          <div class="col-auto ms-auto cursor px-2" id="nextMonth-btn">></div>
+        </div>
+        <div class="row w-100 mx-auto border-b">
           <div class="col text-center c-r">일</div>
           <div class="col text-center">월</div>
           <div class="col text-center">화</div>
@@ -74,152 +281,18 @@
           <div class="col text-center c-b">토</div>
         </div>
 
-        <div class="row w-100 mx-auto" style="height: 133px;">
-          <div class="col p-0 border"></div>
-          <div class="col p-0 border"></div>
-          <div class="col p-0 border"></div>
-          <div class="col p-0 border"></div>
-          <div class="col p-0 border"></div>
-          <div class="col p-0 border"></div>
-          <div class="col p-0 border">
-            <div class="px-3">1</div>
-            <div class="p-0 border-red" style="height: 16px; border-top-left-radius: 8px; border-bottom-left-radius: 8px;"></div>
-          </div>
-        </div>
-        <div class="row w-100 mx-auto" style="height: 133px;">
-          <div class="col p-0 border">
-            <div class="px-3">2</div>
-            <div class="p-0 border-red" style="height: 16px;">
-              <div style="width: 50%; height:100%; background-color: red;"></div>
-            </div>
-          </div>
-          <div class="col p-0 border">
-            <div class="px-3">3</div>
-            <div class="p-0 border-red" style="height: 16px;">
-              <div style="width: 72%; height:100%; background-color: red;"></div>
-            </div>
-            <div class="p-0 border-blue mt-1" style="height: 16px;  border-top-left-radius: 8px; border-bottom-left-radius: 8px;">
-              <div style="width: 24%; height:100%; background-color: blue; border-top-left-radius: 8px; border-bottom-left-radius: 8px;"></div>
-            </div>
-          </div>
-          <div class="col p-0 border">
-            <div class="px-3">4</div>
-            <div class="p-0 border-red" style="height: 16px;">
-              <div style="width: 68%; height:100%; background-color: red;"></div>
-            </div>
-            <div class="p-0 border-blue mt-1" style="height: 16px">
-              <div style="width: 24%; height:100%; background-color: blue;"></div>
-            </div>
-          </div>
-          <div class="col p-0 border">
-            <div class="px-3">5</div>
-            <div class="p-0 border-red" style="height: 16px; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+        <div class="row w-100 mx-auto" id="calendarDateField" style="height: 600px;">
 
-            </div>
-            <div class="p-0 border-blue mt-1" style="height: 16px;">
-              <div style="width: 24%; height:100%; background-color: blue;"></div>
-            </div>
-          </div>
-          <div class="col p-0 border">
-            <div class="px-3">6</div>
-            <div class="p-0" style="height: 16px;">
-            </div>
-            <div class="p-0 border-blue mt-1" style="height: 16px; height: 16px; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
-              <div style="width: 24%; height:100%; background-color: blue; border-top-right-radius: 8px; border-bottom-right-radius: 8px;"></div>
-            </div>
-          </div>
-          <div class="col p-0 border">
-            <div class="px-3">7</div>
-          </div>
-          <div class="col p-0 border">
-            <div class="px-3">8</div>
-          </div>
-        </div>
-        <div class="row w-100 mx-auto" style="height: 133px;">
-          <div class="col">
-            <div>9</div>
-          </div>
-          <div class="col">
-            <div>10</div>
-          </div>
-          <div class="col">
-            <div>11</div>
-          </div>
-          <div class="col">
-            <div>12</div>
-          </div>
-          <div class="col">
-            <div>13</div>
-          </div>
-          <div class="col">
-            <div>14</div>
-          </div>
-          <div class="col">
-            <div>15</div>
-          </div>
-        </div>
-        <div class="row w-100 mx-auto" style="height: 133px;">
-          <div class="col">
-            <div>16</div>
-          </div>
-          <div class="col">
-            <div>17</div>
-          </div>
-          <div class="col">
-            <div>18</div>
-          </div>
-          <div class="col">
-            <div>19</div>
-          </div>
-          <div class="col">
-            <div>20</div>
-          </div>
-          <div class="col">
-            <div>21</div>
-          </div>
-          <div class="col">
-            <div>22</div>
-          </div>
-        </div>
-        <div class="row w-100 mx-auto" style="height: 133px;">
-          <div class="col">
-            <div>23</div>
-          </div>
-          <div class="col">
-            <div>24</div>
-          </div>
-          <div class="col">
-            <div>25</div>
-          </div>
-          <div class="col">
-            <div>26</div>
-          </div>
-          <div class="col">
-            <div>27</div>
-          </div>
-          <div class="col">
-            <div>28</div>
-          </div>
-          <div class="col">
-            <div>29</div>
-          </div>
-        </div>
-        <div class="row w-100 mx-auto" style="height: 133px;">
-          <div class="col">
-            <div>30</div>
-          </div>
-          <div class="col">
-            <div>31</div>
-          </div>
-          <div class="col"></div>
-          <div class="col"></div>
-          <div class="col"></div>
-          <div class="col"></div>
-          <div class="col"></div>
+<!--          <div class="col-auto p-0 border" style="width: 238px; height: 120px;">-->
+<!--            <div class="px-3">1</div>-->
+<!--            <div class="p-0 border-red" style="height: 16px; border-top-left-radius: 8px; border-bottom-left-radius: 8px;"></div>-->
+<!--          </div>-->
+
         </div>
       </div>
     </div>
   </div>
 </div>
+<script src="/js/seller/schedule.js"></script>
 </body>
 </html>

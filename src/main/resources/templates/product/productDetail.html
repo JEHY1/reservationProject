@@ -173,8 +173,8 @@
       margin-right: 30px;
     }
 
-    .star-rating .red {
-      color: red;
+    .star-rating .color {
+      color: #0D569B;
     }
 
     .star-rating label {
@@ -316,9 +316,9 @@
                 <div class="col-6" th:text="${review.reviewTitle}">리뷰 제목</div>
                 <div class="ms-auto col-2 star-rating">
                     <label th:each="star : ${#numbers.sequence(1, 5)}"
-                           th:classappend="${star <= review.reviewScore} ? 'red' : ''"></label>
+                           th:classappend="${star <= review.reviewScore} ? 'color' : ''"></label>
                 </div>
-                <div class="col-2 text-center" th:text="${review.order.user.username}">이름</div>
+                <div class="col-2 text-center" th:text="${review.order.user.username.substring(0, 3) + '*'.repeat(review.order.user.username.length - 3)}">이름</div>
                 <div class="col-auto" th:text="${#temporals.format(review.reviewSubmitDate, 'yyyy-MM-dd')}" style="width: 150px;">2024-05-05</div>
               </div>
               <div class="p-3 d-hidden">
@@ -360,7 +360,7 @@
                     <label>비밀글 설정하기</label>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" id="qnaSubmit-btn" class="btn btn-primary">등록</button>
+                    <button type="button" id="qnaSubmit-btn" class="btn btn-primary" style="background-color: #0D569B; border-color: 0D569B;">등록</button>
                   </div>
                 </div>
               </div>

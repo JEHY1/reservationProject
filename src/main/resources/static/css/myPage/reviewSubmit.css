@@ -144,3 +144,33 @@ td:nth-child(5) {
     padding: 10px;
     vertical-align: top;
 }
+
+/* 별점 css */
+.star {
+  appearance: none;
+  padding: 1px;
+}
+.star::after {
+  content: '☆';
+  color: #0D569B;
+  font-size: 20px;
+}
+.star:hover::after {
+  content: '★';
+}
+.star:has(~ .star:hover)::after {
+  content: '★';
+}
+.star:checked::after,
+.star:has(~ .star:checked)::after {
+  content: '★';
+}
+.star:hover::after,
+.star:has(~ .star:hover)::after,
+.star:checked::after,
+.star:has(~ .star:checked)::after {
+  content: '★';
+}
+.star:hover ~ .star::after {
+  content: '☆';
+}

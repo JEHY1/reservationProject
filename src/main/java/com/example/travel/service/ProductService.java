@@ -509,8 +509,46 @@ public class ProductService {
         return nameList.stream().toList();
     }
 
+
     public List<Product> findAllProduct(){
         return productRepository.findAll();
     }
 
+    //상품 판매 순위
+    public List<RankDto> getProductRank(){
+        LocalDate now = LocalDate.now();
+        //이번달 금액조회
+        LocalDateTime startDate = LocalDate.of(now.getYear(), now.getMonth(), 1).atStartOfDay(); //검색 기간 시작일
+        LocalDateTime endDate = startDate.plusMonths(1).minusSeconds(1); //검색기간 종료일
+
+        //저번달 금액 조회
+        LocalDateTime startDate2 = startDate.minusMonths(1);
+        LocalDateTime endDate2 = endDate.minusMonths(1);
+
+        List<RankDto> thisMonthRankList = productRepository.getProductRank(startDate, endDate, LocalDateTime.now());
+        List<RankDto> prevMonthRankList = productRepository.getProductRank(startDate2, endDate2, LocalDateTime.now());
+
+        System.err.println("thisMonthRankList");
+        thisMonthRankList.forEach(info -> System.err.println(info));
+
+        long rank = 1;
+        for(RankDto rankDto : thisMonthRankList){
+            rankDto.setRank(rank++);
+        }
+        rank = 1;
+        for(RankDto rankDto : prevMonthRankList){
+            rankDto.setRank(rank++);
+        }
+
+        for(RankDto thisMonthRankDto : thisMonthRankList){
+            for(RankDto prevMonthRankDto : prevMonthRankList){
+                if(prevMonthRankDto.getProductId() == thisMonthRankDto.getProductId()){
+                    thisMonthRankDto.setChangedRankCount(prevMonthRankDto.getRank() - thisMonthRankDto.getRank());
+                    break;
+                }
+            }
+        }
+
+        return thisMonthRankList.subList(0, Math.min(thisMonthRankList.size(), 10));
+    }
 }
