@@ -159,7 +159,7 @@
         <div class="col-auto mx-auto text-center price" style="width: 180px;" th:text="${product.totalRevenue}">10,100,110원</div>
         <div class="col-auto mx-auto p-0 pe-2 text-center" style="width: 90px;">
           <div class="row w-100 mx-auto">
-            <div class="col-auto p-0" th:classappend="${product.changedRankCount == null || product.changedRankCount == 0 ? 'mx-auto' : 'ms-auto'}" th:text="${product.changedRankCount == null ? 'new!' : product.changedRankCount == 0 ? '-' : product.changedRankCount}"></div>
+            <div class="col-auto p-0" th:classappend="${product.changedRankCount == null || product.changedRankCount == 0 ? 'mx-auto' : 'ms-auto'}" th:text="${product.changedRankCount == null ? 'new!' : product.changedRankCount == 0 ? '-' : (product.changedRankCount > 0 ? product.changedRankCount : product.changedRankCount * -1)}"></div>
             <div class="col-auto me-auto p-0" th:if="${product.changedRankCount != null && product.changedRankCount != 0}" th:classappend="${product.changedRankCount != null && product.changedRankCount > 0 ? 'color-red' : 'color-blue'}" th:text="${product.changedRankCount > 0 ? '▴' : '▾'}"></div>
           </div>
         </div>

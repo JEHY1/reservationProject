@@ -232,9 +232,12 @@
         <h1 th:text="${productInfo.product.productTitle}">상품 이름</h1>
         <div class="fs-6" th:text="${productInfo.product.productInfo}">상품 코맨트<br>상품 코맨트</div>
         <div th:if="${productInfo.product.productDiscountPrice == null}" th:text="${productInfo.product.productRegularPrice}" class="price d-hidden">00,000원</div>
+        <div th:if="${productInfo.product.productDiscountPrice == null}" class="row w-100 mx-auto" >
+          <div class="col-auto d-flex align-items-center price" th:text="${productInfo.product.productRegularPrice}" style="font-size: 30px;">00,000원</div>
+        </div>
         <div th:if="${productInfo.product.productDiscountPrice != null}" class="row w-100 mx-auto" >
           <del class="col-auto ps-0 d-flex align-items-center"><div class="price" th:text="${productInfo.product.productRegularPrice}">00,000원</div></del>
-          <div class="col-auto color-red d-flex align-items-center price" th:text="${productInfo.product.productDiscountPrice}">00,000원</div>
+          <div class="col-auto color-red d-flex align-items-center price" th:text="${productInfo.product.productDiscountPrice}" style="font-size: 30px;">00,000원</div>
           <div class="col-auto ms-auto percent" id="discountPercentage">10%</div>
         </div>
         <div class="calendar mt-2">
