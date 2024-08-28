@@ -293,7 +293,7 @@ public class PaymentService {
     }
 
     public MyWrittenReviewResponse myWrittenReviewList(Principal principal, Pageable pageable){
-        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatusOrderByOrderDepartureDateDesc(userService.getUserId(principal), LocalDateTime.now(), "결제완료").orElse(null);
+        List<Order> writableReviewAndWrittenReviewList = orderRepository.findAllByUserUserIdAndOrderEndDateIsBeforeAndOrderStatusOrderByReviewReviewSubmitDateDesc(userService.getUserId(principal), LocalDateTime.now(), "결제완료").orElse(null);
 
         if(writableReviewAndWrittenReviewList != null){
             writableReviewAndWrittenReviewList = writableReviewAndWrittenReviewList.stream().filter(order -> order.getReview() != null).collect(Collectors.toList());

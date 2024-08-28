@@ -18,4 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Page<Review>> findByOrderUserUsernameContainingOrderByOrderUserUsernameAscReviewIdDesc(String username, Pageable pageable);
     // userRealName 으로 검색해서 userRealName 오름차순, reviewId 내림차순으로 페이징 처리한 Page<Review>
     Optional<Page<Review>> findByOrderUserUserRealNameContainingOrderByOrderUserUserRealNameAscReviewIdDesc(String userRealName, Pageable pageable);
+
+    Optional<Page<Review>> findAllByOrderByReviewIdDesc(Pageable pageable);
 }

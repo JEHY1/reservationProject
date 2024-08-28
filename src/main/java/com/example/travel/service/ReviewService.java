@@ -41,6 +41,7 @@ public class ReviewService {
     @Transactional
     public void saveReview(ReviewSubmitRequest request) {
         Review review = null;
+
         if(request.getReviewId() != null) {
             // 리뷰 수정
             review = findByReviewId(request.getReviewId()).updateReview(request);
@@ -109,9 +110,11 @@ public class ReviewService {
     // 관리자페이지에서 리뷰 조회
     public Page<Review> reviewList(Integer category, String searchKeyword, Pageable pageable) {
         Page<Review> reviewList = null;
+
         // 검색 안했을 때
         if(searchKeyword == null || searchKeyword.equals("")) {
-            reviewList = reviewRepository.findAll(pageable);
+            reviewList = reviewRepository.findAllByOrderByReviewIdDesc(pageable)
+                    .orElseThrow(() -> new IllegalArgumentException("not found review"));
         }
         // searchKeyword 로 검색 했을 때
         else {

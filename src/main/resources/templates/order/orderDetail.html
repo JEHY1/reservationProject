@@ -221,10 +221,10 @@
           <div class="col-2 infoTitle">환불 계좌 은행명</div>
           <select class="col border-F0" id="paymentRefundAccountBank">
             <option value="0" class="d-hidden">환불 계좌 은행을 선택해주세요.</option>
-            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행1')}">은행1</option>
-            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행2')}">은행2</option>
-            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행3')}">은행3</option>
-            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('은행4')}">은행4</option>
+            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('국민은행')}">국민은행</option>
+            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('하나은행')}">하나은행</option>
+            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('신한은행')}">신한은행</option>
+            <option th:selected="${order.payment != null && order.payment.paymentRefundAccount.split(' ')[0].equals('농협은행')}">농협은행</option>
           </select>
         </div>
         <div class="row w-100 mx-auto mt-1 p-0">

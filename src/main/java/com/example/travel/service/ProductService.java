@@ -501,7 +501,7 @@ public class ProductService {
                 nameList.add(ProductNameForm.builder()
                         .frontText(product.getProductTitle().substring(0, index))
                         .searchText(searchText)
-                        .endText(product.getProductTitle().substring(index + 1, product.getProductTitle().length()))
+                        .endText(product.getProductTitle().substring(index + searchText.length(), product.getProductTitle().length()))
                         .build());
             }
         });
